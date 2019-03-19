@@ -1,1 +1,3 @@
-from _jso
+import _JanJa
+
+print(_JanJa.path(), "os")

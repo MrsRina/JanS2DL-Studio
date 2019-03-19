@@ -8,14 +8,9 @@ import json
 import sys
 import os
 
-def embed(_embed):
-	try:
-		os.environ['SDL_WINDOWID'] = str(_embed.winfo_id())
-		os.environ['SDL_VIDEODRIVER'] = "windib"
-	except:
-		raise
-	return None
+JAN_load_json = lambda x_path : (json.load(open(x_path, "r")))
+JAN_embed     = lambda x_id   : (setattr(os.environ['SDL_WINDOWID'], str(x_id.winfo_id())))
 
-global path
+path = JAN_load_json("data/bin/path.json")
 
-path = json.loads("data/path.json")
+print(path)
