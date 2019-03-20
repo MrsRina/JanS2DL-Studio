@@ -11,7 +11,7 @@ class DAT:
 	def __init__(self):
 		try:
 			self.JanWin = JanGui.create_window(JAN_ENGINE_engine.get("Geometry"), JAN_ENGINE_engine.get("Title"),
-													JAN_ENGINE_engine.get("Color"))
+												JAN_ENGINE_engine.get("Color"))
 			self.JanRun = True
 
 			self.JanWidthPygame  = 1024
