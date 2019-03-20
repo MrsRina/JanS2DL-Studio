@@ -1,16 +1,30 @@
-rom tkinter import *
-
-import sdl2.ext as _sdl
-import sdl2 	as sdl
-
 import math
-import json
 import sys
 import os
 
-JAN_load_json = lambda x_path : (json.load(open(x_path, "r")))
-JAN_embed     = lambda x_id   : (setattr(os.environ['SDL_WINDOWID'], str(x_id.winfo_id())))
+sys.path.insert(0, "{}\\data\\func".format(os.getcwd()))
 
-path = JAN_load_json("data/bin/path.json")
+from func import JanJson
 
-print(path)
+global JAN_ENGINE_path
+global JAN_ENGINE_embed
+
+JAN_ENGINE_path  = JanJson.load("data/_np/JanEnginePath.json")
+
+# Fix paths
+JAN_ENGINE_path.new("Jan_Dll", "{}".format(os.getcwd()))
+JAN_ENGINE_path.new("Jan_Engine", "{}\\data\\_np\\JanEngine.json".format(os.getcwd()))
+
+try:
+	# pygame import
+	from pygame import *
+	import pygame
+except:
+	raise
+
+global JAN_ENGINE_engine
+
+JAN_ENGINE_engine = JanJson.load(JAN_ENGINE_path.get("Jan_Engine"))
+
+from func import JanGui
+from func import JanFrame
