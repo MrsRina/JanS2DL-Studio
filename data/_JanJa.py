@@ -1,4 +1,4 @@
-from tkinter import *
+rom tkinter import *
 
 import sdl2.ext as _sdl
 import sdl2 	as sdl

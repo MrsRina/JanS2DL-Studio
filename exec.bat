@@ -1,5 +1,5 @@
-path = data/bin/python/
+path = data/python/
 
-python data/_JanBase.py
+python data/_JanDat.py
 
 pause
