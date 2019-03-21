@@ -32,3 +32,30 @@ class create_window(object):
 		except:
 			raise
 		return None
+
+class create_menu(object):
+	def __init__(self, master):
+		try:
+			self._master_menu = Menu(master, tearoff = 0)
+
+			# Add:
+			master.configure(Menu=self._master_menu)
+		except:
+			raise
+		return None
+
+	def create_file_menu(self, json_value, value):
+		try:
+			self._menu_file = Menu(self._master_menu, tearoff = 0)
+			self._menu_file.add_command(label = json_value[""])			
+		except:
+			raise
+		return None
+
+class create_note(object):	
+	def __init__(self):
+		try:
+			pass
+		except:
+			raise
+		return None

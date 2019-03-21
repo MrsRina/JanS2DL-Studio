@@ -1,8 +1,12 @@
 {
-	"Title" 	: "JanJa Engine",
-	"Color"    	: "Gray",
+	"Title"		: "JanJa Engine",
+	"Color"		: "Gray",
 
-	"Width"     : "1280",
-	"Height"    : "1024"
+	"Width"		: "1280",
+	"Height"	: "1024",
+
+	"Menu_File"		: "File", "menu_Open_File" : "Open", "Menu_Save_File" : "Save", "Menu_Save_File_As" : "Save As",
+	"Menu_Tools"	: "Tools",
+	"Menu_Build"    : "Build", "Menu_Build_Script" : "Script", "Menu_Open_Build_Script" : "Open Script", "Menu_Run_Build" : "Run"
 
 }
