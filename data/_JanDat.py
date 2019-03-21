@@ -10,7 +10,7 @@ from _JanJa import JAN_ENGINE_engine
 class DAT:
 	def __init__(self):
 		try:
-			self.JanWin = JanGui.create_window(JAN_ENGINE_engine.get("Geometry"), JAN_ENGINE_engine.get("Title"),
+			self.JanWin = JanGui.create_window(JAN_ENGINE_engine.get("Width"), JAN_ENGINE_engine.get("Width"), JAN_ENGINE_engine.get("Title"),
 												JAN_ENGINE_engine.get("Color"))
 			self.JanRun = True
 

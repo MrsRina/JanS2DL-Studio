@@ -2,10 +2,10 @@ from tkinter import messagebox
 import tkinter as tk
 
 class create_window(object):
-	def __init__(self, geometry, title, color):
+	def __init__(self, width, height, title, color):
 		try:
 			self.Window = tk.Tk()
-			self.Window.geometry(geometry)
+			self.Window.geometry("{}x{}".format(width, height))
 			self.Window.title(title)
 			self.Window.configure(background = color)
 		except:

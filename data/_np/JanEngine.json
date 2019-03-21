@@ -1,9 +1,8 @@
 {
 	"Title" 	: "JanJa Engine",
-	"Geometry"  : "1280x1024",
 	"Color"    	: "Gray",
 
-	"width"     : "1280",
-	"height"    : "1024"
+	"Width"     : "1280",
+	"Height"    : "1024"
 
 }
