@@ -17,9 +17,12 @@ class DAT:
 			self.JanWidthPygame  = 1024
 			self.JanHeightPygame = 768
 
+			self.JanBackgroundColorPygame = (190, 190, 190, 0)
+
 			self.create_frame()		
 
 			while (self.JanRun):
+				self.JanPygame.fill((self.JanBackgroundColorPygame))
 
 				self.window_loop()
 		except:
@@ -28,15 +31,12 @@ class DAT:
 
 	def create_frame(self):
 		try:
-			self.JanFramePygame = JanFrame._frame(self.JanWin, width=self.JanWidthPygame, height=self.JanHeightPygame,
-										 bg=JAN_ENGINE_engine.get("Color"), borde="Black", resize_with=pygame)
-
-			os.environ["SDL_WINDOWID"] = str(self.JanFramePygame.get_id().winfo_id())
+			os.environ["SDL_WINDOWID"] = str(self.JanWin.get_master().winfo_id())
 			os.environ['SDL_VIDEODRIVER'] = 'windib'
 
 			pygame.init()
 
-			self.JanPygame = pygame.display.set_mode((self.JanWidthPygame, self.JanHeightPygame), pygame.DOUBLEBUF)
+			self.JanPygame = pygame.display.set_mode((int(JAN_ENGINE_engine.get("width")), int(JAN_ENGINE_engine.get("height"))), pygame.DOUBLEBUF)
 		except:
 			raise
 		return None
