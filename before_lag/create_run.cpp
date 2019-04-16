@@ -13,8 +13,6 @@ int main()
 	system("cls");
 	
 	// run main
-	system("python data/_JanDat.py");
-	
-	ShowWindow( GetConsoleWindow(), SW_HIDE );	
+	system("python data/_JanDat.py")	
 		
 }
