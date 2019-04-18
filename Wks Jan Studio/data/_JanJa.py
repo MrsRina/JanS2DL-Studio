@@ -19,7 +19,7 @@ class load(object):
 			self.file[item_json] = write_json
 	
 			self.path.seek(0)
-			json.dump(self.file , self.path)
+			json.dump(self.file, self.path)
 			self.path.truncate()
 		except:
 			raise
@@ -30,7 +30,7 @@ class load(object):
 			self.file[item_json] = write_json
 	
 			self.path.seek(0)
-			json.dump(self.file , self.path)
+			json.dump(self.file, self.path)
 			self.path.truncate()
 		except:
 			raise
@@ -44,7 +44,7 @@ class load(object):
 				pass
 	
 			self.path.seek(0)
-			json.dump(self.file , self.path)
+			json.dump(self.file, self.path)
 			self.path.truncate()
 		except:
 			raise
@@ -78,7 +78,7 @@ def replace_folder(remove, place):
 		raise
 	return None
 
-JAN_ENGINE_path = load(replace_folder("data/_JanJa.py", "JanPath.json"))
+JAN_ENGINE_engine = load(replace_folder("data/_JanJa.py", "JanConfig.json"))
 
 try:
 	# pygame import
@@ -87,5 +87,9 @@ try:
 except:
 	raise
 
-from JanFrame import *
-from JAnGui   import *
+import JanFrame
+import JanGui
+
+user32 = ctypes.windll.user32
+
+JAN_ENGINE_resolution = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)

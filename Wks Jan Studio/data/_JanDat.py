@@ -6,12 +6,13 @@ from _JanJa import JanGui
 from _JanJa import JanFrame
 
 from _JanJa import JAN_ENGINE_engine
+from _JanJa import JAN_ENGINE_resolution
+
 
 class DAT:
 	def __init__(self):
 		try:
-			self.JanWin = JanGui.create_window(JAN_ENGINE_engine.get("Width"), JAN_ENGINE_engine.get("Height"), JAN_ENGINE_engine.get("Title"),
-												JAN_ENGINE_engine.get("Color"))
+			self.JanWin = JanGui.create_window(JAN_ENGINE_resolution[0], JAN_ENGINE_resolution[1], "JanJaEngine", "Gray")
 			
 			self.JanMenu = JanGui.create_menu(self.JanWin.get_master()) 
 
@@ -40,26 +41,31 @@ class DAT:
 
 			pygame.init()
 
-			self.JanPygame = pygame.display.set_mode((int(JAN_ENGINE_engine.get("Width")), int(JAN_ENGINE_engine.get("Height"))), pygame.DOUBLEBUF)
+			self.JanPygame = pygame.display.set_mode((JAN_ENGINE_resolution), pygame.DOUBLEBUF)
 		except:
 			raise
 		return None
 
 	def create_designer_menu(self):
 		try:
-			self.JanMenu.create_file_menu(JAN_ENGINE_engine, None, None, None, None)
-			self.JanMenu.create_tools_menu(JAN_ENGINE_engine, None, None, None, None, None)
+			self.JanMenu.create_file_menu(None, None, None, self.close)
+			self.JanMenu.create_tools_menu(None, None, None, None, None)
+		except:
+			raise
+		return None
+
+	def close(self):
+		try:
+			if self.JanWin.askExit("Do you want to quit?"):
+				self.JanRun=False; self.JanWin.close(); sys.exit()
+
 		except:
 			raise
 		return None
 
 	def window_loop(self):
-		try:
-			def close():
-				if self.JanWin.askExit("Do you want to quit?"):
-					self.JanRun=False; self.JanWin.close(); sys.exit()
-			
-			self.JanWin.get_master().protocol("WM_DELETE_WINDOW", close)
+		try:			
+			self.JanWin.get_master().protocol("WM_DELETE_WINDOW", self.close)
 
 			pygame.display.flip()			
 			self.JanWin.get_master().update()

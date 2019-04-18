@@ -48,10 +48,10 @@ class create_menu(object):
 		try:
 			self.menu_file = tk.Menu(self.master_menu, tearoff = 0, bg = "Gray", fg = "White")
 
-			self.menu_file.add_command(label = "Open File",	   commad = command_Open_File	 )
-			self.menu_file.add_command(label = "Save File",	   commad = command_Save_File    )
-			self.menu_file.add_command(label = "Save File As", commad = command_Save_As_File )
-			self.menu_file.add_command(label = "Exit",	       commad = command_File_Exit	 )
+			self.menu_file.add_command(label = "Open File",	   command = command_Open_File	 )
+			self.menu_file.add_command(label = "Save File",	   command = command_Save_File    )
+			self.menu_file.add_command(label = "Save File As", command = command_Save_As_File )
+			self.menu_file.add_command(label = "Exit",	       command = command_File_Exit	 )
 
 			self.master_menu.add_cascade(label = "Project", menu = self.menu_file)	
 		except:
