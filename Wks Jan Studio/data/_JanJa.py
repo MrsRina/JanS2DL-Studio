@@ -3,16 +3,13 @@ import math
 import sys
 import os
 
-sys.path.insert(0, "{}\\SDL.dll".format(os.getcwd()))
-sys.path.insert(0, "{}\\data\\func".format(os.getcwd()))
-
 import json
 
 class load(object):
 	def __init__(self, path):
 		try:
 			self.path = open(path, "r+")
-			self.file  = json.load(self.path)
+			self.file = json.load(self.path)
 		except:
 			raise
 		return None
@@ -41,7 +38,10 @@ class load(object):
 
 	def rem(self, item_json):
 		try:
-			del self.file[item_json]
+			try:
+				del self.file[item_json]
+			except:
+				pass
 	
 			self.path.seek(0)
 			json.dump(self.file , self.path)
@@ -65,12 +65,20 @@ class load(object):
 		return None
 
 global JAN_ENGINE_path
-global JAN_ENGINE_embed
 
-JAN_ENGINE_path  = load("data/_np/JanEnginePath.json")
+def replace_folder(remove, place):
+	try:
+		cache      = os.path.realpath(__file__)
+		cahce_path = cache.replace("\\", "/")
+		
+		path = cahce_path.replace(remove, place)
+		
+		return path
+	except:
+		raise
+	return None
 
-# Fix paths
-JAN_ENGINE_path.new("Jan_Engine", "{}\\data\\_np\\JanEngine.json".format(os.getcwd()))
+JAN_ENGINE_path = load(replace_folder("data/_JanJa.py", "JanPath.json"))
 
 try:
 	# pygame import
@@ -78,10 +86,6 @@ try:
 	import pygame
 except:
 	raise
-
-global JAN_ENGINE_engine
-
-JAN_ENGINE_engine = load(JAN_ENGINE_path.get("Jan_Engine"))
 
 from JanFrame import *
 from JAnGui   import *

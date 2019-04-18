@@ -1,5 +1,9 @@
-cd data/python/
+setx path = %path%%~dp0\data\python\
 
-python "%~dp0/data/_JanDat.py"
+cd data\python\
+
+cls
+
+python "%~dp0data\_JanDat.py"
 
 pause

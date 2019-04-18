@@ -25,7 +25,7 @@ class _frame(object):
 
 	def resize_frame_width(self, event):
 		try:
-			self.width=event.x
+			self.width = event.x
 			self.resize_canvas_width.configure(width=self.width, height=self.height)
 			self.resize_canvas_height.configure(width=self.width, height=self.height)
 			self.master_frame.configure(width=self.width, height=self.height)
@@ -36,7 +36,7 @@ class _frame(object):
 
 	def resize_frame_height(self, event):
 		try:
-			self.height=event.y			
+			self.height = event.y			
 			self.resize_canvas_width.configure(width=self.width, height=self.height)
 			self.resize_canvas_height.configure(width=self.width, height=self.height)
 			self.master_frame.configure(width=self.width, height=self.height)
@@ -75,7 +75,7 @@ class frame(object):
 
 	def resize_frame_width(self, event):
 		try:
-			self.width=event.x
+			self.width = event.x
 			self.resize_canvas_width.configure(width=self.width, height=self.height)
 			self.resize_canvas_height.configure(width=self.width, height=self.height)
 			self.master_frame.configure(width=self.width, height=self.height)
@@ -85,7 +85,7 @@ class frame(object):
 
 	def resize_frame_height(self, event):
 		try:
-			self.height=event.y			
+			self.height = event.y			
 			self.resize_canvas_width.configure(width=self.width, height=self.height)
 			self.resize_canvas_height.configure(width=self.width, height=self.height)
 			self.master_frame.configure(width=self.width, height=self.height)
