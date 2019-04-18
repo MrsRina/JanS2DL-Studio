@@ -62,11 +62,11 @@ class create_menu(object):
 		try:
 			self.menu_tools = tk.Menu(self.master_menu, tearoff = 0, bg = "Gray", fg = "White")
 
-			self.menu_tools.add_command(label = "Sprites",	command = command_Tool_Sprite 		)
-			self.menu_tools.add_command(label = "Objects",	command = command_Tool_Objects 		)
-			self.menu_tools.add_command(label = "Effects",	command = command_Tool_Efects 		)
-			self.menu_tools.add_command(label = "Text", 	command = command_Tool_Text			); self.menu_tools.add_separator()
-			self.menu_tools.add_command(label = "", 		command = command_tool_Background 	)
+			self.menu_tools.add_command(label = "Sprites",	  command = command_Tool_Sprite 		)
+			self.menu_tools.add_command(label = "Objects",	  command = command_Tool_Objects 		)
+			self.menu_tools.add_command(label = "Effects",	  command = command_Tool_Efects 		)
+			self.menu_tools.add_command(label = "Text", 	  command = command_Tool_Text			); self.menu_tools.add_separator()
+			self.menu_tools.add_command(label = "Background", command = command_tool_Background 	)
 
 			self.master_menu.add_cascade(label = "Tools", menu = self.menu_tools)
 		except:
