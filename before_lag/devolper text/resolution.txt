@@ -1,0 +1,25 @@
+logica de verificacao de resolucao da engine (JANJA)
+{
+
+	se por acaso a resolucao padrao for igual a verdadeiro
+	{
+		definir nada no arquivo json ;
+		
+		se por acaso a resolucao vertical nao foi igual a padrao
+		{
+			definir resolucao vertical para a padrao ;
+		}
+		
+		e se a resolucao da horizontal nao for igual a padrao
+		{
+			definir resolucao horizontal para a padrao ;
+		}
+	}
+	
+	caso nao for igual a resolucao padrao
+	{
+		definir nada no arquivo json ;
+	}
+}
+
+// end

@@ -38,7 +38,6 @@ class create_menu(object):
 		try:
 			self.master_menu = tk.Menu(master, tearoff = 0)
 
-			# Add:
 			master.configure(menu = self.master_menu)
 		except:
 			raise
@@ -48,10 +47,10 @@ class create_menu(object):
 		try:
 			self.menu_file = tk.Menu(self.master_menu, tearoff = 0, bg = "Gray", fg = "White")
 
-			self.menu_file.add_command(label = "Open File",	   command = command_Open_File	 )
+			self.menu_file.add_command(label = "Open File",	   command = command_Open_File	  )
 			self.menu_file.add_command(label = "Save File",	   command = command_Save_File    )
 			self.menu_file.add_command(label = "Save File As", command = command_Save_As_File )
-			self.menu_file.add_command(label = "Exit",	       command = command_File_Exit	 )
+			self.menu_file.add_command(label = "Exit",	       command = command_File_Exit	  )
 
 			self.master_menu.add_cascade(label = "Project", menu = self.menu_file)	
 		except:
@@ -73,10 +72,8 @@ class create_menu(object):
 			raise
 		return None
 
-class create_note(object):	
-	def __init__(self):
+	def create_notes_menu(self):
 		try:
 			pass
 		except:
 			raise
-		return None

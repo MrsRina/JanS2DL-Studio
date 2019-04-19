@@ -5,6 +5,12 @@ import os
 
 import json
 
+hardware_dll = ctypes.windll.user32
+
+# // define
+
+hardware_res = hardware_dll.GetSystemMetrics
+
 class load(object):
 	def __init__(self, path):
 		try:
@@ -30,7 +36,7 @@ class load(object):
 			self.file[item_json] = write_json
 	
 			self.path.seek(0)
-			json.dump(self.file, self.path)
+			json.dump(self.file, self.path, indent = 4)
 			self.path.truncate()
 		except:
 			raise
@@ -90,6 +96,18 @@ except:
 import JanFrame
 import JanGui
 
-user32 = ctypes.windll.user32
+"""
+resolution.txt
+"""
 
-JAN_ENGINE_resolution = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
+if JAN_ENGINE_engine.get("Default Resolution") is True:
+	if not JAN_ENGINE_engine.get("Width") == hardware_res():
+		JAN_ENGINE_engine.new("Width", hardware_res(0))
+
+	if not JAN_ENGINE_engine.get("Height") == hardware_res(1):
+		JAN_ENGINE_engine.new("Height", hardware_res(1))
+
+else:
+	"""
+	None
+	"""

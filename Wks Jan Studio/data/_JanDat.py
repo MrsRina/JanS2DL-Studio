@@ -6,13 +6,13 @@ from _JanJa import JanGui
 from _JanJa import JanFrame
 
 from _JanJa import JAN_ENGINE_engine
-from _JanJa import JAN_ENGINE_resolution
 
+int_engine = lambda _int: int(JAN_ENGINE_engine.get(_int))
 
 class DAT:
 	def __init__(self):
 		try:
-			self.JanWin = JanGui.create_window(JAN_ENGINE_resolution[0], JAN_ENGINE_resolution[1], "JanJaEngine", "Gray")
+			self.JanWin = JanGui.create_window(int_engine("Width"), int_engine("Height"), "JanJaEngine", "Gray")
 			
 			self.JanMenu = JanGui.create_menu(self.JanWin.get_master()) 
 
@@ -41,7 +41,7 @@ class DAT:
 
 			pygame.init()
 
-			self.JanPygame = pygame.display.set_mode((JAN_ENGINE_resolution), pygame.DOUBLEBUF)
+			self.JanPygame = pygame.display.set_mode((int_engine("Width"), int_engine("Height")), pygame.DOUBLEBUF)
 		except:
 			raise
 		return None
