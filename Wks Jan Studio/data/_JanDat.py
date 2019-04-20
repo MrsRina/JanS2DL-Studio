@@ -44,8 +44,7 @@ class DAT:
 			while (self.JanRun):
 				self.Tick_Fps.tick(30)
 
-				self.x_main, self.y_main = (self.JanWin.get_master().winfo_pointerx() - self.JanWin.get_master().winfo_vrootx(),
-											self.JanWin.get_master().winfo_pointery() - self.JanWin.get_master().winfo_vrooty())
+				self.up_mouse_popup_event()
 
 				self.JanPygame.fill((self.JanBackgroundColorPygame))
 				
@@ -53,6 +52,14 @@ class DAT:
 					self.dynamic_popup(event_)
 
 				self.window_loop()
+		except:
+			raise
+		return None
+
+	def up_mouse_popup_event(self):
+		try:
+			self.x_main, self.y_main = (self.JanWin.get_master().winfo_pointerx() - self.JanWin.get_master().winfo_vrootx(),
+										self.JanWin.get_master().winfo_pointery() - self.JanWin.get_master().winfo_vrooty())
 		except:
 			raise
 		return None
