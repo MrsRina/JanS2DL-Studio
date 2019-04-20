@@ -1,9 +1,10 @@
-import ctypes
-import math
-import sys
-import os
+from JanPort import (
+os     ,
+sys    ,
+math   ,
+ctypes ,
 
-import json
+json)
 
 hardware_dll = ctypes.windll.user32
 
@@ -86,28 +87,13 @@ def replace_folder(remove, place):
 
 JAN_ENGINE_engine = load(replace_folder("data/_JanJa.py", "JanConfig.json"))
 
-try:
-	# pygame import
-	from pygame import *
-	import pygame
-except:
-	raise
-
-import JanFrame
-import JanGui
+from JanPort import JanFrame
+from JanPort import JanMath
+from JanPort import JanGui
+from JanPort import pygame
 
 """
 resolution.txt
 """
 
-if JAN_ENGINE_engine.get("Default Resolution") is True:
-	if not JAN_ENGINE_engine.get("Width") == hardware_res():
-		JAN_ENGINE_engine.new("Width", hardware_res(0))
-
-	if not JAN_ENGINE_engine.get("Height") == hardware_res(1):
-		JAN_ENGINE_engine.new("Height", hardware_res(1))
-
-else:
-	"""
-	None
-	"""
+JanMath.Sync_Resolution(JAN_ENGINE_engine, hardware_res)

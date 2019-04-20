@@ -1,11 +1,10 @@
-from tkinter import messagebox
-import tkinter as tk
+from JanPort import tk, messagebox
 
 class create_window(object):
 	def __init__(self, width, height, title, color):
 		try:
 			self.Window = tk.Tk()
-			self.Window.geometry("{}x{}".format(width, height))
+			self.Window.geometry("{}x{}+1280+0".format(width, height))
 			self.Window.title(title)
 			self.Window.configure(background = color)
 		except:
@@ -49,7 +48,7 @@ class create_menu(object):
 
 			self.menu_file.add_command(label = "Open File",	   command = command_Open_File	  )
 			self.menu_file.add_command(label = "Save File",	   command = command_Save_File    )
-			self.menu_file.add_command(label = "Save File As", command = command_Save_As_File )
+			self.menu_file.add_command(label = "Save File As", command = command_Save_As_File ); self.menu_file.add_separator()
 			self.menu_file.add_command(label = "Exit",	       command = command_File_Exit	  )
 
 			self.master_menu.add_cascade(label = "Project", menu = self.menu_file)	
@@ -72,8 +71,39 @@ class create_menu(object):
 			raise
 		return None
 
-	def create_notes_menu(self):
+	def create_events_menu(self, command_New_Event_Mouse, command_New_Event_Keyboard, command_New_Event_Collide, command_New_Event_Window, command_Event_Settings):
 		try:
-			pass
+			self.menu_events = tk.Menu(self.master_menu, tearoff = 0, bg = "Gray", fg = "White")
+
+			self.menu_events.add_command(label = "New Event Mouse"    , command = command_New_Event_Mouse	 )
+			self.menu_events.add_command(label = "New Event Keyboard" , command = command_New_Event_Keyboard )
+			self.menu_events.add_command(label = "New Event Collide"  , command = command_New_Event_Collide  )
+			self.menu_events.add_command(label = "New Event Window"   , command = command_New_Event_Window   )
+			self.menu_events.add_command(label = "Event Settings"     , command = command_Event_Settings     )
+
+			self.master_menu.add_cascade(label = "Events", menu = self.menu_events)
 		except:
 			raise
+
+	def create_about_menu(self, command_About_Wks_Jan_Studio, command_About_Engine):
+		try:
+			self.menu_about = tk.Menu(self.master_menu, tearoff = 0, bg = "Gray", fg = "White")
+
+			self.menu_about.add_command(label = "About Wks Jan Studio" , command = None )
+			self.menu_about.add_command(label = "About JanJaEngine"    , command = None )
+
+			self.master_menu.add_cascade(label = "About", menu = self.menu_about)
+		except:
+			raise
+		return None
+
+class create_container(object):
+	def __init__(self, master):
+		try:
+			self.master = master
+
+			self.frame_game_devolper = tk.Frame(self.master, width = self.master.winfo_screenwidth  () , height = self.master.winfo_screenheight())
+			self.frame_event_game    = tk.Frame(self.master, width = self.master.winfo_screenheight () , height = self.master.winfo_screenheight())
+		except:
+			raise
+		return None
