@@ -8,6 +8,8 @@ from _JanJa import JanFrame
 from _JanJa import JAN_ENGINE_engine
 from _JanJa import replace_folder
 
+from JanPort import filedialog
+
 int_engine = lambda _int: int(JAN_ENGINE_engine.get(_int))
 
 class DAT:
@@ -23,13 +25,19 @@ class DAT:
 			self.JanWidthPygame  = 1024
 			self.JanHeightPygame = 768
 
-			self.JanBackgroundColorPygame = (190, 190, 190, 0)
+			self. a = False
+
+			self.JanBackgroundColorPygame = (127, 127, 127, 0)
 
 			self.create_designer_menu()
-			self.create_designer_containers()
+			self.create_frame(self.JanContainer.get_id())
 
 			while (self.JanRun):
 				self.JanPygame.fill((self.JanBackgroundColorPygame))
+
+				if self.a:
+					self.JanPygame.blit(self.i, (80, 80))
+
 
 				self.window_loop()
 		except:
@@ -43,7 +51,7 @@ class DAT:
 
 			pygame.init()
 
-			self.JanPygame = pygame.display.set_mode((id.winfo_screenwidth(), id.info_screenheight()), pygame.DOUBLEBUF)
+			self.JanPygame = pygame.display.set_mode((id.winfo_screenwidth(), id.winfo_screenheight()), pygame.DOUBLEBUF)
 		except:
 			raise
 		return None
@@ -51,31 +59,31 @@ class DAT:
 	def create_designer_menu(self):
 		try:
 			self.JanMenu.create_file_menu(None, None, None, self.close)
-			self.JanMenu.create_tools_menu(None, None, None, None, None)
+			self.JanMenu.create_tools_menu(self.load_image, None, None, None, None)
 			self.JanMenu.create_events_menu(None, None, None, None, None)
 			self.JanMenu.create_about_menu(None, None)
 		except:
 			raise
 		return None
 
-	def create_designer_containers(self):
-		try:
-			self.JanContainer.create_main_container(None, None)
-
-
-			create_frame.create_container
-		except:
-			raise
-		return None
-
 	def close(self):
 		try:
-			if  not JAN_ENGINE_engine.get("Devolper") is (False):
+			if   not JAN_ENGINE_engine.get("Devolper") is (False):
 					self.JanRun = False; self.JanWin.close(); os.startfile(replace_folder("data/_JanJa.py", "run.cmd"))
 
 			elif not JAN_ENGINE_engine.get("Devolper") is (True):
 				if self.JanWin.askExit("Do you want to quit?"):
 					self.JanRun = False; self.JanWin.close(); sys.exit()
+		except:
+			raise
+		return None
+
+	def load_image(self):
+		try:
+			filename =  filedialog.askopenfilename(initialdir = "/",title = "Select file",filetypes = (("jpeg files","*.jpg"),("all files","*.*")))
+			if filename:
+				self.a = True
+				self.i = pygame.image.load(filename)
 		except:
 			raise
 		return None

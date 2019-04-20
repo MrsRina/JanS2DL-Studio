@@ -1,4 +1,4 @@
-from JanPort import tk, messagebox
+from JanPort import tk, ttk, messagebox
 
 class create_window(object):
 	def __init__(self, width, height, title, color):
@@ -7,6 +7,9 @@ class create_window(object):
 			self.Window.geometry("{}x{}+1280+0".format(width, height))
 			self.Window.title(title)
 			self.Window.configure(background = color)
+
+			self.Style = ttk.Style()
+			self.Style.theme_use("clam")
 		except:
 			raise
 		return None
@@ -102,8 +105,24 @@ class create_container(object):
 		try:
 			self.master = master
 
-			self.frame_game_devolper = tk.Frame(self.master, width = self.master.winfo_screenwidth  () , height = self.master.winfo_screenheight())
-			self.frame_event_game    = tk.Frame(self.master, width = self.master.winfo_screenheight () , height = self.master.winfo_screenheight())
+			self.container = ttk.Notebook(self.master)
+
+			self.frame_game_devolper = tk.Frame(self.master, width = self.master.winfo_screenwidth  () , height = self.master.winfo_screenheight(), bg = "Gray")
+			self.frame_event_game    = tk.Frame(self.master, width = self.master.winfo_screenheight () , height = self.master.winfo_screenheight(), bg = "Gray")
+			
+			self.container.add(self.frame_game_devolper , text = "Game    ")
+			self.container.add(self.frame_event_game    , text = "Events    ")
+
+			self.container.place(x = 0, y = 0)
+		except:
+			raise
+		return None
+
+	def get_id(self):
+		try:
+			cache_x = [self.frame_game_devolper, self.frame_event_game]
+			for x in cache_x:
+				return x
 		except:
 			raise
 		return None
