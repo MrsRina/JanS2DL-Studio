@@ -4,7 +4,7 @@ class create_window(object):
 	def __init__(self, width, height, title, color):
 		try:
 			self.Window = tk.Tk()
-			self.Window.geometry("{}x{}+1280+0".format(width, height))
+			self.Window.geometry("{}x{}".format(width, height))
 			self.Window.title(title)
 			self.Window.configure(background = color)
 
@@ -36,66 +36,55 @@ class create_window(object):
 		return None
 
 class create_menu(object):
-	def __init__(self, master):
+	def __init__(self, master, cmds):
 		try:
 			self.master_menu = tk.Menu(master, tearoff = 0)
 
-			master.configure(menu = self.master_menu)
+			master.configure(menu = self.master_menu, bg = "Gray")
+
+			self.cmds = cmds
+			self.create_file_and_tool_menu()
+			self.create_events_menu()
 		except:
 			raise
 		return None
 
-	def create_file_menu(self, command_Open_File, command_Save_File, command_Save_As_File, command_File_Exit):
+	def create_file_and_tool_menu(self):
 		try:
-			self.menu_file = tk.Menu(self.master_menu, tearoff = 0, bg = "Gray", fg = "White")
+			self.menu_file_tools = tk.Menu(self.master_menu, tearoff = 0, bg = "Gray", fg = "White")
 
-			self.menu_file.add_command(label = "Open File",	   command = command_Open_File	  )
-			self.menu_file.add_command(label = "Save File",	   command = command_Save_File    )
-			self.menu_file.add_command(label = "Save File As", command = command_Save_As_File ); self.menu_file.add_separator()
-			self.menu_file.add_command(label = "Exit",	       command = command_File_Exit	  )
-
-			self.master_menu.add_cascade(label = "Project", menu = self.menu_file)	
+			self.menu_file_tools.add_command(label = "Open File",    command = self.cmds[0] )
+			self.menu_file_tools.add_command(label = "Save File",    command = self.cmds[1] )
+			self.menu_file_tools.add_command(label = "Save File As", command = self.cmds[2] ); self.menu_file_tools.add_separator()
+			self.menu_file_tools.add_command(label = "Sprites",      command = self.cmds[3] )
+			self.menu_file_tools.add_command(label = "Objects",      command = self.cmds[4] )
+			self.menu_file_tools.add_command(label = "Effects",      command = self.cmds[5] )
+			self.menu_file_tools.add_command(label = "Text",         command = self.cmds[6] )
+			self.menu_file_tools.add_command(label = "Background",   command = self.cmds[7] ); self.menu_file_tools.add_separator()
+			self.menu_file_tools.add_command(label = "Exit",         command = self.cmds[8] )
 		except:
 			raise
 		return None
 
-	def create_tools_menu(self, command_Tool_Sprite, command_Tool_Objects, command_Tool_Efects, command_Tool_Text, command_tool_Background):
-		try:
-			self.menu_tools = tk.Menu(self.master_menu, tearoff = 0, bg = "Gray", fg = "White")
-
-			self.menu_tools.add_command(label = "Sprites",	  command = command_Tool_Sprite 		)
-			self.menu_tools.add_command(label = "Objects",	  command = command_Tool_Objects 		)
-			self.menu_tools.add_command(label = "Effects",	  command = command_Tool_Efects 		)
-			self.menu_tools.add_command(label = "Text", 	  command = command_Tool_Text			); self.menu_tools.add_separator()
-			self.menu_tools.add_command(label = "Background", command = command_tool_Background 	)
-
-			self.master_menu.add_cascade(label = "Tools", menu = self.menu_tools)
-		except:
-			raise
-		return None
-
-	def create_events_menu(self, command_New_Event_Mouse, command_New_Event_Keyboard, command_New_Event_Collide, command_New_Event_Window, command_Event_Settings):
+	def create_events_menu(self):
 		try:
 			self.menu_events = tk.Menu(self.master_menu, tearoff = 0, bg = "Gray", fg = "White")
 
-			self.menu_events.add_command(label = "New Event Mouse"    , command = command_New_Event_Mouse	 )
-			self.menu_events.add_command(label = "New Event Keyboard" , command = command_New_Event_Keyboard )
-			self.menu_events.add_command(label = "New Event Collide"  , command = command_New_Event_Collide  )
-			self.menu_events.add_command(label = "New Event Window"   , command = command_New_Event_Window   )
-			self.menu_events.add_command(label = "Event Settings"     , command = command_Event_Settings     )
-
-			self.master_menu.add_cascade(label = "Events", menu = self.menu_events)
+			self.menu_events.add_command(label = "New Event Mouse"    , command = self.cmds[9]  )
+			self.menu_events.add_command(label = "New Event Keyboard" , command = self.cmds[10] )
+			self.menu_events.add_command(label = "New Event Collide"  , command = self.cmds[11] )
+			self.menu_events.add_command(label = "New Event Window"   , command = self.cmds[12] )
+			self.menu_events.add_command(label = "Event Settings"     , command = self.cmds[13] )
 		except:
 			raise
 
-	def create_about_menu(self, command_About_Wks_Jan_Studio, command_About_Engine):
+	def get(self, x):
 		try:
-			self.menu_about = tk.Menu(self.master_menu, tearoff = 0, bg = "Gray", fg = "White")
+			if (x) is ("Main"):
+				return (self.menu_file_tools)
 
-			self.menu_about.add_command(label = "About Wks Jan Studio" , command = None )
-			self.menu_about.add_command(label = "About JanJaEngine"    , command = None )
-
-			self.master_menu.add_cascade(label = "About", menu = self.menu_about)
+			elif (x) is ("Events"):
+				return (self.menu_events)
 		except:
 			raise
 		return None
@@ -107,11 +96,11 @@ class create_container(object):
 
 			self.container = ttk.Notebook(self.master)
 
-			self.frame_game_devolper = tk.Frame(self.master, width = self.master.winfo_screenwidth  () , height = self.master.winfo_screenheight(), bg = "Gray")
-			self.frame_event_game    = tk.Frame(self.master, width = self.master.winfo_screenheight () , height = self.master.winfo_screenheight(), bg = "Gray")
-			
-			self.container.add(self.frame_game_devolper , text = "Game    ")
-			self.container.add(self.frame_event_game    , text = "Events    ")
+			self.frame_game_developer = tk.Canvas(self.master, width = self.master.winfo_screenwidth  () , height = self.master.winfo_screenheight(), bg = "Gray")
+			self.frame_event_game     = tk.Canvas(self.master, width = self.master.winfo_screenheight () , height = self.master.winfo_screenheight(), bg = "Gray")
+
+			self.container.add(self.frame_game_developer , text = "Game    "   )
+			self.container.add(self.frame_event_game     , text = "Events    " )
 
 			self.container.place(x = 0, y = 0)
 		except:
@@ -120,9 +109,7 @@ class create_container(object):
 
 	def get_id(self):
 		try:
-			cache_x = [self.frame_game_devolper, self.frame_event_game]
-			for x in cache_x:
-				return x
+			return self.frame_game_developer
 		except:
 			raise
 		return None

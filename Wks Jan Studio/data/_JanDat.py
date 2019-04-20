@@ -16,28 +16,41 @@ class DAT:
 	def __init__(self):
 		try:
 			self.JanWin = JanGui.create_window(int_engine("Width"), int_engine("Height"), "JanJaEngine", "Gray")
-			
-			self.JanMenu      = JanGui.create_menu(self.JanWin.get_master())
-			self.JanContainer = JanGui.create_container(self.JanWin.get_master())
+
+			self.JanContainer = JanGui.create_container(self.JanWin.get_master())	
+			self.JanMenu      = JanGui.create_menu(self.JanWin.get_master(),
+			(
+				None, None, None, None, None, None, None,
+				None, self.close, None, None, None, None, None,
+			)
+			)
+
+			self.x_main, self.y_main = (self.JanWin.get_master().winfo_pointerx() - self.JanWin.get_master().winfo_vrootx(),
+										self.JanWin.get_master().winfo_pointery() - self.JanWin.get_master().winfo_vrooty())
 
 			self.JanRun = True
 
 			self.JanWidthPygame  = 1024
 			self.JanHeightPygame = 768
 
-			self. a = False
-
 			self.JanBackgroundColorPygame = (127, 127, 127, 0)
 
-			self.create_designer_menu()
 			self.create_frame(self.JanContainer.get_id())
 
+			self.Tick_Fps = pygame.time.Clock()
+
+			self.poop_up()
+
 			while (self.JanRun):
+				self.Tick_Fps.tick(30)
+
+				self.x_main, self.y_main = (self.JanWin.get_master().winfo_pointerx() - self.JanWin.get_master().winfo_vrootx(),
+											self.JanWin.get_master().winfo_pointery() - self.JanWin.get_master().winfo_vrooty())
+
 				self.JanPygame.fill((self.JanBackgroundColorPygame))
-
-				if self.a:
-					self.JanPygame.blit(self.i, (80, 80))
-
+				
+				for event_ in pygame.event.get():
+					self.dynamic_popup(event_)
 
 				self.window_loop()
 		except:
@@ -56,12 +69,38 @@ class DAT:
 			raise
 		return None
 
-	def create_designer_menu(self):
+	def create_file_tool_menu(self):
+		try:			
+			try:
+				self.JanMenu.get("Main").tk_popup(self.x_main, self.y_main, 0)
+			finally:
+				self.JanMenu.get("Main").grab_release()
+		except:
+			raise
+		return None
+
+	def dynamic_popup(self, event):
 		try:
-			self.JanMenu.create_file_menu(None, None, None, self.close)
-			self.JanMenu.create_tools_menu(self.load_image, None, None, None, None)
-			self.JanMenu.create_events_menu(None, None, None, None, None)
-			self.JanMenu.create_about_menu(None, None)
+			if event.type is pygame.MOUSEBUTTONUP and event.button is 3:
+				self.create_file_tool_menu()
+
+		except:
+			raise
+		return None
+
+	def create_event_menu(self, event):
+		try:
+			try:
+				self.JanMenu.get("Events").tk_popup(event.x_root, event.y_root, 0)
+			finally:
+				self.JanMenu.get("Events").grab_release()
+		except:
+			raise
+		return None
+
+	def poop_up(self):
+		try:
+			self.JanContainer.frame_event_game.bind("<Button-3>", self.create_event_menu)
 		except:
 			raise
 		return None
@@ -78,16 +117,6 @@ class DAT:
 			raise
 		return None
 
-	def load_image(self):
-		try:
-			filename =  filedialog.askopenfilename(initialdir = "/",title = "Select file",filetypes = (("jpeg files","*.jpg"),("all files","*.*")))
-			if filename:
-				self.a = True
-				self.i = pygame.image.load(filename)
-		except:
-			raise
-		return None
-
 	def window_loop(self):
 		try:			
 			self.JanWin.get_master().protocol("WM_DELETE_WINDOW", self.close)
@@ -97,5 +126,9 @@ class DAT:
 		except:
 			raise
 		return None
+
+if __name__ is "__main__":
+	DAT()
+else:
+	DAT()
 	
-DAT()
