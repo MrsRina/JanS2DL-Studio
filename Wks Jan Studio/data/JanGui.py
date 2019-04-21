@@ -88,6 +88,12 @@ class create_menu(object):
 			self.menu_selected_sprites = tk.Menu(self.master_menu, tearoff = 0, bg = "Gray", fg= "White")
 
 			self.menu_selected_sprites.add_command(label = "Delete Sprite (del)" , command = self.sub_cmds[0])
+			self.menu_selected_sprites.add_command(label = "Change" , command = self.sub_cmds[0])
+			self.menu_selected_sprites.add_command(label = "Delete Sprite (del)" , command = self.sub_cmds[0])
+			self.menu_selected_sprites.add_command(label = "Delete Sprite (del)" , command = self.sub_cmds[0])
+			self.menu_selected_sprites.add_command(label = "Delete Sprite (del)" , command = self.sub_cmds[0])
+			self.menu_selected_sprites.add_command(label = "Delete Sprite (del)" , command = self.sub_cmds[0])
+			self.menu_selected_sprites.add_command(label = "Delete Sprite (del)" , command = self.sub_cmds[0])
 		except:
 			raise
 		return None
