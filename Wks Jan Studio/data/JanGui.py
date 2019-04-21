@@ -73,7 +73,7 @@ class create_menu(object):
 			self.menu_events.add_command(label = "New Event Mouse"    , command = self.cmds[9]  )
 			self.menu_events.add_command(label = "New Event Keyboard" , command = self.cmds[10] )
 			self.menu_events.add_command(label = "New Event Collide"  , command = self.cmds[11] )
-			self.menu_events.add_command(label = "New Event Window"   , command = self.cmds[12] )
+			self.menu_events.add_command(label = "New Event Window"   , command = self.cmds[12] ); self.menu_events.add_separator()
 			self.menu_events.add_command(label = "Event Settings"     , command = self.cmds[13] )
 		except:
 			raise

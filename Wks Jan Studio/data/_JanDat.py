@@ -12,6 +12,32 @@ from JanPort import filedialog
 
 int_engine = lambda _int: int(JAN_ENGINE_engine.get(_int))
 
+class load(object):
+	def __init__(self, master, path):
+		try:
+			self.tag = str(os.path.basename(path))
+
+			self.img = pygame.image.load(path)
+
+			self.rect = pygame.rect.Rect(0, 0, self.img.get_width(), self.img.get_height())
+
+			self.master = master
+
+			self.move = False
+		except:
+			raise
+		return None
+
+	def render(self):
+		try:
+			if self.move:
+				self.rect.center = pygame.mouse.get_pos()
+
+			self.master.blit(self.img, (self.rect.x, self.rect.y))
+		except:
+			raise
+		return None
+
 class DAT:
 	def __init__(self):
 		try:
@@ -20,7 +46,7 @@ class DAT:
 			self.JanContainer = JanGui.create_container(self.JanWin.get_master())	
 			self.JanMenu      = JanGui.create_menu(self.JanWin.get_master(),
 			(
-				None, None, None, None, None, None, None,
+				None, None, None, self.load_image, None, None, None,
 				None, self.close, None, None, None, None, None,
 			)
 			)
@@ -32,34 +58,80 @@ class DAT:
 
 			self.JanWidthPygame  = 1024
 			self.JanHeightPygame = 768
+		
+			self.selected = "None"
+			self.sprites  = {}
 
 			self.JanBackgroundColorPygame = (127, 127, 127, 0)
 
 			self.create_frame(self.JanContainer.get_id())
-
+			
 			self.Tick_Fps = pygame.time.Clock()
 
-			self.poop_up()
-
 			while (self.JanRun):
-				self.Tick_Fps.tick(30)
+				self.Tick_Fps.tick(75)
+				self.JanPygame.fill((self.JanBackgroundColorPygame))
+
+				for event_ in pygame.event.get():
+					self.images_select(event_)
+					self.dynamic_popup(event_)
 
 				self.up_mouse_popup_event()
+				self.poop_up()
 
-				self.JanPygame.fill((self.JanBackgroundColorPygame))
-				
-				for event_ in pygame.event.get():
-					self.dynamic_popup(event_)
+				for sprites in self.sprites.values():
+					sprites.render()
 
 				self.window_loop()
 		except:
 			raise
 		return None
 
+	def images_select(self, event):
+		try:
+			for sprites in self.sprites.values():
+				if event.type is pygame.MOUSEBUTTONDOWN and event.button is 1:
+					try:
+						x, y = event.pos
+						if sprites.rect.collidepoint(x, y):
+							sprites.move = True
+					except:
+						raise
+
+				if event.type is pygame.MOUSEBUTTONUP:
+					sprites.move = False
+		except:
+			raise
+		return None
 	def up_mouse_popup_event(self):
 		try:
 			self.x_main, self.y_main = (self.JanWin.get_master().winfo_pointerx() - self.JanWin.get_master().winfo_vrootx(),
 										self.JanWin.get_master().winfo_pointery() - self.JanWin.get_master().winfo_vrooty())
+		except:
+			raise
+		return None
+
+	def find(self):
+		try:
+			return filedialog.askopenfilename(initialdir = "/", title = "Select file", filetypes = (
+			(
+				"files", "*.jpg *.png *.gif *.bmp *.pcx *.tga *.tif *.lbm *.pbm *.xpm"
+			),
+			(
+				"all files", "*.*"
+			)))
+		except:
+			raise
+		return None
+
+	def load_image(self):
+		try:
+			find = self.find()			
+			if find:
+				self.sprites[os.path.basename(find)] = load(self.JanPygame, find)
+
+				pygame.display.update()
+				self.JanWin.get_master().update()
 		except:
 			raise
 		return None
