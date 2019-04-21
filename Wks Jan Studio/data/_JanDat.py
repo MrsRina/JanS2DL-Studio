@@ -15,25 +15,48 @@ int_engine = lambda _int: int(JAN_ENGINE_engine.get(_int))
 class load(object):
 	def __init__(self, master, path):
 		try:
-			self.tag = str(os.path.basename(path))
-
-			self.img = pygame.image.load(path)
-
+			self.tag  = str(os.path.basename(path))
+			self.img  = pygame.image.load(path)
 			self.rect = pygame.rect.Rect(0, 0, self.img.get_width(), self.img.get_height())
 
-			self.master = master
+			self.master    = master
+			self.move      = False
+			self.rendering = True
+			self.selected  = False
+		except:
+			raise
+		return None
 
-			self.move = False
+	def delete(self):
+		try:
+			self.selected  = False
+			self.rendering = False
+		except:
+			raise
+		return None
+
+	def render_again(self):
+		try:
+			self.rendering = True
 		except:
 			raise
 		return None
 
 	def render(self):
 		try:
-			if self.move:
-				self.rect.center = pygame.mouse.get_pos()
+			if self.rendering:
+				if self.move:
+					self.rect.center = pygame.mouse.get_pos()
 
-			self.master.blit(self.img, (self.rect.x, self.rect.y))
+				self.master.blit(self.img, (self.rect.x, self.rect.y))
+
+				if self.selected:
+					key = pygame.key.get_pressed()
+
+					if key[pygame.K_DELETE]: self.delete()
+
+					pygame.draw.rect(self.master, (255, 0, 0), self.rect)
+
 		except:
 			raise
 		return None
@@ -94,7 +117,12 @@ class DAT:
 					try:
 						x, y = event.pos
 						if sprites.rect.collidepoint(x, y):
-							sprites.move = True
+							sprites.selected = True
+							sprites.move     = True
+
+						if not sprites.rect.collidepoint(x, y):
+							sprites.selected = False
+							sprites.selected = False
 					except:
 						raise
 
