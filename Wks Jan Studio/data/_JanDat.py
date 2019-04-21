@@ -20,7 +20,7 @@ class load(object):
 		try:
 			self.tag     = str(os.path.basename(path))
 			self.img     = pygame.image.load(path)
-			self.rect    = pygame.rect.Rect(0, 0, self.img.get_width(), self.img.get_height())
+			self.rect    = self.img.get_rect()
 			self.effect_ = pygame.Surface((self.rect.w, self.rect.h), pygame.SRCALPHA)
 			self.effect_.fill((255, 0, 0, 50))
 
@@ -28,21 +28,8 @@ class load(object):
 			self.move      = False
 			self.rendering = True
 			self.selected  = False
-		except:
-			raise
-		return None
 
-	def delete(self):
-		try:
-			self.selected  = False
-			self.rendering = False
-		except:
-			raise
-		return None
-
-	def render_again(self):
-		try:
-			self.rendering = True
+			self.delete_function = None
 		except:
 			raise
 		return None
@@ -58,11 +45,9 @@ class load(object):
 				if self.selected:
 					key = pygame.key.get_pressed()
 
-					if key[pygame.K_DELETE]: self.delete()
+					if key[pygame.K_DELETE]: self.delete_function()
 
 					self.master.blit(self.effect_, (self.rect.x, self.rect.y))
-
-
 		except:
 			raise
 		return None
@@ -119,7 +104,7 @@ class DAT:
 				for sprites in self.sprites.values():
 					sprites.render()
 
-				print(self.selected_type, self.selected, self.some_not_selected)
+			#print(self.selected_type, self.selected, self.some_not_selected)
 
 				self.window_loop()
 		except:
@@ -142,7 +127,16 @@ class DAT:
 
 	def images_select(self, event):
 		try:
+			global sprites
+
 			for sprites in self.sprites.values():
+
+				def delete_sprite():
+					sprites.selected  = False
+					sprites.rendering = False
+
+					del self.sprites[self.selected]
+
 				if event.type is pygame.MOUSEBUTTONDOWN and event.button is 1:
 					try:
 						x, y = event.pos
@@ -150,17 +144,21 @@ class DAT:
 							sprites.selected = True
 							sprites.move     = True
 
+							sprites.delete_function = delete_sprite
+
+							print(sprites.tag)
+
 							self.selected_some()
 							self.selected_type = "Sprite"
 							self.selected = sprites.tag
 	
 						if not sprites.rect.collidepoint(x, y):
 							sprites.selected = False
-							sprites.selected = False
 
 							self.no_selected_some()
 							self.selected_type = "None"
 							self.selected = "None"
+
 					except:
 						raise
 	

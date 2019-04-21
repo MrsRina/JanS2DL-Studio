@@ -1,6 +1,9 @@
 def remove(main, sprite):
 	try:
-		return main[sprite].delete()
+		if sprite is "None":
+			pass
+		else:
+			return main[sprite].delete()
 	except:
 		pass
 	return None
