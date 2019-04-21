@@ -26,6 +26,11 @@ except:
 	pass
 
 try:
+	import JanBools
+except:
+	pass
+
+try:
 	import JanFrame
 except:
 	pass

@@ -9,15 +9,20 @@ from _JanJa import JAN_ENGINE_engine
 from _JanJa import replace_folder
 
 from JanPort import filedialog
+from JanPort import JanMath
+
+from JanPort import JanBools
 
 int_engine = lambda _int: int(JAN_ENGINE_engine.get(_int))
 
 class load(object):
 	def __init__(self, master, path):
 		try:
-			self.tag  = str(os.path.basename(path))
-			self.img  = pygame.image.load(path)
-			self.rect = pygame.rect.Rect(0, 0, self.img.get_width(), self.img.get_height())
+			self.tag     = str(os.path.basename(path))
+			self.img     = pygame.image.load(path)
+			self.rect    = pygame.rect.Rect(0, 0, self.img.get_width(), self.img.get_height())
+			self.effect_ = pygame.Surface((self.rect.w, self.rect.h), pygame.SRCALPHA)
+			self.effect_.fill((255, 0, 0, 50))
 
 			self.master    = master
 			self.move      = False
@@ -55,7 +60,8 @@ class load(object):
 
 					if key[pygame.K_DELETE]: self.delete()
 
-					pygame.draw.rect(self.master, (255, 0, 0), self.rect)
+					self.master.blit(self.effect_, (self.rect.x, self.rect.y))
+
 
 		except:
 			raise
@@ -66,11 +72,21 @@ class DAT:
 		try:
 			self.JanWin = JanGui.create_window(int_engine("Width"), int_engine("Height"), "JanJaEngine", "Gray")
 
+			self.selected = "None"
+			self.sprites  = {}
+
+			self.some_not_selected = True
+			self.selected_type = "None"
+
 			self.JanContainer = JanGui.create_container(self.JanWin.get_master())	
 			self.JanMenu      = JanGui.create_menu(self.JanWin.get_master(),
 			(
+				# Main container and Events container	
 				None, None, None, self.load_image, None, None, None,
 				None, self.close, None, None, None, None, None,
+			),
+			(
+				JanBools.remove(self.sprites, self.selected), None
 			)
 			)
 
@@ -81,9 +97,6 @@ class DAT:
 
 			self.JanWidthPygame  = 1024
 			self.JanHeightPygame = 768
-		
-			self.selected = "None"
-			self.sprites  = {}
 
 			self.JanBackgroundColorPygame = (127, 127, 127, 0)
 
@@ -97,6 +110,7 @@ class DAT:
 
 				for event_ in pygame.event.get():
 					self.images_select(event_)
+
 					self.dynamic_popup(event_)
 
 				self.up_mouse_popup_event()
@@ -105,7 +119,23 @@ class DAT:
 				for sprites in self.sprites.values():
 					sprites.render()
 
+				print(self.selected_type, self.selected, self.some_not_selected)
+
 				self.window_loop()
+		except:
+			raise
+		return None
+
+	def selected_some(self):
+		try:
+			self.some_not_selected = False
+		except:
+			raise
+		return None
+
+	def no_selected_some(self):
+		try:
+			self.some_not_selected = True
 		except:
 			raise
 		return None
@@ -120,17 +150,26 @@ class DAT:
 							sprites.selected = True
 							sprites.move     = True
 
+							self.selected_some()
+							self.selected_type = "Sprite"
+							self.selected = sprites.tag
+	
 						if not sprites.rect.collidepoint(x, y):
 							sprites.selected = False
 							sprites.selected = False
+
+							self.no_selected_some()
+							self.selected_type = "None"
+							self.selected = "None"
 					except:
 						raise
-
+	
 				if event.type is pygame.MOUSEBUTTONUP:
 					sprites.move = False
 		except:
 			raise
 		return None
+
 	def up_mouse_popup_event(self):
 		try:
 			self.x_main, self.y_main = (self.JanWin.get_master().winfo_pointerx() - self.JanWin.get_master().winfo_vrootx(),
@@ -176,21 +215,27 @@ class DAT:
 			raise
 		return None
 
+	def dynamic_popup(self, event):
+		try:
+			if self.some_not_selected is True:
+				if event.type is pygame.MOUSEBUTTONUP and event.button is 3:
+					self.create_file_tool_menu()
+
+			elif self.some_not_selected is False:
+				if self.selected_type is "Sprite":
+					if event.type is pygame.MOUSEBUTTONUP and event.button is 3:
+						self.create_selected_sprite_menu()
+
+		except:
+			raise
+		return None
+
 	def create_file_tool_menu(self):
 		try:			
 			try:
 				self.JanMenu.get("Main").tk_popup(self.x_main, self.y_main, 0)
 			finally:
 				self.JanMenu.get("Main").grab_release()
-		except:
-			raise
-		return None
-
-	def dynamic_popup(self, event):
-		try:
-			if event.type is pygame.MOUSEBUTTONUP and event.button is 3:
-				self.create_file_tool_menu()
-
 		except:
 			raise
 		return None
@@ -205,6 +250,16 @@ class DAT:
 			raise
 		return None
 
+	def create_selected_sprite_menu(self):
+		try:
+			try:
+				self.JanMenu.get("MainSprite").tk_popup(self.x_main, self.y_main, 0)
+			finally:
+				self.JanMenu.get("MainSprite").grab_release()
+		except:
+			raise
+		return None
+
 	def poop_up(self):
 		try:
 			self.JanContainer.frame_event_game.bind("<Button-3>", self.create_event_menu)
@@ -214,8 +269,8 @@ class DAT:
 
 	def close(self):
 		try:
-			if   not JAN_ENGINE_engine.get("Devolper") is (False):
-					self.JanRun = False; self.JanWin.close(); os.startfile(replace_folder("data/_JanJa.py", "run.cmd"))
+			if not JAN_ENGINE_engine.get("Devolper") is (False):
+				self.JanRun = False; self.JanWin.close(); os.startfile(replace_folder("data/_JanJa.py", "run.cmd"))
 
 			elif not JAN_ENGINE_engine.get("Devolper") is (True):
 				if self.JanWin.askExit("Do you want to quit?"):

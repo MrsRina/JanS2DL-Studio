@@ -36,13 +36,17 @@ class create_window(object):
 		return None
 
 class create_menu(object):
-	def __init__(self, master, cmds):
+	def __init__(self, master, cmds, sub_cmds):
 		try:
 			self.master_menu = tk.Menu(master, tearoff = 0)
+			self.master = master
 
 			master.configure(menu = self.master_menu, bg = "Gray")
 
-			self.cmds = cmds
+			self.cmds     = cmds
+			self.sub_cmds = sub_cmds
+
+			self.create_selected_sprite_menu()
 			self.create_file_and_tool_menu()
 			self.create_events_menu()
 		except:
@@ -77,11 +81,24 @@ class create_menu(object):
 			self.menu_events.add_command(label = "Event Settings"     , command = self.cmds[13] )
 		except:
 			raise
+		return None
+
+	def create_selected_sprite_menu(self):
+		try:
+			self.menu_selected_sprites = tk.Menu(self.master_menu, tearoff = 0, bg = "Gray", fg= "White")
+
+			self.menu_selected_sprites.add_command(label = "Delete Sprite (del)" , command = self.sub_cmds[0])
+		except:
+			raise
+		return None
 
 	def get(self, x):
 		try:
 			if (x) is ("Main"):
 				return (self.menu_file_tools)
+
+			elif (x) is ("MainSprite"):
+				return (self.menu_selected_sprites)
 
 			elif (x) is ("Events"):
 				return (self.menu_events)
