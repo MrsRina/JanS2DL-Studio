@@ -28,8 +28,6 @@ class load(object):
 			self.move      = False
 			self.rendering = True
 			self.selected  = False
-
-			self.delete_function = None
 		except:
 			raise
 		return None
@@ -37,16 +35,11 @@ class load(object):
 	def render(self):
 		try:
 			if self.rendering:
-				if self.move:
-					self.rect.center = pygame.mouse.get_pos()
-
 				self.master.blit(self.img, (self.rect.x, self.rect.y))
 
 				if self.selected:
-					key = pygame.key.get_pressed()
-
-					if key[pygame.K_DELETE]: self.delete_function()
-
+					if self.move:
+						self.rect.center = pygame.mouse.get_pos()
 					self.master.blit(self.effect_, (self.rect.x, self.rect.y))
 		except:
 			raise
@@ -61,7 +54,8 @@ class DAT:
 			self.sprites  = {}
 
 			self.some_not_selected = True
-			self.selected_type = "None"
+			self.selected_type     = "None"
+			self.selected_sprite   = None
 
 			self.JanContainer = JanGui.create_container(self.JanWin.get_master())	
 			self.JanMenu      = JanGui.create_menu(self.JanWin.get_master(),
@@ -71,7 +65,7 @@ class DAT:
 				None, self.close, None, None, None, None, None,
 			),
 			(
-				JanBools.remove(self.sprites, self.selected), None
+				self.delete_selected, None
 			)
 			)
 
@@ -104,7 +98,7 @@ class DAT:
 				for sprites in self.sprites.values():
 					sprites.render()
 
-			#print(self.selected_type, self.selected, self.some_not_selected)
+				print(self.some_not_selected, self.selected_type, self.selected, self.selected_sprite)
 
 				self.window_loop()
 		except:
@@ -125,45 +119,65 @@ class DAT:
 			raise
 		return None
 
+	def delete_selected(self):
+		try:
+			self.no_selected_some()
+
+			self.selected_sprite.tag       = "Deleted"
+			self.selected_type             = "None"
+			self.selected                  = "None"
+			
+			self.selected_sprite.selected  = False
+			self.selected_sprite.rendering = False
+			self.selected_sprite.rect      = None
+			self.selected_sprite           = None
+
+			self.sprites.pop(self.selected_sprite.tag)
+		except:
+			pass
+		return None
+
 	def images_select(self, event):
 		try:
-			global sprites
+			if event.type is pygame.KEYUP and event.key is pygame.K_DELETE:
+				self.delete_selected()
+
+			if event.type is pygame.MOUSEBUTTONUP:
+					try:
+						self.selected_sprite.move = False
+					except:
+						pass
 
 			for sprites in self.sprites.values():
-
-				def delete_sprite():
-					sprites.selected  = False
-					sprites.rendering = False
-
-					del self.sprites[self.selected]
-
 				if event.type is pygame.MOUSEBUTTONDOWN and event.button is 1:
 					try:
-						x, y = event.pos
-						if sprites.rect.collidepoint(x, y):
+						if sprites.rect.collidepoint(event.pos):
 							sprites.selected = True
 							sprites.move     = True
-
-							sprites.delete_function = delete_sprite
-
-							print(sprites.tag)
-
+	
 							self.selected_some()
-							self.selected_type = "Sprite"
-							self.selected = sprites.tag
-	
-						if not sprites.rect.collidepoint(x, y):
+							super(DAT, self).__setattr__("selected_sprite", None)
+							
+							super(DAT, self).__setattr__("selected_type", "Sprite")
+							super(DAT, self).__setattr__("selected", sprites.tag)
+							super(DAT, self).__setattr__("selected_sprite", sprites)
+		
+						if not sprites.rect.collidepoint(event.pos):
 							sprites.selected = False
-
-							self.no_selected_some()
-							self.selected_type = "None"
-							self.selected = "None"
-
-					except:
-						raise
+							sprites.move = False
 	
-				if event.type is pygame.MOUSEBUTTONUP:
-					sprites.move = False
+							self.no_selected_some()
+							if not self.selected_sprite is None:
+								super(DAT, self).__setattr__("selected_type", "Sprite")
+
+							else:
+								super(DAT, self).__setattr__("selected_type", "None")
+								
+							super(DAT, self).__setattr__("selected", None)
+
+						print(self.selected)
+					except:
+						pass
 		except:
 			raise
 		return None
@@ -223,7 +237,6 @@ class DAT:
 				if self.selected_type is "Sprite":
 					if event.type is pygame.MOUSEBUTTONUP and event.button is 3:
 						self.create_selected_sprite_menu()
-
 		except:
 			raise
 		return None
