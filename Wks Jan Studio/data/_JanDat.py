@@ -32,6 +32,35 @@ class load(object):
 			raise
 		return None
 
+	def do(self, type):
+		try:
+			if (type) is ("delete"):
+				self.img     = None
+				self.rect    = None
+				self.effect_ = None
+				self.master  = None
+				self.tag     = ("deleted")
+
+				self.move      = False
+				self.rendering = False
+				self.selected  = False
+
+			elif (type) is ("select"):
+				self.selected = True
+
+			elif (type) is ("dselect"):
+				self.selected = False
+
+			elif (type) is ("move"):
+				self.move = True
+
+			elif (type) is ("dmove"):
+				self.move = False
+
+		except:
+			raise
+		return None
+
 	def render(self):
 		try:
 			if self.rendering:
@@ -40,6 +69,7 @@ class load(object):
 				if self.selected:
 					if self.move:
 						self.rect.center = pygame.mouse.get_pos()
+
 					self.master.blit(self.effect_, (self.rect.x, self.rect.y))
 		except:
 			raise
@@ -50,14 +80,14 @@ class DAT:
 		try:
 			self.JanWin = JanGui.create_window(int_engine("Width"), int_engine("Height"), "JanJaEngine", "Gray")
 
-			self.selected = "None"
-			self.sprites  = {}
-
-			self.some_not_selected = True
-			self.selected_type     = "None"
-			self.selected_sprite   = None
+			self.selected_pos_sprites = None
+			self.some_selected        = False
+			self.selected_now         = None
+			self.selected             = None
+			self.sprites              = {}
 
 			self.JanContainer = JanGui.create_container(self.JanWin.get_master())	
+			self.JanStatus    = JanGui.create_status(self.JanWin.get_master(), "JanJaEngine")
 			self.JanMenu      = JanGui.create_menu(self.JanWin.get_master(),
 			(
 				# Main container and Events container	
@@ -65,7 +95,7 @@ class DAT:
 				None, self.close, None, None, None, None, None,
 			),
 			(
-				self.delete_selected, None
+				self.delete_selected, None, None, None, None
 			)
 			)
 
@@ -84,131 +114,139 @@ class DAT:
 			self.Tick_Fps = pygame.time.Clock()
 
 			while (self.JanRun):
-				self.Tick_Fps.tick(75)
+				self.Tick_Fps.tick(102)
 				self.JanPygame.fill((self.JanBackgroundColorPygame))
 
 				for event_ in pygame.event.get():
-					self.images_select(event_)
-
+					self.events_sprite(event_)
 					self.dynamic_popup(event_)
 
-				self.up_mouse_popup_event()
+				self.up_mouse_event()
 				self.poop_up()
 
 				for sprites in self.sprites.values():
 					sprites.render()
-
-				print(self.some_not_selected, self.selected_type, self.selected, self.selected_sprite)
 
 				self.window_loop()
 		except:
 			raise
 		return None
 
-	def selected_some(self):
+	def events_sprite(self, event):
 		try:
-			self.some_not_selected = False
-		except:
-			raise
-		return None
+			if event.type is pygame.MOUSEBUTTONDOWN:
+				for sprite_selected in self.sprites.values():
+					if event.button is 1:
+						try:
+							if sprite_selected.rect.collidepoint(event.pos):
+								if self.selected != None:
+									self.sprites[self.selected].selected = False
+									self.sprites[self.selected].move     = False
 
-	def no_selected_some(self):
-		try:
-			self.some_not_selected = True
+									self.selected = sprite_selected.tag
+
+									self.sprites[self.selected].selected = True
+									self.sprites[self.selected].move     = True
+
+									self.some_selected = True
+
+								elif self.selected is None:
+									self.selected = sprite_selected.tag
+
+									self.sprites[self.selected].selected = True
+									self.sprites[self.selected].move     = True
+
+									self.some_selected = True
+
+							elif not self.sprites[self.selected].rect.collidepoint(event.pos):
+								if self.selected != None:
+									self.sprites[self.selected].selected = False
+									self.sprites[self.selected].move     = False
+
+									self.selected      = None
+									self.some_selected = False
+
+								elif self.selected is None:
+									self.selected      = None
+									self.some_selected = False
+						except:
+							pass
+	
+					if event.button is 3:
+						try:						
+							if self.sprites[self.selected].selected:
+								self.create_selected_sprite_menu()
+						except:
+							pass
+
+			if event.type is pygame.MOUSEBUTTONUP:
+				if event.button is 1:
+					try:
+						self.sprites[self.selected].move = False
+					except:
+						pass
+
+			if event.type is pygame.KEYUP:
+				if event.key is pygame.K_DELETE:
+					try:
+						self.sprites[self.selected].do("delete")
+						self.some_selected = False
+						self.selected = None
+					except:
+						pass
+
+			if event.type is pygame.KEYDOWN:
+				if event.key is pygame.K_LCTRL and pygame.key.get_mods() & pygame.K_w:
+					print("Print")
 		except:
 			raise
 		return None
 
 	def delete_selected(self):
 		try:
-			self.no_selected_some()
-
-			self.selected_sprite.tag       = "Deleted"
-			self.selected_type             = "None"
-			self.selected                  = "None"
-			
-			self.selected_sprite.selected  = False
-			self.selected_sprite.rendering = False
-			self.selected_sprite.rect      = None
-			self.selected_sprite           = None
-
-			self.sprites.pop(self.selected_sprite.tag)
+			self.sprites[self.selected].do("delete")
+			self.some_selected = False
+			self.selected = None
 		except:
 			pass
 		return None
 
-	def images_select(self, event):
+	def remove(self, x):
 		try:
-			if event.type is pygame.KEYUP and event.key is pygame.K_DELETE:
-				self.delete_selected()
-
-			if event.type is pygame.MOUSEBUTTONUP:
-					try:
-						self.selected_sprite.move = False
-					except:
-						pass
-
-			for sprites in self.sprites.values():
-				if event.type is pygame.MOUSEBUTTONDOWN and event.button is 1:
-					try:
-						if sprites.rect.collidepoint(event.pos):
-							sprites.selected = True
-							sprites.move     = True
-	
-							self.selected_some()
-							super(DAT, self).__setattr__("selected_sprite", None)
-							
-							super(DAT, self).__setattr__("selected_type", "Sprite")
-							super(DAT, self).__setattr__("selected", sprites.tag)
-							super(DAT, self).__setattr__("selected_sprite", sprites)
-		
-						if not sprites.rect.collidepoint(event.pos):
-							sprites.selected = False
-							sprites.move = False
-	
-							self.no_selected_some()
-							if not self.selected_sprite is None:
-								super(DAT, self).__setattr__("selected_type", "Sprite")
-
-							else:
-								super(DAT, self).__setattr__("selected_type", "None")
-								
-							super(DAT, self).__setattr__("selected", None)
-
-						print(self.selected)
-					except:
-						pass
+			if (x) is ("sprite"):
+				return self.sprites.pop(self.selected)
 		except:
-			raise
+			pass
 		return None
 
-	def up_mouse_popup_event(self):
+	def up_mouse_event(self):
 		try:
 			self.x_main, self.y_main = (self.JanWin.get_master().winfo_pointerx() - self.JanWin.get_master().winfo_vrootx(),
 										self.JanWin.get_master().winfo_pointery() - self.JanWin.get_master().winfo_vrooty())
-		except:
-			raise
-		return None
 
-	def find(self):
-		try:
-			return filedialog.askopenfilename(initialdir = "/", title = "Select file", filetypes = (
-			(
-				"files", "*.jpg *.png *.gif *.bmp *.pcx *.tga *.tif *.lbm *.pbm *.xpm"
-			),
-			(
-				"all files", "*.*"
-			)))
+			self.JanStatus.set_text("{}{} {}".format(
+				"" if self.selected is None else self.selected, 
+				pygame.mouse.get_pos() if self.selected is None else " %d" % self.sprites[self.selected].rect.x,
+				"" if self.selected is None else self.sprites[self.selected].rect.y)
+			)
 		except:
 			raise
 		return None
 
 	def load_image(self):
 		try:
-			find = self.find()			
+			find = filedialog.askopenfilename(initialdir = os.path.realpath(__file__), title = "Select file", filetypes = (
+			(
+				"files", "*.jpg *.png *.gif *.bmp *.pcx *.tga *.tif *.lbm *.pbm *.xpm"
+			),
+			(
+				"all files", "*.*"
+			)))
+
 			if find:
 				self.sprites[os.path.basename(find)] = load(self.JanPygame, find)
 
+				self.selected = None
 				pygame.display.update()
 				self.JanWin.get_master().update()
 		except:
@@ -229,14 +267,9 @@ class DAT:
 
 	def dynamic_popup(self, event):
 		try:
-			if self.some_not_selected is True:
+			if not self.some_selected:
 				if event.type is pygame.MOUSEBUTTONUP and event.button is 3:
 					self.create_file_tool_menu()
-
-			elif self.some_not_selected is False:
-				if self.selected_type is "Sprite":
-					if event.type is pygame.MOUSEBUTTONUP and event.button is 3:
-						self.create_selected_sprite_menu()
 		except:
 			raise
 		return None

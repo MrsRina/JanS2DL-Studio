@@ -1,0 +1,9 @@
+se por acaso selecionado um sprite
+{
+	::
+ }
+
+se por acaso o selecionado nao for igual a Nada
+{
+	ele ira deselecionar
+}

@@ -87,7 +87,11 @@ class create_menu(object):
 		try:
 			self.menu_selected_sprites = tk.Menu(self.master_menu, tearoff = 0, bg = "Gray", fg= "White")
 
-			self.menu_selected_sprites.add_command(label = "Delete Sprite (del)" , command = self.sub_cmds[0])
+			self.menu_selected_sprites.add_command(label = "Delete (delete)"          , command = self.sub_cmds[0]); self.menu_selected_sprites.add_separator()
+			self.menu_selected_sprites.add_command(label = "Set Name (f2)"            , command = self.sub_cmds[1])
+			self.menu_selected_sprites.add_command(label = "Set Size (ctrl + mouse)"  , command = self.sub_cmds[2])
+			self.menu_selected_sprites.add_command(label = "Collide (shift + d)"      , command = self.sub_cmds[3])
+			self.menu_selected_sprites.add_command(label = "Color (ctrl + shift + b)" , command = self.sub_cmds[4])
 		except:
 			raise
 		return None
@@ -127,6 +131,25 @@ class create_container(object):
 	def get_id(self):
 		try:
 			return self.frame_game_developer
+		except:
+			raise
+		return None
+
+class create_status(object):
+	def __init__(self, master, text):
+		try:
+			self.master = master
+
+			self.label = tk.Label(self.master, text = text, bg = "Gray", anchor = "w", relief = tk.SUNKEN)
+
+			self.label.pack(fill = tk.X, side = tk.BOTTOM)
+		except:
+			raise
+		return None
+
+	def set_text(self, text):
+		try:
+			return self.label.configure(text = text)
 		except:
 			raise
 		return None
