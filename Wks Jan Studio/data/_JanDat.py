@@ -18,14 +18,15 @@ int_engine = lambda _int: int(JAN_ENGINE_engine.get(_int))
 class load(object):
 	def __init__(self, master, path):
 		try:
+			self.path    = path
 			self.tag     = str(os.path.basename(path))
-			self.img     = pygame.image.load(path)
+			self.img     = pygame.image.load(self.path)
 			self.rect    = self.img.get_rect()
-			self.effect_ = pygame.Surface((self.rect.w, self.rect.h), pygame.SRCALPHA)
-			self.effect_.fill((255, 0, 0, 50))
 
 			self.master    = master
 			self.move      = False
+			self.resize    = False
+			self.rotate    = False
 			self.rendering = True
 			self.selected  = False
 		except:
@@ -35,6 +36,7 @@ class load(object):
 	def do(self, type):
 		try:
 			if (type) is ("delete"):
+				self.path    = None
 				self.img     = None
 				self.rect    = None
 				self.effect_ = None
@@ -42,21 +44,10 @@ class load(object):
 				self.tag     = ("deleted")
 
 				self.move      = False
+				self.resize    = False
+				self.rotate    = False
 				self.rendering = False
 				self.selected  = False
-
-			elif (type) is ("select"):
-				self.selected = True
-
-			elif (type) is ("dselect"):
-				self.selected = False
-
-			elif (type) is ("move"):
-				self.move = True
-
-			elif (type) is ("dmove"):
-				self.move = False
-
 		except:
 			raise
 		return None
@@ -70,7 +61,20 @@ class load(object):
 					if self.move:
 						self.rect.center = pygame.mouse.get_pos()
 
-					self.master.blit(self.effect_, (self.rect.x, self.rect.y))
+					if self.rotate:
+						pass
+
+					if self.resize:
+						self.rect.w, self.rect.h = pygame.mouse.get_pos()
+						
+						self.img = pygame.transform.scale(pygame.image.load(self.path), (self.rect.w, self.rect.h))
+
+						pygame.display.flip()
+
+					self.effect_ = pygame.Surface((self.rect.w, self.rect.h), pygame.SRCALPHA)
+					self.effect_.fill((255, 0, 0, 50))
+
+					self.master.blit(self.effect_, self.rect)
 		except:
 			raise
 		return None
@@ -79,6 +83,8 @@ class DAT:
 	def __init__(self):
 		try:
 			self.JanWin = JanGui.create_window(int_engine("Width"), int_engine("Height"), "JanJaEngine", "Gray")
+
+			self.bool_click = 0
 
 			self.selected_pos_sprites = None
 			self.some_selected        = False
@@ -121,7 +127,7 @@ class DAT:
 					self.events_sprite(event_)
 					self.dynamic_popup(event_)
 
-				self.up_mouse_event()
+				self.up_events()
 				self.poop_up()
 
 				for sprites in self.sprites.values():
@@ -137,38 +143,56 @@ class DAT:
 			if event.type is pygame.MOUSEBUTTONDOWN:
 				for sprite_selected in self.sprites.values():
 					if event.button is 1:
+						if self.bool_click is 0:
+							self.bool_click = 0.1
+
+						elif self.bool_click < 2:
+							try:
+								if sprite_selected.rect.collidepoint(event.pos):
+									if self.selected != None:
+										self.sprites[self.selected].selected = False
+										self.sprites[self.selected].move     = False
+
+										self.selected = sprite_selected.tag
+	
+										self.sprites[self.selected].selected = True
+										self.sprites[self.selected].move     = True
+	
+										self.some_selected = True
+	
+									elif self.selected is None:
+										self.selected = sprite_selected.tag
+	
+										self.sprites[self.selected].selected = True
+										self.sprites[self.selected].move     = True
+										
+										self.some_selected = True
+
+									pygame.display.flip()
+									self.JanWin.get_master().update()
+							except:
+								pass
+
+					if event.button is 1:
 						try:
-							if sprite_selected.rect.collidepoint(event.pos):
-								if self.selected != None:
-									self.sprites[self.selected].selected = False
-									self.sprites[self.selected].move     = False
+							if self.sprites[self.selected].selected:
+								if self.sprites[self.selected].rect.collidepoint(event.pos):
+									self.sprites[self.selected].move = True
 
-									self.selected = sprite_selected.tag
+								elif not self.sprites[self.selected].rect.collidepoint(event.pos):
+									if self.selected != None:
+										self.sprites[self.selected].selected = False
+										self.sprites[self.selected].move     = False
+	
+										self.selected      = None
+										self.some_selected = False
+	
+									elif self.selected is None:
+										self.selected      = None
+										self.some_selected = False
 
-									self.sprites[self.selected].selected = True
-									self.sprites[self.selected].move     = True
-
-									self.some_selected = True
-
-								elif self.selected is None:
-									self.selected = sprite_selected.tag
-
-									self.sprites[self.selected].selected = True
-									self.sprites[self.selected].move     = True
-
-									self.some_selected = True
-
-							elif not self.sprites[self.selected].rect.collidepoint(event.pos):
-								if self.selected != None:
-									self.sprites[self.selected].selected = False
-									self.sprites[self.selected].move     = False
-
-									self.selected      = None
-									self.some_selected = False
-
-								elif self.selected is None:
-									self.selected      = None
-									self.some_selected = False
+									pygame.display.flip()
+									self.JanWin.get_master().update()
 						except:
 							pass
 	
@@ -179,10 +203,23 @@ class DAT:
 						except:
 							pass
 
+					if event.button is 2:
+						try:
+							self.sprites[self.selected].resize = True
+						except:
+							pass
+
 			if event.type is pygame.MOUSEBUTTONUP:
 				if event.button is 1:
 					try:
-						self.sprites[self.selected].move = False
+						if self.sprites[self.selected].selected:
+							self.sprites[self.selected].move = False
+					except:
+						pass
+
+				if event.button is 2:
+					try:
+						self.sprites[self.selected].resize = False
 					except:
 						pass
 
@@ -192,12 +229,11 @@ class DAT:
 						self.sprites[self.selected].do("delete")
 						self.some_selected = False
 						self.selected = None
+
+						pygame.display.flip()
+						self.JanWin.get_master().update()
 					except:
 						pass
-
-			if event.type is pygame.KEYDOWN:
-				if event.key is pygame.K_LCTRL and pygame.key.get_mods() & pygame.K_w:
-					print("Print")
 		except:
 			raise
 		return None
@@ -207,6 +243,10 @@ class DAT:
 			self.sprites[self.selected].do("delete")
 			self.some_selected = False
 			self.selected = None
+
+
+			pygame.display.flip()
+			self.JanWin.get_master().update()
 		except:
 			pass
 		return None
@@ -219,16 +259,25 @@ class DAT:
 			pass
 		return None
 
-	def up_mouse_event(self):
+	def up_events(self):
 		try:
 			self.x_main, self.y_main = (self.JanWin.get_master().winfo_pointerx() - self.JanWin.get_master().winfo_vrootx(),
 										self.JanWin.get_master().winfo_pointery() - self.JanWin.get_master().winfo_vrooty())
 
-			self.JanStatus.set_text("{}{} {}".format(
+			self.JanStatus.set_text("{}{} {} {} {}".format(
 				"" if self.selected is None else self.selected, 
 				pygame.mouse.get_pos() if self.selected is None else " %d" % self.sprites[self.selected].rect.x,
-				"" if self.selected is None else self.sprites[self.selected].rect.y)
+				"" if self.selected is None else self.sprites[self.selected].rect.y,
+				"" if self.selected is None else self.sprites[self.selected].rect.w,
+				"" if self.selected is None else self.sprites[self.selected].rect.h)
 			)
+
+			if self.bool_click != 0:
+				self.bool_click += 0.1
+
+				if self.bool_click >= 2:
+					self.bool_click = 0
+
 		except:
 			raise
 		return None

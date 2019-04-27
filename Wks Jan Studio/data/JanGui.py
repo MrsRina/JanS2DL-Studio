@@ -89,7 +89,7 @@ class create_menu(object):
 
 			self.menu_selected_sprites.add_command(label = "Delete (delete)"          , command = self.sub_cmds[0]); self.menu_selected_sprites.add_separator()
 			self.menu_selected_sprites.add_command(label = "Set Name (f2)"            , command = self.sub_cmds[1])
-			self.menu_selected_sprites.add_command(label = "Set Size (ctrl + mouse)"  , command = self.sub_cmds[2])
+			self.menu_selected_sprites.add_command(label = "Set Size (mouse 2)"  , command = self.sub_cmds[2])
 			self.menu_selected_sprites.add_command(label = "Collide (shift + d)"      , command = self.sub_cmds[3])
 			self.menu_selected_sprites.add_command(label = "Color (ctrl + shift + b)" , command = self.sub_cmds[4])
 		except:
