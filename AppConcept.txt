@@ -1,0 +1,75 @@
+// Wks Jan Studio
+Menu Barr - No
+Frame Tools - Yes
+Container Tools - Yes
+
+if Container Tools
+	MAIN - Game Developing - Yes
+	EVENTS - Game Events Developing - Yes
+
+with Frame Tools in LEFT:
+	Frame Tools x Container Tools Frame Tools - Yes
+	
+	if Frame Tools x Container Tools Frame Tools
+		Tools
+		Events
+
+		Tools
+		{
+		Sprites
+			if ^ Sprites ^
+				Name [SET NAME]
+				
+				Image [SET IMAGE PATH]
+				Frames [SET FRAMES IF IS (.gif ...)]
+				X [SET X]
+				Y [SET Y]
+		Objects
+			if ^ Objects ^
+				Name [SET NAME]
+
+				Image [SET IMAGE PATH]
+				Frames [SET NUMBER FRAMES IF IS (.gif ...)]
+				X [SET X]
+				Y [SET Y]
+				
+				Event [SET MAIN EVENT]
+		Text
+			if ^ Text ^
+				Name [SET NAME]
+
+				Text [SET TEXT]
+				Font [SET FONT SYS OR FONT PATH ( .TTF, .OTF ...)]
+				Font Size [SET SIZE FONT]
+				X [SET X]
+				Y [SET Y]
+
+				Event [SET MAIN EVENT]							
+		Background
+			if ^ Background ^
+				Name [SET NAME]
+
+				Color [SET COLOR]
+				Image [SET BACKGROUND IMAGE]
+
+				Camera [SET WHAT CAMERA BACKGROUND WILL BE]
+		Camera
+			if ^ Camera ^
+				Name [SET NAME]			
+
+				X [SET X]
+				Y [SET Y]
+		}
+
+		Events
+		{
+		New Event Mouse
+		New Event Keyboard
+		New Event Collide
+		New Event Window
+		Event Settings
+		}
+
+
+		
+

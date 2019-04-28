@@ -57,14 +57,14 @@ class create_menu(object):
 		try:
 			self.menu_file_tools = tk.Menu(self.master_menu, tearoff = 0, bg = "Gray", fg = "White")
 
-			self.menu_file_tools.add_command(label = "Open File",    command = self.cmds[0] )
-			self.menu_file_tools.add_command(label = "Save File",    command = self.cmds[1] )
-			self.menu_file_tools.add_command(label = "Save File As", command = self.cmds[2] ); self.menu_file_tools.add_separator()
-			self.menu_file_tools.add_command(label = "Sprites",      command = self.cmds[3] )
+			self.menu_file_tools.add_command(label = "Open File"    ,    command = self.cmds[0] )
+			self.menu_file_tools.add_command(label = "Save File"    ,    command = self.cmds[1] )
+			self.menu_file_tools.add_command(label = "Save File As" , command = self.cmds[2] ); self.menu_file_tools.add_separator()
+			self.menu_file_tools.add_command(label = "Sprites"      ,      command = self.cmds[3] )
 			self.menu_file_tools.add_command(label = "Objects",      command = self.cmds[4] )
-			self.menu_file_tools.add_command(label = "Effects",      command = self.cmds[5] )
-			self.menu_file_tools.add_command(label = "Text",         command = self.cmds[6] )
-			self.menu_file_tools.add_command(label = "Background",   command = self.cmds[7] ); self.menu_file_tools.add_separator()
+			self.menu_file_tools.add_command(label = "Text",         command = self.cmds[5] )
+			self.menu_file_tools.add_command(label = "Background",   command = self.cmds[6] ); self.menu_file_tools.add_separator()
+			self.menu_file_tools.add_command(label = "Camera",       command = self.cmds[7] )
 			self.menu_file_tools.add_command(label = "Exit",         command = self.cmds[8] )
 		except:
 			raise
@@ -89,7 +89,7 @@ class create_menu(object):
 
 			self.menu_selected_sprites.add_command(label = "Delete (delete)"          , command = self.sub_cmds[0]); self.menu_selected_sprites.add_separator()
 			self.menu_selected_sprites.add_command(label = "Set Name (f2)"            , command = self.sub_cmds[1])
-			self.menu_selected_sprites.add_command(label = "Set Size (mouse 2)"  , command = self.sub_cmds[2])
+			self.menu_selected_sprites.add_command(label = "Set Size (mouse 2)"  	  , command = self.sub_cmds[2])
 			self.menu_selected_sprites.add_command(label = "Collide (shift + d)"      , command = self.sub_cmds[3])
 			self.menu_selected_sprites.add_command(label = "Color (ctrl + shift + b)" , command = self.sub_cmds[4])
 		except:
@@ -153,3 +153,9 @@ class create_status(object):
 		except:
 			raise
 		return None
+
+def create_frame_tools(object):
+	def __init__(self):
+		try:
+		except:
+			pass

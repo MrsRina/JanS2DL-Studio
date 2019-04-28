@@ -82,7 +82,7 @@ class load(object):
 class DAT:
 	def __init__(self):
 		try:
-			self.JanWin = JanGui.create_window(int_engine("Width"), int_engine("Height"), "JanJaEngine", "Gray")
+			self.JanWin = JanGui.create_window(int_engine("Width"), int_engine("Height"), "JanCreate Studio", "Gray")
 
 			self.bool_click = 0
 
