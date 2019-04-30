@@ -1,5 +1,4 @@
 // Include
-#include <windows.h>
 #include <iostream>
 
 using namespace std;
@@ -9,7 +8,8 @@ using namespace std;
 int main()
 {
 	// add path
-	system("path = data/python/");
+	system("setx path = %path%%~dp0\data\python\");
+	system("cd data\python\");
 	system("cls");
 	
 	// run main

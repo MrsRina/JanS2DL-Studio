@@ -1,15 +1,18 @@
-from JanPort import tk, ttk, messagebox
+from JanPort import tk, ttk, messagebox, _JanJa
 
 class create_window(object):
-	def __init__(self, width, height, title, color):
+	def __init__(self, width, height, title, color, icon):
 		try:
 			self.Window = tk.Tk()
 			self.Window.geometry("{}x{}".format(width, height))
 			self.Window.title(title)
+			self.Window.iconbitmap(default = icon)
 			self.Window.configure(background = color)
 
 			self.Style = ttk.Style()
 			self.Style.theme_use("clam")
+
+			self.Window.update()
 		except:
 			raise
 		return None
@@ -57,15 +60,15 @@ class create_menu(object):
 		try:
 			self.menu_file_tools = tk.Menu(self.master_menu, tearoff = 0, bg = "Gray", fg = "White")
 
-			self.menu_file_tools.add_command(label = "Open File"    ,    command = self.cmds[0] )
-			self.menu_file_tools.add_command(label = "Save File"    ,    command = self.cmds[1] )
+			self.menu_file_tools.add_command(label = "Open File"    , command = self.cmds[0] )
+			self.menu_file_tools.add_command(label = "Save File"    , command = self.cmds[1] )
 			self.menu_file_tools.add_command(label = "Save File As" , command = self.cmds[2] ); self.menu_file_tools.add_separator()
-			self.menu_file_tools.add_command(label = "Sprites"      ,      command = self.cmds[3] )
-			self.menu_file_tools.add_command(label = "Objects",      command = self.cmds[4] )
-			self.menu_file_tools.add_command(label = "Text",         command = self.cmds[5] )
-			self.menu_file_tools.add_command(label = "Background",   command = self.cmds[6] ); self.menu_file_tools.add_separator()
-			self.menu_file_tools.add_command(label = "Camera",       command = self.cmds[7] )
-			self.menu_file_tools.add_command(label = "Exit",         command = self.cmds[8] )
+			self.menu_file_tools.add_command(label = "Sprites"      , command = self.cmds[3] )
+			self.menu_file_tools.add_command(label = "Objects"      , command = self.cmds[4] )
+			self.menu_file_tools.add_command(label = "Text"         , command = self.cmds[5] )
+			self.menu_file_tools.add_command(label = "Background"   , command = self.cmds[6] )
+			self.menu_file_tools.add_command(label = "Camera"       , command = self.cmds[7] ); self.menu_file_tools.add_separator()
+			self.menu_file_tools.add_command(label = "Exit"         , command = self.cmds[8] )
 		except:
 			raise
 		return None
@@ -111,7 +114,7 @@ class create_menu(object):
 		return None
 
 class create_container(object):
-	def __init__(self, master):
+	def __init__(self, master, frame, tag):
 		try:
 			self.master = master
 
@@ -123,7 +126,7 @@ class create_container(object):
 			self.container.add(self.frame_game_developer , text = "Game    "   )
 			self.container.add(self.frame_event_game     , text = "Events    " )
 
-			self.container.place(x = 0, y = 0)
+			self.container.place(x = frame.winfo_width() + 200, y = 0)
 		except:
 			raise
 		return None
@@ -154,8 +157,27 @@ class create_status(object):
 			raise
 		return None
 
-def create_frame_tools(object):
-	def __init__(self):
+class create_frame_tools(object):
+	def __init__(self, master):
 		try:
+			self.master    = master
+
+			self.resize = tk.Canvas(master, width = 200, height = master.winfo_screenheight(), bg = "Gray")
+			self.frame  = tk.Frame(master,  width = 200, height = master.winfo_screenheight(), bg = "Gray")
+
+			self.resize.place(x = 1, y = 0)
+			self.frame.place(x = 0, y = 0)
 		except:
-			pass
+			raise
+		return None
+
+	def resize_config(self, container):
+		try:
+			def resizing(event):
+				self.frame.config(width = event.x); self.resize.config(width = event.x)
+				container.place(x = event.x + 1)
+
+			self.resize.bind("<B1-Motion>", resizing)
+		except:
+			raise
+		return None

@@ -3,15 +3,12 @@ from _JanJa import sys
 from _JanJa import os
 
 from _JanJa import JanGui
-from _JanJa import JanFrame
 
 from _JanJa import JAN_ENGINE_engine
 from _JanJa import replace_folder
 
 from JanPort import filedialog
 from JanPort import JanMath
-
-from JanPort import JanBools
 
 int_engine = lambda _int: int(JAN_ENGINE_engine.get(_int))
 
@@ -82,7 +79,8 @@ class load(object):
 class DAT:
 	def __init__(self):
 		try:
-			self.JanWin = JanGui.create_window(int_engine("Width"), int_engine("Height"), "JanCreate Studio", "Gray")
+			self.JanWin = JanGui.create_window(int_engine("Width"), int_engine("Height"), "JanCreate Studio", "Gray",
+				r"{}".format(replace_folder("/_JanJa.py", "/icone.ico")))
 
 			self.bool_click = 0
 
@@ -92,9 +90,11 @@ class DAT:
 			self.selected             = None
 			self.sprites              = {}
 
-			self.JanContainer = JanGui.create_container(self.JanWin.get_master())	
-			self.JanStatus    = JanGui.create_status(self.JanWin.get_master(), "JanJaEngine")
-			self.JanMenu      = JanGui.create_menu(self.JanWin.get_master(),
+			self.JanFrameTools = JanGui.create_frame_tools(self.JanWin.get_master())
+			self.JanContainer  = JanGui.create_container(self.JanWin.get_master(), self.JanFrameTools.frame, "Container Developer")
+			self.JanFrameTools.resize_config(self.JanContainer.container)
+			self.JanStatus     = JanGui.create_status(self.JanWin.get_master(), "JanJaEngine")
+			self.JanMenu       = JanGui.create_menu(self.JanWin.get_master(),
 			(
 				# Main container and Events container	
 				None, None, None, self.load_image, None, None, None,
