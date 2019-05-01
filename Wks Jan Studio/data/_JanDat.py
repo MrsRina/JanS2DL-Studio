@@ -91,7 +91,7 @@ class DAT:
 			self.sprites              = {}
 
 			self.JanFrameTools = JanGui.create_frame_tools(self.JanWin.get_master())
-			self.JanContainer  = JanGui.create_container(self.JanWin.get_master(), self.JanFrameTools.frame, "Container Developer")
+			self.JanContainer  = JanGui.create_container(self.JanWin.get_master(), self.JanFrameTools.resize, "Container Developer")
 			self.JanFrameTools.resize_config(self.JanContainer.container)
 			self.JanStatus     = JanGui.create_status(self.JanWin.get_master(), "JanJaEngine")
 			self.JanMenu       = JanGui.create_menu(self.JanWin.get_master(),
@@ -130,6 +130,8 @@ class DAT:
 				self.up_events()
 				self.poop_up()
 
+				print(self.bool_click)
+
 				for sprites in self.sprites.values():
 					sprites.render()
 
@@ -143,21 +145,20 @@ class DAT:
 			if event.type is pygame.MOUSEBUTTONDOWN:
 				for sprite_selected in self.sprites.values():
 					if event.button is 1:
-						if self.bool_click is 0:
-							self.bool_click = 0.1
-
-						elif self.bool_click < 2:
-							try:
-								if sprite_selected.rect.collidepoint(event.pos):
+						try:
+							if sprite_selected.rect.collidepoint(event.pos):
+								if self.bool_click is 0:
+									self.bool_click = 0.1
+	
+								elif self.bool_click <= 1.5:
 									if self.selected != None:
 										self.sprites[self.selected].selected = False
 										self.sprites[self.selected].move     = False
-
 										self.selected = sprite_selected.tag
 	
 										self.sprites[self.selected].selected = True
 										self.sprites[self.selected].move     = True
-	
+		
 										self.some_selected = True
 	
 									elif self.selected is None:
@@ -167,11 +168,11 @@ class DAT:
 										self.sprites[self.selected].move     = True
 										
 										self.some_selected = True
-
+	
 									pygame.display.flip()
 									self.JanWin.get_master().update()
-							except:
-								pass
+						except:
+							pass
 
 					if event.button is 1:
 						try:
@@ -200,12 +201,18 @@ class DAT:
 						try:						
 							if self.sprites[self.selected].selected:
 								self.create_selected_sprite_menu()
+								
+								pygame.display.flip()
+								self.JanWin.get_master().update()
 						except:
 							pass
 
 					if event.button is 2:
 						try:
 							self.sprites[self.selected].resize = True
+
+							pygame.display.flip()
+							self.JanWin.get_master().update()
 						except:
 							pass
 
@@ -319,6 +326,9 @@ class DAT:
 			if not self.some_selected:
 				if event.type is pygame.MOUSEBUTTONUP and event.button is 3:
 					self.create_file_tool_menu()
+
+					pygame.display.update()
+					self.JanWin.get_master().update()
 		except:
 			raise
 		return None

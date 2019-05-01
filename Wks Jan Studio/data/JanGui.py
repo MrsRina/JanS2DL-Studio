@@ -88,7 +88,7 @@ class create_menu(object):
 
 	def create_selected_sprite_menu(self):
 		try:
-			self.menu_selected_sprites = tk.Menu(self.master_menu, tearoff = 0, bg = "Gray", fg= "White")
+			self.menu_selected_sprites = tk.Menu(self.master_menu, tearoff = 0, bg = "Gray", fg = "White")
 
 			self.menu_selected_sprites.add_command(label = "Delete (delete)"          , command = self.sub_cmds[0]); self.menu_selected_sprites.add_separator()
 			self.menu_selected_sprites.add_command(label = "Set Name (f2)"            , command = self.sub_cmds[1])
@@ -126,7 +126,7 @@ class create_container(object):
 			self.container.add(self.frame_game_developer , text = "Game    "   )
 			self.container.add(self.frame_event_game     , text = "Events    " )
 
-			self.container.place(x = frame.winfo_width() + 200, y = 0)
+			self.container.place(x = 205, y = 0)
 		except:
 			raise
 		return None
@@ -162,22 +162,43 @@ class create_frame_tools(object):
 		try:
 			self.master    = master
 
-			self.resize = tk.Canvas(master, width = 200, height = master.winfo_screenheight(), bg = "Gray")
-			self.frame  = tk.Frame(master,  width = 200, height = master.winfo_screenheight(), bg = "Gray")
+			self.resize = tk.Frame(master, width = 200, height = master.winfo_screenheight(), bg = "Gray", bd = 5)
+			self.frame  = tk.Frame(master, width = 200, height = master.winfo_screenheight(), bg = "Gray")
 
-			self.resize.place(x = 1, y = 0)
+			self.resize.place(x = 3, y = 0)
 			self.frame.place(x = 0, y = 0)
+
+			self.container = ttk.Notebook(self.resize)
 		except:
 			raise
 		return None
 
 	def resize_config(self, container):
 		try:
-			def resizing(event):
-				self.frame.config(width = event.x); self.resize.config(width = event.x)
-				container.place(x = event.x + 1)
+			def mouse(event):
+				try:
+					self.resize.config(cursor = "sb_h_double_arrow")
+				except:
+					pass
+				return None
 
-			self.resize.bind("<B1-Motion>", resizing)
+			def res(event):
+				try:
+					self.frame.config(width = event.x); self.resize.config(width = event.x)
+					container.place(x = event.x + 5)
+				except:
+					pass
+				return None
+
+			self.resize.bind("<B1-Motion>", res)
+			self.resize.bind("<Enter>", mouse)
+		except:
+			raise
+		return None
+
+	def get_raise(self):
+		try:
+			return self.frame
 		except:
 			raise
 		return None
