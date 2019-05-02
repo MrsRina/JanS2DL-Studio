@@ -1,8 +1,11 @@
-from JanPort import tk, ttk, messagebox, _JanJa
+from JanPort import tk, ttk, messagebox, _JanJa, os
 
 class start_(object):
 	def __init__(self, image, callback):
 		try:
+			self.callback = callback
+			self.load_number = 0
+
 			self.window = tk.Tk()
 			self.window.overrideredirect(True)
 
@@ -13,10 +16,10 @@ class start_(object):
 			self.image(image)
 			self.text()
 
-			self.callback = callback
-			self.window.after(1000, self._)
+			self.loading = ttk.Progressbar(self.window, orient = "horizontal", length = 620, mode = "determinate")
+			self.loading.place(x = 10, y = 610)
 
-			self.window.mainloop()
+			self.loading_tread()
 		except:
 			raise
 		return None
@@ -34,15 +37,54 @@ class start_(object):
 
 	def text(self):
 		try:
-			credit = tk.Label(self.window, text = "Credit", font = "16", bg = "Gray")
+			credit = tk.Label(self.window, text = "Wks Jan Studio", font = "Arial 10", bg = "Gray")
 			credit.place(x = 10, y = 490)
+
+			programer = tk.Label(self.window, text = "Programer - Sr_Rina", font = "Arial 10", bg = "Gray")
+			programer.place(x = 10, y = 510)
+
+			designer = tk.Label(self.window, text = "Designer - PEDRIN", font = "Arial 10", bg = "Gray")
+			designer.place(x = 10, y = 530)
+
+			self.progress_text = tk.Label(self.window, text = "Loading...", font = "Arial 10", bg = "Gray")
+			self.progress_text.place(x = 10, y = 585)
 		except:
 			raise
 		return None
 
-	def _(self):
+	def loading_tread(self):
 		try:
-			self.window.destroy()
+			self.loading["maximum"] = 125
+			
+			run = True
+			while (run):
+				self.load_number += 0.1
+				self.loading["value"] = self.load_number
+
+				if self.load_number >= 25:
+					self.progress_text.configure(text = os.path.abspath("_JanDat.py"))
+
+				if self.load_number >= 50:
+					self.progress_text.configure(text = os.path.abspath("_JanJa.py"))
+
+				if self.load_number >= 75:
+					self.progress_text.configure(text = os.path.abspath("JanGui.py"))
+
+				if self.load_number >= 100:
+					self.progress_text.configure(text = os.path.abspath("JanMath.py"))
+
+				if self.load_number >= 125:
+					self.progress_text.configure(text = os.path.abspath("JanPort.py"))
+
+				if self.load_number >= 125:
+					self.window.destroy()
+					run = False
+
+				try:
+					self.window.update()
+				except:
+					pass
+
 			self.callback()
 		except:
 			raise

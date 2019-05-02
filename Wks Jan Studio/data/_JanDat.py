@@ -84,6 +84,7 @@ class DAT:
 				r"{}".format(replace_folder("/_JanJa.py", "/icone.ico")))
 
 			self.bool_click = 0
+			self.tread_load = 0
 
 			self.selected_pos_sprites = None
 			self.some_selected        = False
@@ -122,6 +123,8 @@ class DAT:
 
 			while (self.JanRun):
 
+				print(self.tread_load)
+
 				self.Tick_Fps.tick(102)
 				self.JanPygame.fill((self.JanBackgroundColorPygame))
 
@@ -131,8 +134,6 @@ class DAT:
 
 				self.up_events()
 				self.poop_up()
-
-				print(self.bool_click)
 
 				for sprites in self.sprites.values():
 					sprites.render()
