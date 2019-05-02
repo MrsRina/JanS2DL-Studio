@@ -3,6 +3,7 @@ from _JanJa import sys
 from _JanJa import os
 
 from _JanJa import JanGui
+from _JanJa import hardware_res
 
 from _JanJa import JAN_ENGINE_engine
 from _JanJa import replace_folder
@@ -92,23 +93,9 @@ class DAT:
 			self.selected             = None
 			self.sprites              = {}
 
-			self.JanFrameTools = JanGui.create_frame_tools(self.JanWin.get_master())
-			self.JanContainer  = JanGui.create_container(self.JanWin.get_master(), self.JanFrameTools.resize, "Container Developer")
-			self.JanFrameTools.resize_config(self.JanContainer.container)
-			self.JanStatus     = JanGui.create_status(self.JanWin.get_master(), "JanJaEngine")
-			self.JanMenu       = JanGui.create_menu(self.JanWin.get_master(),
-			(
-				# Main container and Events container	
-				None, None, None, self.load_image, None, None, None,
-				None, self.close, None, None, None, None, None,
-			),
-			(
-				self.delete_selected, None, None, None, None
-			)
-			)
+			self.create_widget()
 
-			self.x_main, self.y_main = (self.JanWin.get_master().winfo_pointerx() - self.JanWin.get_master().winfo_vrootx(),
-										self.JanWin.get_master().winfo_pointery() - self.JanWin.get_master().winfo_vrooty())
+			self.x_main, self.y_main = JanMath.Sync_Resolution_Pos(self.JanWin.get_master())
 
 			self.JanRun = True
 
@@ -123,7 +110,7 @@ class DAT:
 
 			while (self.JanRun):
 
-				print(self.tread_load)
+				print(self.JanWin.get("Width"), self.JanWin.get("Height"))
 
 				self.Tick_Fps.tick(102)
 				self.JanPygame.fill((self.JanBackgroundColorPygame))
@@ -271,8 +258,9 @@ class DAT:
 
 	def up_events(self):
 		try:
-			self.x_main, self.y_main = (self.JanWin.get_master().winfo_pointerx() - self.JanWin.get_master().winfo_vrootx(),
-										self.JanWin.get_master().winfo_pointery() - self.JanWin.get_master().winfo_vrooty())
+			self.JanContainer.container.configure(width = self.JanWin.get("Width"), height = self.JanWin.get("Height"))
+
+			self.x_main, self.y_main = JanMath.Sync_Resolution_Pos(self.JanWin.get_master())
 
 			self.JanStatus.set_text("{}{} {} {} {}".format(
 				"" if self.selected is None else self.selected, 
@@ -373,6 +361,26 @@ class DAT:
 			raise
 		return None
 
+	def create_widget(self):
+		try:
+			self.JanFrameTools = JanGui.create_frame_tools(self.JanWin.get_master())
+			self.JanContainer  = JanGui.create_container(self.JanWin.get_master(), self.JanFrameTools.resize, "Container Developer")
+			self.JanFrameTools.resize_config(self.JanContainer.container)
+			self.JanStatus     = JanGui.create_status(self.JanWin.get_master(), "JanJaEngine")
+			self.JanMenu       = JanGui.create_menu(self.JanWin.get_master(),
+			(
+				# Main container and Events container	
+				None, None, None, self.load_image, None, None, None,
+				None, self.close, None, None, None, None, None,
+			),
+			(
+				self.delete_selected, None, None, None, None
+			)
+			)
+		except:
+			raise
+		return None
+
 	def close(self):
 		try:
 			if not JAN_ENGINE_engine.get("Devolper") is (False):
@@ -398,4 +406,7 @@ class DAT:
 if __name__ is "__main__":
 	JanGui.start_(replace_folder("/_JanJa.py", "/splash/logo_00.png"), DAT)
 else:
-	JanGui.start_(replace_folder("/_JanJa.py", "/splash/logo_00.png"), DAT)	
+	JanGui.start_(replace_folder("/_JanJa.py", "/splash/logo_00.png"), DAT, hardware_res, JanMath,
+	json    = JAN_ENGINE_engine,
+	version = "Alpha 0.1.4"
+	)

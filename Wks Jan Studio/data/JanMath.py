@@ -14,3 +14,11 @@ def Sync_Resolution(resolution, _resolution):
 	except:
 		raise
 	return None
+
+def Sync_Resolution_Pos(master):
+	try:
+		return (master.winfo_pointerx() - master.winfo_vrootx(),
+				master.winfo_pointery() - master.winfo_vrooty())
+	except:
+		raise
+	return None

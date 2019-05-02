@@ -1,10 +1,14 @@
 from JanPort import tk, ttk, messagebox, _JanJa, os
 
 class start_(object):
-	def __init__(self, image, callback):
+	def __init__(self, image, callback, hardware, math, json = None, version = None):
 		try:
-			self.callback = callback
+			self.callback    = callback
 			self.load_number = 0
+			self.hardware    = hardware
+			self.json        = json
+			self.math        = math
+			self.ver         = version
 
 			self.window = tk.Tk()
 			self.window.overrideredirect(True)
@@ -46,6 +50,9 @@ class start_(object):
 			designer = tk.Label(self.window, text = "Designer - PEDRIN", font = "Arial 10", bg = "Gray")
 			designer.place(x = 10, y = 530)
 
+			version = tk.Label(self.window, text = self.ver, font = "Arial 10", bg = "Gray")
+			version.place(x = 10, y = 560)
+
 			self.progress_text = tk.Label(self.window, text = "Loading...", font = "Arial 10", bg = "Gray")
 			self.progress_text.place(x = 10, y = 585)
 		except:
@@ -54,7 +61,7 @@ class start_(object):
 
 	def loading_tread(self):
 		try:
-			self.loading["maximum"] = 125
+			self.loading["maximum"] = 200
 			
 			run = True
 			while (run):
@@ -62,21 +69,22 @@ class start_(object):
 				self.loading["value"] = self.load_number
 
 				if self.load_number >= 25:
-					self.progress_text.configure(text = os.path.abspath("_JanDat.py"))
+					self.progress_text.configure(text = self.json.get("Default Resolution"))
 
 				if self.load_number >= 50:
-					self.progress_text.configure(text = os.path.abspath("_JanJa.py"))
+					self.progress_text.configure(text = self.json.get("Width"))
 
 				if self.load_number >= 75:
-					self.progress_text.configure(text = os.path.abspath("JanGui.py"))
+					self.progress_text.configure(text = self.json.get("Height"))
 
 				if self.load_number >= 100:
-					self.progress_text.configure(text = os.path.abspath("JanMath.py"))
+					self.progress_text.configure(text = self.json.get("Devolper"))
 
 				if self.load_number >= 125:
-					self.progress_text.configure(text = os.path.abspath("JanPort.py"))
+					self.math.Sync_Resolution(self.json, self.hardware)
+					self.progress_text.configure(text = os.path.abspath("_JanDat.py") + "...")
 
-				if self.load_number >= 125:
+				if self.load_number >= 200:
 					self.window.destroy()
 					run = False
 
@@ -118,6 +126,17 @@ class create_window(object):
 	def get_master(self):
 		try:
 			return self.window
+		except:
+			raise
+		return None
+
+	def get(self, x):
+		try:
+			if ("Width") is (x):
+				return self.window.winfo_width()
+
+			if ("Height") is (x):
+				return self.window.winfo_height()
 		except:
 			raise
 		return None
@@ -275,8 +294,13 @@ class create_frame_tools(object):
 
 			def res(event):
 				try:
-					self.frame.config(width = event.x); self.resize.config(width = event.x)
-					container.place(x = event.x + 5)
+					if event.x > 0:
+						self.frame.config(width = event.x); self.resize.config(width = event.x)
+						container.place(x = event.x + 5)
+
+					else:
+						self.frame.config(width = 2); self.resize.config(width = 2)
+						container.place(x = 5)
 				except:
 					pass
 				return None

@@ -90,9 +90,3 @@ JAN_ENGINE_engine = load(replace_folder("data/_JanJa.py", "JanConfig.json"))
 from JanPort import JanMath
 from JanPort import JanGui
 from JanPort import pygame
-
-"""
-resolution.txt
-"""
-
-JanMath.Sync_Resolution(JAN_ENGINE_engine, hardware_res)
