@@ -1,18 +1,67 @@
 from JanPort import tk, ttk, messagebox, _JanJa
 
+class start_(object):
+	def __init__(self, image, callback):
+		try:
+			self.window = tk.Tk()
+			self.window.overrideredirect(True)
+
+			self.window.configure(background = "Gray")
+
+			self.window.geometry("640x640+200+200")
+
+			self.image(image)
+			self.text()
+
+			self.callback = callback
+			self.window.after(1000, self._)
+
+			self.window.mainloop()
+		except:
+			raise
+		return None
+
+	def image(self, image):
+		try:
+			image = tk.PhotoImage(file = image)
+
+			image_show = tk.Label(self.window, image = image)
+			image_show.photo = image
+			image_show.place(x = 0, y = 0)
+		except:
+			raise
+		return None
+
+	def text(self):
+		try:
+			credit = tk.Label(self.window, text = "Credit", font = "16", bg = "Gray")
+			credit.place(x = 10, y = 490)
+		except:
+			raise
+		return None
+
+	def _(self):
+		try:
+			self.window.destroy()
+			self.callback()
+		except:
+			raise
+		return None
+
 class create_window(object):
 	def __init__(self, width, height, title, color, icon):
 		try:
-			self.Window = tk.Tk()
-			self.Window.geometry("{}x{}".format(width, height))
-			self.Window.title(title)
-			self.Window.iconbitmap(default = icon)
-			self.Window.configure(background = color)
+			self.window = tk.Tk()
+			self.window.geometry("{}x{}".format(width, height))
+			self.window.title(title)
+			
+			self.window.iconbitmap(icon)
+			self.window.configure(background = color)
 
-			self.Style = ttk.Style()
-			self.Style.theme_use("clam")
+			self.style = ttk.Style()
+			self.style.theme_use("clam")
 
-			self.Window.update()
+			self.window.update()
 		except:
 			raise
 		return None
@@ -26,14 +75,14 @@ class create_window(object):
 
 	def get_master(self):
 		try:
-			return self.Window
+			return self.window
 		except:
 			raise
 		return None
 
 	def close(self):
 		try:
-			return self.Window.destroy()
+			return self.window.destroy()
 		except:
 			raise
 		return None

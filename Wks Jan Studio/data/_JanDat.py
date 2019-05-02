@@ -9,6 +9,7 @@ from _JanJa import replace_folder
 
 from JanPort import filedialog
 from JanPort import JanMath
+from JanPort import tk
 
 int_engine = lambda _int: int(JAN_ENGINE_engine.get(_int))
 
@@ -120,6 +121,7 @@ class DAT:
 			self.Tick_Fps = pygame.time.Clock()
 
 			while (self.JanRun):
+
 				self.Tick_Fps.tick(102)
 				self.JanPygame.fill((self.JanBackgroundColorPygame))
 
@@ -393,7 +395,6 @@ class DAT:
 		return None
 
 if __name__ is "__main__":
-	DAT()
+	JanGui.start_(replace_folder("/_JanJa.py", "/splash/logo_00.png"), DAT)
 else:
-	DAT()
-	
+	JanGui.start_(replace_folder("/_JanJa.py", "/splash/logo_00.png"), DAT)	
