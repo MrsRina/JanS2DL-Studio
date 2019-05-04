@@ -7,6 +7,7 @@ from _JanJa import hardware_res
 
 from _JanJa import JAN_ENGINE_engine
 from _JanJa import replace_folder
+from _JanJa import replace
 
 from JanPort import filedialog
 from JanPort import JanMath
@@ -14,11 +15,11 @@ from JanPort import tk
 
 int_engine = lambda _int: int(JAN_ENGINE_engine.get(_int))
 
-class load(object):
+class Sprite(object):
 	def __init__(self, master, path):
 		try:
 			self.path    = path
-			self.tag     = str(os.path.basename(path))
+			self.tag     = str(os.path.splitext(os.path.basename(self.path))[0])
 			self.img     = pygame.image.load(self.path)
 			self.rect    = self.img.get_rect()
 
@@ -88,6 +89,7 @@ class DAT:
 			self.tread_load = 0
 
 			self.selected_pos_sprites = None
+			self.selected_tree_view   = None
 			self.some_selected        = False
 			self.selected_now         = None
 			self.selected             = None
@@ -109,9 +111,6 @@ class DAT:
 			self.Tick_Fps = pygame.time.Clock()
 
 			while (self.JanRun):
-
-				print(self.JanWin.get("Width"), self.JanWin.get("Height"))
-
 				self.Tick_Fps.tick(102)
 				self.JanPygame.fill((self.JanBackgroundColorPygame))
 
@@ -120,12 +119,53 @@ class DAT:
 					self.dynamic_popup(event_)
 
 				self.up_events()
-				self.poop_up()
 
 				for sprites in self.sprites.values():
 					sprites.render()
 
 				self.window_loop()
+		except:
+			raise
+		return None
+
+	def events_select_tree(self):
+		try:
+			def selected_some_tree(event):
+				try:
+					for item in self.tool_tree.selection():
+						if not item.find("Class Sprite"):
+							selected_now = replace(item, "Class Sprite ", "")
+	
+							# Remove taf Class Sprite for select
+							if self.selected is None:
+								self.selected = selected_now
+
+								self.sprites[self.selected].selected = True
+
+								self.some_selected = True
+	
+							elif self.selected != None:
+								self.sprites[self.selected].selected = False	
+								self.selected                        = selected_now	
+								self.sprites[self.selected].selected = True
+								self.some_selected                   = True
+
+						else:
+							if self.selected is None:
+								self.selected      = None
+								self.some_selected = False
+
+							elif self.selected != None:
+								self.sprites[self.selected].selected = False
+								self.selected                        = None
+								self.some_selected                   = False
+
+					pygame.display.flip()
+					self.JanWin.get_master().update()
+				except:
+					pass
+
+			self.tool_tree.bind("<<TreeviewSelect>>", selected_some_tree)
 		except:
 			raise
 		return None
@@ -148,16 +188,20 @@ class DAT:
 	
 										self.sprites[self.selected].selected = True
 										self.sprites[self.selected].move     = True
-		
+										
 										self.some_selected = True
-	
+
+										self.tool_tree.selection_set(self.sprites[self.selected].tag)
+
 									elif self.selected is None:
 										self.selected = sprite_selected.tag
 	
 										self.sprites[self.selected].selected = True
 										self.sprites[self.selected].move     = True
-										
+
 										self.some_selected = True
+
+										self.tool_tree.selection_set(self.sprites[self.selected].tag)
 	
 									pygame.display.flip()
 									self.JanWin.get_master().update()
@@ -174,13 +218,18 @@ class DAT:
 									if self.selected != None:
 										self.sprites[self.selected].selected = False
 										self.sprites[self.selected].move     = False
-	
+										
 										self.selected      = None
 										self.some_selected = False
-	
-									elif self.selected is None:
+
+										self.tool_tree.selection_remove(self.sprites[self.selected].tag)
+
+									else:
 										self.selected      = None
 										self.some_selected = False
+
+										self.tool_tree.selection_remove(self.sprites[self.selected].tag)
+
 
 									pygame.display.flip()
 									self.JanWin.get_master().update()
@@ -191,9 +240,6 @@ class DAT:
 						try:						
 							if self.sprites[self.selected].selected:
 								self.create_selected_sprite_menu()
-								
-								pygame.display.flip()
-								self.JanWin.get_master().update()
 						except:
 							pass
 
@@ -222,25 +268,16 @@ class DAT:
 
 			if event.type is pygame.KEYUP:
 				if event.key is pygame.K_DELETE:
-					try:
-						self.sprites[self.selected].do("delete")
-						self.some_selected = False
-						self.selected = None
-
-						pygame.display.flip()
-						self.JanWin.get_master().update()
-					except:
-						pass
+					self.delete_selected_sprite()
 		except:
 			raise
 		return None
 
-	def delete_selected(self):
+	def delete_selected_sprite(self):
 		try:
 			self.sprites[self.selected].do("delete")
+			self.selected      = None
 			self.some_selected = False
-			self.selected = None
-
 
 			pygame.display.flip()
 			self.JanWin.get_master().update()
@@ -258,29 +295,36 @@ class DAT:
 
 	def up_events(self):
 		try:
+			self.events_select_tree()
+			self.poop_up()
+
 			self.JanContainer.container.configure(width = self.JanWin.get("Width"), height = self.JanWin.get("Height"))
+			self.JanTree.up()
+
 
 			self.x_main, self.y_main = JanMath.Sync_Resolution_Pos(self.JanWin.get_master())
 
-			self.JanStatus.set_text("{}{} {} {} {}".format(
-				"" if self.selected is None else self.selected, 
-				pygame.mouse.get_pos() if self.selected is None else " %d" % self.sprites[self.selected].rect.x,
-				"" if self.selected is None else self.sprites[self.selected].rect.y,
-				"" if self.selected is None else self.sprites[self.selected].rect.w,
-				"" if self.selected is None else self.sprites[self.selected].rect.h)
-			)
+			try:
+				self.JanStatus.set_text("{}{} {} {} {}".format(
+					"" if self.selected is None else self.selected, 
+					pygame.mouse.get_pos() if self.selected is None else " %d" % self.sprites[self.selected].rect.x,
+					"" if self.selected is None else self.sprites[self.selected].rect.y,
+					"" if self.selected is None else self.sprites[self.selected].rect.w,
+					"" if self.selected is None else self.sprites[self.selected].rect.h)
+				)
+			except:
+				pass
 
 			if self.bool_click != 0:
 				self.bool_click += 0.1
 
 				if self.bool_click >= 2:
 					self.bool_click = 0
-
 		except:
 			raise
 		return None
 
-	def load_image(self):
+	def load_sprite(self):
 		try:
 			find = filedialog.askopenfilename(initialdir = os.path.realpath(__file__), title = "Select file", filetypes = (
 			(
@@ -291,7 +335,11 @@ class DAT:
 			)))
 
 			if find:
-				self.sprites[os.path.basename(find)] = load(self.JanPygame, find)
+				self.sprites[os.path.splitext(os.path.basename(find))[0]] = Sprite(self.JanPygame, find)
+				self.tool_tree.insert(
+				"Sprites", "end",
+				"Class Sprite {}".format(self.sprites[os.path.splitext(os.path.basename(find))[0]].tag),
+				text = self.sprites[os.path.splitext(os.path.basename(find))[0]].tag)
 
 				self.selected = None
 				pygame.display.update()
@@ -370,13 +418,20 @@ class DAT:
 			self.JanMenu       = JanGui.create_menu(self.JanWin.get_master(),
 			(
 				# Main container and Events container	
-				None, None, None, self.load_image, None, None, None,
+				None, None, None, self.load_sprite, None, None, None,
 				None, self.close, None, None, None, None, None,
 			),
 			(
-				self.delete_selected, None, None, None, None
+				self.delete_selected_sprite(), None, None, None, None
 			)
 			)
+
+			self.JanTree = JanGui.create_object_tree_view(self.JanFrameTools.frame, replace_folder("/_JanJa.py", "/splash/icone_01.png"))
+
+			self.tool_tree         = self.JanTree.tree
+			self.tool_tree_sprites = self.JanTree.sprites
+			self.tool_tree_objects = self.JanTree.objects
+			self.tool_tree_cameras = self.JanTree.cameras
 		except:
 			raise
 		return None

@@ -111,6 +111,8 @@ class create_window(object):
 			self.style = ttk.Style()
 			self.style.theme_use("clam")
 
+			self.style.configure("Treeview", background = "Gray", fieldbackground = "Gray")
+
 			self.window.update()
 		except:
 			raise
@@ -230,8 +232,8 @@ class create_container(object):
 
 			self.container = ttk.Notebook(self.master)
 
-			self.frame_game_developer = tk.Canvas(self.master, width = self.master.winfo_screenwidth  () , height = self.master.winfo_screenheight(), bg = "Gray")
-			self.frame_event_game     = tk.Canvas(self.master, width = self.master.winfo_screenheight () , height = self.master.winfo_screenheight(), bg = "Gray")
+			self.frame_game_developer = tk.Frame(self.master, width = self.master.winfo_screenwidth  () , height = self.master.winfo_screenheight(), bg = "Gray")
+			self.frame_event_game     = tk.Frame(self.master, width = self.master.winfo_screenheight () , height = self.master.winfo_screenheight(), bg = "Gray")
 
 			self.container.add(self.frame_game_developer , text = "Game    "   )
 			self.container.add(self.frame_event_game     , text = "Events    " )
@@ -314,6 +316,33 @@ class create_frame_tools(object):
 	def get_raise(self):
 		try:
 			return self.frame
+		except:
+			raise
+		return None
+
+class create_object_tree_view(object):
+	def __init__(self, master, icon_path_00):
+		try:
+			self.master = master
+
+			self.tree = ttk.Treeview(self.master)
+
+			image_icone_01 = tk.PhotoImage(file = icon_path_00)
+			icone_01       = tk.Label(image = image_icone_01)
+			icone_01.photo = image_icone_01
+
+			self.sprites = self.tree.insert("", "end", "Sprites", text = " " + "Sprites")
+			self.objects = self.tree.insert("", 'end', "Objects", image = icone_01.photo, text = " " + "Objects")
+			self.cameras = self.tree.insert("", 'end', "Cameras", text = " " + "Cameras")
+
+			self.tree.place(x = 10, y = 10, width = master.winfo_width() - 25, height = master.winfo_height() - 50)
+		except:
+			raise
+		return None
+
+	def up(self):
+		try:
+			self.tree.place(width = self.master.winfo_width() - 25, height = self.master.winfo_height() - self.master.winfo_height() / 2)
 		except:
 			raise
 		return None

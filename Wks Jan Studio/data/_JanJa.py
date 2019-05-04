@@ -85,6 +85,15 @@ def replace_folder(remove, place):
 		raise
 	return None
 
+def replace(variable, to, new):
+	try:
+		cache_00 = variable.replace(to, new)
+
+		return cache_00
+	except:
+		raise
+	return None
+
 JAN_ENGINE_engine = load(replace_folder("data/_JanJa.py", "JanConfig.json"))
 
 from JanPort import JanMath
