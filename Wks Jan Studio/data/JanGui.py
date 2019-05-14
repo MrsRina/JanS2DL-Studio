@@ -321,18 +321,22 @@ class create_frame_tools(object):
 		return None
 
 class create_object_tree_view(object):
-	def __init__(self, master, icon_path_00):
+	def __init__(self, master, icon_path_00, icon_path_01):
 		try:
 			self.master        = master.frame
 			self.master_master = master.master
 
 			self.tree = ttk.Treeview(self.master)
 
-			image_icone_01 = tk.PhotoImage(file = icon_path_00)
+			image_icone_00 = tk.PhotoImage(file = icon_path_00)
+			icone_00       = tk.Label(image = image_icone_00)
+			icone_00.photo = image_icone_00
+
+			image_icone_01 = tk.PhotoImage(file = icon_path_01)
 			icone_01       = tk.Label(image = image_icone_01)
 			icone_01.photo = image_icone_01
 
-			self.sprites = self.tree.insert("", "end", "Sprites", text = " " + "Sprites")
+			self.sprites = self.tree.insert("", "end", "Sprites", image = icone_00.photo, text = " " + "Sprites")
 			self.objects = self.tree.insert("", 'end', "Objects", image = icone_01.photo, text = " " + "Objects")
 			self.cameras = self.tree.insert("", 'end', "Cameras", text = " " + "Cameras")
 

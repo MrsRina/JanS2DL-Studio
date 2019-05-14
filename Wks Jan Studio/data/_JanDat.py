@@ -429,7 +429,7 @@ class DAT:
 			)
 			)
 
-			self.JanTree = JanGui.create_object_tree_view(self.JanFrameTools, replace_folder("/_JanJa.py", "/splash/icone_01.png"))
+			self.JanTree = JanGui.create_object_tree_view(self.JanFrameTools, replace_folder("/_JanJa.py", "/splash/icone_00.png"), replace_folder("/_JanJa.py", "/splash/icone_01.png"))
 
 			self.tool_tree         = self.JanTree.tree
 			self.tool_tree_sprites = self.JanTree.sprites
