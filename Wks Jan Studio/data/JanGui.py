@@ -238,7 +238,7 @@ class create_container(object):
 			self.container.add(self.frame_game_developer , text = "Game    "   )
 			self.container.add(self.frame_event_game     , text = "Events    " )
 
-			self.container.place(x = 205, y = 0)
+			self.container.place(x = 405, y = 0)
 		except:
 			raise
 		return None
@@ -274,8 +274,8 @@ class create_frame_tools(object):
 		try:
 			self.master    = master
 
-			self.resize = tk.Frame(master, width = 200, height = master.winfo_screenheight(), bg = "Gray", bd = 5)
-			self.frame  = tk.Frame(master, width = 200, height = master.winfo_screenheight(), bg = "Gray")
+			self.resize = tk.Frame(master, width = 400, height = master.winfo_screenheight(), bg = "Gray", bd = 5)
+			self.frame  = tk.Frame(master, width = 400, height = master.winfo_screenheight(), bg = "Gray")
 
 			self.resize.place(x = 3, y = 0)
 			self.frame.place(x = 0, y = 0)
@@ -323,7 +323,8 @@ class create_frame_tools(object):
 class create_object_tree_view(object):
 	def __init__(self, master, icon_path_00):
 		try:
-			self.master = master
+			self.master        = master.frame
+			self.master_master = master.master
 
 			self.tree = ttk.Treeview(self.master)
 
@@ -335,14 +336,19 @@ class create_object_tree_view(object):
 			self.objects = self.tree.insert("", 'end', "Objects", image = icone_01.photo, text = " " + "Objects")
 			self.cameras = self.tree.insert("", 'end', "Cameras", text = " " + "Cameras")
 
-			self.tree.place(x = 10, y = 10, width = master.winfo_width() - 25, height = master.winfo_height() - 50)
+			self.tree.place(x = 10, y = 10, width = self.master.winfo_width() - 25, height = self.master.winfo_height() - 50)
 		except:
 			raise
 		return None
 
-	def up(self):
+	def up(self, bool):
 		try:
-			self.tree.place(width = self.master.winfo_width() - 25, height = self.master.winfo_height() - self.master.winfo_height() / 2)
+			if bool == True:
+				self.tree.place(width = self.master.winfo_width() - 25, height = self.master_master.winfo_height() - self.master_master.winfo_height() / 2)
+
+			elif bool is False:
+				self.tree.place(width = self.master.winfo_width() - 25, height = self.master_master.winfo_height() - 45)
+
 		except:
 			raise
 		return None

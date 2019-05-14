@@ -85,12 +85,13 @@ class DAT:
 			self.JanWin = JanGui.create_window(int_engine("Width"), int_engine("Height"), "JanCreate Studio", "Gray",
 				r"{}".format(replace_folder("/_JanJa.py", "/icone.ico")))
 
-			self.bool_click = 0
-			self.tread_load = 0
+			self.tread_load           = False
+			self.bool_click           = False
+			self.some_selected        = False
+			self.bool_tool_tree       = False
 
 			self.selected_pos_sprites = None
 			self.selected_tree_view   = None
-			self.some_selected        = False
 			self.selected_now         = None
 			self.selected             = None
 			self.sprites              = {}
@@ -138,7 +139,8 @@ class DAT:
 	
 							# Remove taf Class Sprite for select
 							if self.selected is None:
-								self.selected = selected_now
+								self.bool_tool_tree = True
+								self.selected       = selected_now
 
 								self.sprites[self.selected].selected = True
 
@@ -152,16 +154,15 @@ class DAT:
 
 						else:
 							if self.selected is None:
-								self.selected      = None
-								self.some_selected = False
+								self.bool_tool_tree = False
+								self.some_selected  = False
+								self.selected       = None
 
 							elif self.selected != None:
 								self.sprites[self.selected].selected = False
-								self.selected                        = None
+								self.bool_tool_tree                  = False
 								self.some_selected                   = False
-
-					pygame.display.flip()
-					self.JanWin.get_master().update()
+								self.selected                        = None
 				except:
 					pass
 
@@ -202,9 +203,6 @@ class DAT:
 										self.some_selected = True
 
 										self.tool_tree.selection_set(self.sprites[self.selected].tag)
-	
-									pygame.display.flip()
-									self.JanWin.get_master().update()
 						except:
 							pass
 
@@ -229,10 +227,6 @@ class DAT:
 										self.some_selected = False
 
 										self.tool_tree.selection_remove(self.sprites[self.selected].tag)
-
-
-									pygame.display.flip()
-									self.JanWin.get_master().update()
 						except:
 							pass
 	
@@ -246,9 +240,6 @@ class DAT:
 					if event.button is 2:
 						try:
 							self.sprites[self.selected].resize = True
-
-							pygame.display.flip()
-							s0
 						except:
 							pass
 
@@ -276,6 +267,7 @@ class DAT:
 	def delete_selected_sprite(self):
 		try:
 			self.sprites[self.selected].do("delete")
+			self.tool_tree.delete(self.sprites[self.selected].tag)
 			self.selected      = None
 			self.some_selected = False
 
@@ -299,8 +291,7 @@ class DAT:
 			self.poop_up()
 
 			self.JanContainer.container.configure(width = self.JanWin.get("Width"), height = self.JanWin.get("Height"))
-			self.JanTree.up()
-
+			self.JanTree.up(self.bool_tool_tree)
 
 			self.x_main, self.y_main = JanMath.Sync_Resolution_Pos(self.JanWin.get_master())
 
@@ -422,11 +413,11 @@ class DAT:
 				None, self.close, None, None, None, None, None,
 			),
 			(
-				self.delete_selected_sprite(), None, None, None, None
+				self.delete_selected_sprite, None, None, None, None
 			)
 			)
 
-			self.JanTree = JanGui.create_object_tree_view(self.JanFrameTools.frame, replace_folder("/_JanJa.py", "/splash/icone_01.png"))
+			self.JanTree = JanGui.create_object_tree_view(self.JanFrameTools, replace_folder("/_JanJa.py", "/splash/icone_01.png"))
 
 			self.tool_tree         = self.JanTree.tree
 			self.tool_tree_sprites = self.JanTree.sprites
