@@ -353,7 +353,7 @@ class create_object_tree_view(object):
 			raise
 		return None
 
-class frame_tool_sprite_command(obejct):
+class sprite_options(object):
 	def __init__(self):
 		try:
 			pass
