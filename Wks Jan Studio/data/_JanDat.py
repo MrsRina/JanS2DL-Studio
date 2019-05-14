@@ -248,7 +248,7 @@ class DAT:
 							self.sprites[self.selected].resize = True
 
 							pygame.display.flip()
-							self.JanWin.get_master().update()
+							s0
 						except:
 							pass
 
@@ -452,7 +452,7 @@ class DAT:
 		try:			
 			self.JanWin.get_master().protocol("WM_DELETE_WINDOW", self.close)
 
-			pygame.display.flip()			
+			pygame.display.flip()
 			self.JanWin.get_master().update()
 		except:
 			raise
