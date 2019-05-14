@@ -196,7 +196,9 @@ class DAT:
 										self.bool_tool_tree = True
 										self.some_selected  = True
 
-										self.tool_tree.selection_set(self.sprites[self.selected].tag)
+										self.tool_tree.selection_set("Class Sprite {}".format(self.sprites[self.selected].tag))
+										self.tool_tree.focus_set()
+										self.tool_tree.focus("Class Sprite {}".format(self.sprites[self.selected].tag))
 
 									elif self.selected is None:
 										self.selected = sprite_selected.tag
@@ -206,10 +208,12 @@ class DAT:
 
 										self.bool_tool_tree = True
 										self.some_selected  = True
-
-										self.tool_tree.selection_set(self.sprites[self.selected].tag)
+										
+										self.tool_tree.selection_set("Class Sprite {}".format(self.sprites[self.selected].tag))
+										self.tool_tree.focus_set()
+										self.tool_tree.focus("Class Sprite {}".format(self.sprites[self.selected].tag))
 						except:
-							pass
+							raise
 
 					if event.button is 1:
 						try:
@@ -219,6 +223,8 @@ class DAT:
 
 								elif not self.sprites[self.selected].rect.collidepoint(event.pos):
 									if self.selected != None:
+										self.tool_tree.selection_remove("Class Sprite {}".format(self.sprites[self.selected].tag))
+
 										self.sprites[self.selected].selected = False
 										self.sprites[self.selected].move     = False
 										
@@ -226,14 +232,12 @@ class DAT:
 										self.selected       = None
 										self.some_selected  = False
 
-										self.tool_tree.selection_remove(self.sprites[self.selected].tag)
-
 									else:
+										self.tool_tree.selection_remove("Class Sprite {}".format(self.sprites[self.selected].tag))
+
 										self.bool_tool_tree = False
 										self.selected       = None
 										self.some_selected  = False
-
-										self.tool_tree.selection_remove(self.sprites[self.selected].tag)
 						except:
 							pass
 	

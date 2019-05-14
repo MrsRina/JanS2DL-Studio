@@ -352,3 +352,11 @@ class create_object_tree_view(object):
 		except:
 			raise
 		return None
+
+class frame_tool_sprite_command(obejct):
+	def __init__(self):
+		try:
+			pass
+		except:
+			raise
+		return None
