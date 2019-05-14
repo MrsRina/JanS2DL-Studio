@@ -85,8 +85,9 @@ class DAT:
 			self.JanWin = JanGui.create_window(int_engine("Width"), int_engine("Height"), "JanCreate Studio", "Gray",
 				r"{}".format(replace_folder("/_JanJa.py", "/icone.ico")))
 
+			self.bool_click           = 0
+
 			self.tread_load           = False
-			self.bool_click           = False
 			self.some_selected        = False
 			self.bool_tool_tree       = False
 
@@ -120,6 +121,8 @@ class DAT:
 					self.dynamic_popup(event_)
 
 				self.up_events()
+
+				print(self.bool_click)
 
 				for sprites in self.sprites.values():
 					sprites.render()
@@ -190,7 +193,8 @@ class DAT:
 										self.sprites[self.selected].selected = True
 										self.sprites[self.selected].move     = True
 										
-										self.some_selected = True
+										self.bool_tool_tree = True
+										self.some_selected  = True
 
 										self.tool_tree.selection_set(self.sprites[self.selected].tag)
 
@@ -200,7 +204,8 @@ class DAT:
 										self.sprites[self.selected].selected = True
 										self.sprites[self.selected].move     = True
 
-										self.some_selected = True
+										self.bool_tool_tree = True
+										self.some_selected  = True
 
 										self.tool_tree.selection_set(self.sprites[self.selected].tag)
 						except:
@@ -217,14 +222,16 @@ class DAT:
 										self.sprites[self.selected].selected = False
 										self.sprites[self.selected].move     = False
 										
-										self.selected      = None
-										self.some_selected = False
+										self.bool_tool_tree = False
+										self.selected       = None
+										self.some_selected  = False
 
 										self.tool_tree.selection_remove(self.sprites[self.selected].tag)
 
 									else:
-										self.selected      = None
-										self.some_selected = False
+										self.bool_tool_tree = False
+										self.selected       = None
+										self.some_selected  = False
 
 										self.tool_tree.selection_remove(self.sprites[self.selected].tag)
 						except:
@@ -266,10 +273,11 @@ class DAT:
 
 	def delete_selected_sprite(self):
 		try:
+			self.tool_tree.delete("Class Sprite {}".format(self.sprites[self.selected].tag))
 			self.sprites[self.selected].do("delete")
-			self.tool_tree.delete(self.sprites[self.selected].tag)
-			self.selected      = None
-			self.some_selected = False
+			self.selected       = None
+			self.some_selected  = False
+			self.bool_tool_tree = False
 
 			pygame.display.flip()
 			self.JanWin.get_master().update()
