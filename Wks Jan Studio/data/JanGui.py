@@ -358,9 +358,32 @@ class create_object_tree_view(object):
 		return None
 
 class sprite_options(object):
-	def __init__(self):
+	def __init__(self, master, sprites, selected, about_frame):
 		try:
-			pass
+			self.master      = master.frame
+			self.sprites     = sprites
+			self.selected    = selected
+			self.about_frame = about_frame
+
+			self.canvas = tk.Canvas(self.master, width = self.master.winfo_width() - 5, height = self.master.winfo_height() - 66, bg = "Gray")
+
+			self.canvas.place(x = 10, y = self.about_frame.winfo_height() - 25)
+		except:
+			raise
+		return None
+
+	def show(self, master, sprites, selected, up = None):
+		try:
+			self.master   = master
+			self.sprites  = sprites
+			self.selected = selected
+
+			if up:
+				self.canvas.place(x = 10, y = self.about_frame.winfo_height() + 25)
+				self.canvas.configure(width = self.master.winfo_width() - 5, height = self.master.winfo_height() - 66)
+
+			else:
+				self.canvas.place_forget()
 		except:
 			raise
 		return None

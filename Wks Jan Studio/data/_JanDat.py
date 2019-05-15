@@ -196,6 +196,8 @@ class DAT:
 										self.bool_tool_tree = True
 										self.some_selected  = True
 
+										self.JanSpriteOptions.up = True
+
 										self.tool_tree.selection_set("Class Sprite {}".format(self.sprites[self.selected].tag))
 										self.tool_tree.focus_set()
 										self.tool_tree.focus("Class Sprite {}".format(self.sprites[self.selected].tag))
@@ -205,6 +207,8 @@ class DAT:
 	
 										self.sprites[self.selected].selected = True
 										self.sprites[self.selected].move     = True
+
+										self.JanSpriteOptions.up = True
 
 										self.bool_tool_tree = True
 										self.some_selected  = True
@@ -227,6 +231,8 @@ class DAT:
 
 										self.sprites[self.selected].selected = False
 										self.sprites[self.selected].move     = False
+
+										self.JanSpriteOptions.up = False
 										
 										self.bool_tool_tree = False
 										self.selected       = None
@@ -234,6 +240,8 @@ class DAT:
 
 									else:
 										self.tool_tree.selection_remove("Class Sprite {}".format(self.sprites[self.selected].tag))
+
+										self.JanSpriteOptions.up = False
 
 										self.bool_tool_tree = False
 										self.selected       = None
@@ -306,6 +314,8 @@ class DAT:
 			self.JanTree.up(self.bool_tool_tree)
 
 			self.x_main, self.y_main = JanMath.Sync_Resolution_Pos(self.JanWin.get_master())
+
+			self.JanSpriteOptions.show(self.tool_tree, self.sprites, self.selected, up = self.bool_tool_tree)
 
 			try:
 				self.JanStatus.set_text("{}{} {} {} {}".format(
@@ -435,6 +445,8 @@ class DAT:
 			self.tool_tree_sprites = self.JanTree.sprites
 			self.tool_tree_objects = self.JanTree.objects
 			self.tool_tree_cameras = self.JanTree.cameras
+
+			self.JanSpriteOptions = JanGui.sprite_options(self.JanFrameTools, self.sprites, self.selected, self.tool_tree)
 		except:
 			raise
 		return None
