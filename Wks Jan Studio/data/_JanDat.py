@@ -217,7 +217,7 @@ class DAT:
 										self.tool_tree.focus_set()
 										self.tool_tree.focus("Class Sprite {}".format(self.sprites[self.selected].tag))
 						except:
-							raise
+							pass
 
 					if event.button is 1:
 						try:
