@@ -15,7 +15,7 @@ class start_(object):
 
 			self.window.configure(background = "Gray")
 
-			self.window.geometry("640x640+200+200")
+			self.window.geometry("640x640+10+10")
 
 			self.image(image)
 			self.text()
@@ -364,8 +364,9 @@ class create_object_tree_view(object):
 		return None
 
 class sprite_options(object):
-	def __init__(self, master, sprites, selected, about_frame):
+	def __init__(self, master_win, master, sprites, selected, about_frame):
 		try:
+			self.master_win  = master_win
 			self.master      = master.frame
 			self.sprites     = sprites
 			self.selected    = selected
@@ -373,32 +374,29 @@ class sprite_options(object):
 
 			self.tag    = None
 			self.path   = None
-			self.xpos   = tk.IntVar()
-			self.ypos   = tk.IntVar()
+
+			self.x = 0
+			self.y = 0
+			self.w = 0
+			self.h = 0
+
 			self.width  = 0
 			self.height = 0
 
 			self.canvas = tk.Canvas(self.master, width = self.master.winfo_width() - 5, height = self.master.winfo_height() - 66, bg = "Gray")
 
-			self.text_tag  = tk.Label(self.canvas, text = self.tag, bg = "Gray")
-			self.text_xpos = tk.Label(self.canvas, text = "x", bg = "Gray")
-			self.text_ypos = tk.Label(self.canvas, text = "y", bg = "Gray")
-
-			self.entry_xpos = tk.Entry(self.canvas, text = self.xpos, bg = "Gray", width = 12, textvariable = self.xpos) 
-			self.entry_ypos = tk.Entry(self.canvas, text = self.xpos, bg = "Gray", width = 12, textvariable = self.ypos)
+			self.text_tag    = tk.Label(self.canvas, text = self.tag, bg = "Gray")
+			self.text_xpos   = tk.Label(self.canvas, text = "x {}".format(self.x), bg = "Gray")
+			self.text_ypos   = tk.Label(self.canvas, text = "y {}".format(self.y), bg = "Gray")
+			self.text_width  = tk.Label(self.canvas, text = "width {}".format(self.w), bg = "Gray")
+			self.text_height = tk.Label(self.canvas, text = "height {}".format(self.h), bg = "Gray")
 
 			self.canvas.place(x = 10, y = self.about_frame.winfo_height() - 25)
-
-			self.xpos.trace(int(), self.set_x)
-			self.ypos.trace(int(), self.set_y)
 
 			self.widgets = [self.canvas]
 		except:
 			raise
 		return None
-
-	def set_x()
-	def set_y()
 
 	def show(self, master, sprites, selected, up = None):
 		try:
@@ -407,26 +405,28 @@ class sprite_options(object):
 				self.selected = sprites[selected].path
 				self.tag      = sprites[selected].tag
 
-				self.xpos = sprites[selected].rect.x
-				self.ypos = sprites[selected].rect.y
+				self.x = sprites[selected].rect.x
+				self.y = sprites[selected].rect.y
+				self.w = sprites[selected].rect.w
+				self.h = sprites[selected].rect.h
 
 				self.canvas.configure(width = self.master.winfo_width() - 5, height = self.master.winfo_height() - 66)
 
 				self.canvas.place(x = 10, y = self.about_frame.winfo_height() + 25)
-
-				self.entry_xpos.configure(textvariable = self.ypos)
-				self.entry_ypos.configure(textvariable = self.ypos)
 				
 				self.text_tag.configure(text = self.tag)
+				self.text_xpos.configure(text = "x: {}".format(self.x))
+				self.text_ypos.configure(text = "y: {}".format(self.y))
+				self.text_width.configure(text = "Width: {}".format(self.w))
+				self.text_height.configure(text = "Height: {}".format(self.h))
 
 				self.text_tag.place(x = 10, y = 10)
-
 				self.text_xpos.place(x = 10, y = 50)
-				self.entry_xpos.place(x = 10, y = 75)
+				self.text_ypos.place(x = 10, y = 75)
+				self.text_width.place(x = 75, y = 50)
+				self.text_height.place(x = 75, y = 75)
 
-				self.text_ypos.place(x = 10, y = 100)
-				self.entry_ypos.place(x = 10, y = 125)
-				
+				self.master_win.update()
 			else:
 				for widgets in self.widgets:
 					widgets.place_forget()

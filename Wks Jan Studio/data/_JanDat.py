@@ -202,6 +202,8 @@ class DAT:
 										self.tool_tree.focus_set()
 										self.tool_tree.focus("Class Sprite {}".format(self.sprites[self.selected].tag))
 
+										self.JanWin.get_master().update()
+
 									elif self.selected is None:
 										self.selected = sprite_selected.tag
 	
@@ -216,6 +218,8 @@ class DAT:
 										self.tool_tree.selection_set("Class Sprite {}".format(self.sprites[self.selected].tag))
 										self.tool_tree.focus_set()
 										self.tool_tree.focus("Class Sprite {}".format(self.sprites[self.selected].tag))
+
+										self.JanWin.get_master().update()
 						except:
 							pass
 
@@ -238,6 +242,8 @@ class DAT:
 										self.selected       = None
 										self.some_selected  = False
 
+										self.JanWin.get_master().update()
+
 									else:
 										self.tool_tree.selection_remove("Class Sprite {}".format(self.sprites[self.selected].tag))
 
@@ -246,6 +252,8 @@ class DAT:
 										self.bool_tool_tree = False
 										self.selected       = None
 										self.some_selected  = False
+
+										self.JanWin.get_master().update()
 						except:
 							pass
 	
@@ -449,7 +457,7 @@ class DAT:
 			self.tool_tree_objects = self.JanTree.objects
 			self.tool_tree_cameras = self.JanTree.cameras
 
-			self.JanSpriteOptions = JanGui.sprite_options(self.JanFrameTools, self.sprites, self.selected, self.tool_tree)
+			self.JanSpriteOptions = JanGui.sprite_options(self.JanWin.window, self.JanFrameTools, self.sprites, self.selected, self.tool_tree)
 		except:
 			raise
 		return None
