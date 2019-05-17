@@ -340,8 +340,6 @@ class create_object_tree_view(object):
 			icone_02       = tk.Label(image = image_icone_02)
 			icone_02.photo = image_icone_02
 
-
-
 			self.sprites = self.tree.insert("", "end", "Sprites", image = icone_00.photo, text = " " + "Sprites")
 			self.objects = self.tree.insert("", 'end', "Objects", image = icone_01.photo, text = " " + "Objects")
 			self.cameras = self.tree.insert("", 'end', "Cameras", image = icone_02.photo, text = " " + "Cameras")
@@ -390,6 +388,7 @@ class sprite_options(object):
 			self.text_ypos   = tk.Label(self.canvas, text = "y {}".format(self.y), bg = "Gray")
 			self.text_width  = tk.Label(self.canvas, text = "width {}".format(self.w), bg = "Gray")
 			self.text_height = tk.Label(self.canvas, text = "height {}".format(self.h), bg = "Gray")
+			self.text_path   = tk.Label(self.canvas, text = "Path: {}".format(self.path), bg = "Gray")
 
 			self.canvas.place(x = 10, y = self.about_frame.winfo_height() - 25)
 
@@ -401,32 +400,38 @@ class sprite_options(object):
 	def show(self, master, sprites, selected, up = None):
 		try:
 			if up:
-				self.master   = master
-				self.selected = sprites[selected].path
-				self.tag      = sprites[selected].tag
-
-				self.x = sprites[selected].rect.x
-				self.y = sprites[selected].rect.y
-				self.w = sprites[selected].rect.w
-				self.h = sprites[selected].rect.h
-
-				self.canvas.configure(width = self.master.winfo_width() - 5, height = self.master.winfo_height() - 66)
-
-				self.canvas.place(x = 10, y = self.about_frame.winfo_height() + 25)
-				
-				self.text_tag.configure(text = self.tag)
-				self.text_xpos.configure(text = "x: {}".format(self.x))
-				self.text_ypos.configure(text = "y: {}".format(self.y))
-				self.text_width.configure(text = "Width: {}".format(self.w))
-				self.text_height.configure(text = "Height: {}".format(self.h))
-
-				self.text_tag.place(x = 10, y = 10)
-				self.text_xpos.place(x = 10, y = 50)
-				self.text_ypos.place(x = 10, y = 75)
-				self.text_width.place(x = 75, y = 50)
-				self.text_height.place(x = 75, y = 75)
-
-				self.master_win.update()
+				try:
+					self.master   = master
+					self.selected = sprites[selected]
+					self.tag      = sprites[selected].tag
+					self.path     = sprites[selected].path
+	
+					self.x = sprites[selected].rect.x
+					self.y = sprites[selected].rect.y
+					self.w = sprites[selected].rect.w
+					self.h = sprites[selected].rect.h
+	
+					self.canvas.configure(width = self.master.winfo_width() - 5, height = self.master.winfo_height() - 66)
+	
+					self.canvas.place(x = 10, y = self.about_frame.winfo_height() + 25)
+					
+					self.text_tag.configure(text = self.tag)
+					self.text_path.configure(text = "{}".format(self.path))
+					self.text_xpos.configure(text = "x: {}".format(self.x))
+					self.text_ypos.configure(text = "y: {}".format(self.y))
+					self.text_width.configure(text = "Width: {}".format(self.w))
+					self.text_height.configure(text = "Height: {}".format(self.h))
+	
+					self.text_tag.place(x = 10, y = 10)
+					self.text_path.place(x = 10, y = 25)
+					self.text_xpos.place(x = 10, y = 50)
+					self.text_ypos.place(x = 10, y = 75)
+					self.text_width.place(x = 75, y = 50)
+					self.text_height.place(x = 75, y = 75)
+	
+					self.master_win.update()
+				except:
+					pass
 			else:
 				for widgets in self.widgets:
 					widgets.place_forget()
