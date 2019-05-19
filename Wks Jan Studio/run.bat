@@ -1,8 +1,6 @@
 setx path = %path%%~dp0\data\python\
 
-cd data\python\
-
-cls
+cd %~dp0\data\python\
 
 python "%~dp0data\_JanDat.py"
 

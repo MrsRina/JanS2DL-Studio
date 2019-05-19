@@ -40,3 +40,8 @@ try:
 	import JanPort
 except:
 	pass
+
+try:
+	import JanCompiler
+except:
+	pass
