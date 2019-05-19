@@ -16,11 +16,11 @@ from JanPort import tk
 int_engine = lambda _int: int(JAN_ENGINE_engine.get(_int))
 
 class load_type(object):
-	def __init__(self, type, master, path):
+	def __init__(self, type, tag, master, path):
 		try:
 			self.type    = type
 			self.path    = path
-			self.tag     = os.path.splitext(os.path.basename(self.path))[0]
+			self.tag     = tag
 			self.img     = pygame.image.load(self.path)
 			self.rect    = self.img.get_rect()
 
@@ -247,7 +247,6 @@ class DAT:
 									self.sprites[self.selected].move = True
 
 								elif not self.sprites[self.selected].rect.collidepoint(event.pos):
-									print("Left")
 									if self.selected != None:
 										self.tool_tree.selection_remove("Class {} {}".format(self.sprites[self.selected].type, self.sprites[self.selected].tag))
 										self.tool_tree.item("Class {} {}".format(self.sprites[self.selected].type, self.sprites[self.selected].tag), open = False)
@@ -319,8 +318,8 @@ class DAT:
 	def delete_selected_sprite(self):
 		try:
 			self.tool_tree.delete("Class {} {}".format(self.sprites[self.selected].type, self.sprites[self.selected].tag))
-			self.remove("sprite")
 			self.sprites[self.selected].do("delete")
+			self.remove("sprite")
 
 			self.selected       = None
 			self.some_selected  = False
@@ -383,8 +382,10 @@ class DAT:
 			)))
 
 			if find:
-				self.selected = os.path.splitext(os.path.basename(find))[0]
-				self.sprites[self.selected] = load_type("Sprites", self.JanPygame, find)
+				import random
+
+				self.selected = os.path.splitext(os.path.basename(find))[0] + str(random.randint(100, 1000))
+				self.sprites[self.selected] = load_type("Sprites", self.selected, self.JanPygame, find)
 				
 				self.tool_tree.insert(
 				self.tool_tree_sprites, "end",
@@ -410,8 +411,10 @@ class DAT:
 			)))
 
 			if find:
-				self.selected = os.path.splitext(os.path.basename(find))[0]
-				self.sprites[self.selected] = load_type("Objects", self.JanPygame, find)
+				import random
+
+				self.selected = os.path.splitext(os.path.basename(find))[0] + str(random.randint(100, 1000))
+				self.sprites[self.selected] = load_type("Objects", self.selected, self.JanPygame, find)
 
 				self.tool_tree.insert(
 				self.tool_tree_objects, "end",
