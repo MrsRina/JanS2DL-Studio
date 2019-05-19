@@ -558,5 +558,5 @@ if __name__ is "__main__":
 else:
 	JanGui.start_(replace_folder("/_JanJa.py", "/splash/logo_00.png"), DAT, hardware_res, JanMath,
 	json    = JAN_ENGINE_engine,
-	version = "Alpha 0.1.4"
+	version = "Alpha 0.1.5"
 	)
