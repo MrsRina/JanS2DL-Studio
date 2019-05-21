@@ -98,6 +98,9 @@ class DAT:
 			self.selected             = None
 			self.sprites              = {}
 
+			self.project = None
+			self.event_file = 0
+
 			self.create_widget()
 
 			self.x_main, self.y_main = JanMath.Sync_Resolution_Pos(self.JanWin.get_master())
@@ -346,6 +349,10 @@ class DAT:
 
 			self.JanContainer.container.configure(width = self.JanWin.get("Width"), height = self.JanWin.get("Height"))
 			self.JanTree.up(self.bool_tool_tree)
+			self.tool_tree.heading("#0", text = "..." if self.project is None else self.project)
+
+			self.JanMenu.menu_file_tools.entryconfig(2, state = JanMath.Sync_File(self.event_file))
+			self.JanMenu.menu_file_tools.entryconfig(3, state = JanMath.Sync_File_As(self.event_file))
 
 			self.x_main, self.y_main = JanMath.Sync_Resolution_Pos(self.JanWin.get_master())
 
@@ -367,6 +374,54 @@ class DAT:
 
 				if self.bool_click >= 2:
 					self.bool_click = 0
+		except:
+			raise
+		return None
+
+	def find_folder_and_return(self):
+		try:
+			find = filedialog.askdirectory()
+
+			if find:
+				self.folder_path = find
+
+				self.folder_path_project_.insert("0", find)
+		except:
+			raise
+		return None
+
+	def new_project(self):
+		try:
+			project_window = tk.Toplevel()
+			project_window.transient(self.JanWin.get_master())
+			project_window.focus_force()
+			project_window.grab_set()
+
+			project_window.geometry("400x230")
+			project_window.config(background = "Gray")
+			project_window.resizable(0, 0)
+
+			text = tk.Label(project_window, text = "New Project", bg = "Gray", font = "None 16").place(x = 10, y = 10)
+
+			text_name_project  = tk.Label(project_window, text = "Project Name:", bg = "Gray").place(x = 10, y = 50)
+			text_name_project_ = tk.Text(project_window, bg = "Gray", height = 1, width = 35); text_name_project_.place(x = 95, y = 50)
+
+			text_widht_project  = tk.Label(project_window, text = "Width:", bg = "Gray").place(x = 10, y = 90)
+			text_widht_project_ = tk.Text(project_window, bg = "Gray", height = 1, width = 12); text_widht_project_.place(x = 95, y = 90)
+
+			text_height_project  = tk.Label(project_window, text = "Height:", bg = "Gray").place(x = 200, y = 90)
+			text_height_project_ = tk.Text(project_window, bg = "Gray", height = 1, width = 16); text_height_project_.place(x = 246, y = 90)
+
+			folder_path_project        = tk.Label(project_window, text = "Folder:", bg = "Gray"); folder_path_project.place(x = 10, y = 130)
+			self.folder_path_project_  = tk.Text(project_window, bg = "Gray", height = 1, width = 27, state = "disabled"); self.folder_path_project_.place(x = 95, y = 130)
+			
+			button_path_project        = tk.Button(project_window, text = "Find", bg = "Gray", width = 7, font = "None 7",
+			command = self.find_folder_and_return); button_path_project.place(x = 326, y = 130)
+
+			button_ok_project     = tk.Button(project_window, text = "Ok", bg = "Gray", width = 12).place(x = 285, y = 190)
+			button_cancel_project = tk.Button(project_window, text = "Cancel", bg = "Gray", width = 12).place(x = 10, y = 190)
+
+			project_window.update()
 		except:
 			raise
 		return None
@@ -499,8 +554,8 @@ class DAT:
 			self.JanMenu       = JanGui.create_menu(self.JanWin.get_master(),
 			(
 				# Main container and Events container	
-				None, None, None, self.load_sprite, self.load_object, None, None,
-				None, self.close, None, None, None, None, None,
+				self.new_project, None, None, None, self.load_sprite, self.load_object, None,
+				self.close, None, None, None, None, None, None, None
 			),
 			(
 				self.delete_selected_sprite, None, None, None, None

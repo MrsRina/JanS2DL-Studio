@@ -36,3 +36,5 @@ setx path = %path%%~dp0\data\python\
 cd %~dp0\data\python\
 
 python "%~dp0\data\_JanDat.py"
+
+pause

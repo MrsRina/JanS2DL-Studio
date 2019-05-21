@@ -19,3 +19,33 @@ def Sync_Resolution_Pos(master):
 	except:
 		raise
 	return None
+
+def Sync_File(x):
+	try:
+		if x is 0:
+			return "disabled"
+
+		elif x is 1:
+			return "disabled"
+
+		elif x is 2:
+			return "normal"
+
+	except:
+		raise
+	return None
+
+def Sync_File_As(x):
+	try:
+		if x is 0:
+			return "disabled"
+
+		elif x is 1:
+			return "normal"
+
+		elif x is 2:
+			return "disabled"
+
+	except:
+		raise
+	return None

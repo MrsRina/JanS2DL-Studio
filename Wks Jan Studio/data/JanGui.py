@@ -170,37 +170,38 @@ class create_menu(object):
 
 	def create_file_and_tool_menu(self):
 		try:
-			self.menu_file_tools = tk.Menu(self.master_menu, tearoff = 0, bg = "Gray", fg = "White")
+			self.menu_file_tools = tk.Menu(self.master_menu, tearoff = 0, bg = "Gray50", fg = "Black")
 
-			self.menu_file_tools.add_command(label = "Open File"    , command = self.cmds[0] )
-			self.menu_file_tools.add_command(label = "Save File"    , command = self.cmds[1] )
-			self.menu_file_tools.add_command(label = "Save File As" , command = self.cmds[2] ); self.menu_file_tools.add_separator()
-			self.menu_file_tools.add_command(label = "Sprites"      , command = self.cmds[3] )
-			self.menu_file_tools.add_command(label = "Objects"      , command = self.cmds[4] )
-			self.menu_file_tools.add_command(label = "Text"         , command = self.cmds[5] )
-			self.menu_file_tools.add_command(label = "Background"   , command = self.cmds[6] )
-			self.menu_file_tools.add_command(label = "Camera"       , command = self.cmds[7] ); self.menu_file_tools.add_separator()
-			self.menu_file_tools.add_command(label = "Exit"         , command = self.cmds[8] )
+			self.menu_file_tools.add_command(label = "New Project"     , command = self.cmds[0] )
+			self.menu_file_tools.add_command(label = "Open Project"    , command = self.cmds[1] )
+			self.menu_file_tools.add_command(label = "Save Project"    , command = self.cmds[2] )
+			self.menu_file_tools.add_command(label = "Save Project As" , command = self.cmds[3] ); self.menu_file_tools.add_separator()
+			self.menu_file_tools.add_command(label = "Sprites"         , command = self.cmds[4] )
+			self.menu_file_tools.add_command(label = "Objects"         , command = self.cmds[5] )
+			self.menu_file_tools.add_command(label = "Text"            , command = self.cmds[6] )
+			self.menu_file_tools.add_command(label = "Background"      , command = self.cmds[7] )
+			self.menu_file_tools.add_command(label = "Camera"          , command = self.cmds[8] ); self.menu_file_tools.add_separator()
+			self.menu_file_tools.add_command(label = "Exit"            , command = self.cmds[9] )
 		except:
 			raise
 		return None
 
 	def create_events_menu(self):
 		try:
-			self.menu_events = tk.Menu(self.master_menu, tearoff = 0, bg = "Gray", fg = "White")
+			self.menu_events = tk.Menu(self.master_menu, tearoff = 0, bg = "Gray50", fg = "Black")
 
-			self.menu_events.add_command(label = "New Event Mouse"    , command = self.cmds[9]  )
-			self.menu_events.add_command(label = "New Event Keyboard" , command = self.cmds[10] )
-			self.menu_events.add_command(label = "New Event Collide"  , command = self.cmds[11] )
-			self.menu_events.add_command(label = "New Event Window"   , command = self.cmds[12] ); self.menu_events.add_separator()
-			self.menu_events.add_command(label = "Event Settings"     , command = self.cmds[13] )
+			self.menu_events.add_command(label = "New Event Mouse"    , command = self.cmds[10]  )
+			self.menu_events.add_command(label = "New Event Keyboard" , command = self.cmds[11] )
+			self.menu_events.add_command(label = "New Event Collide"  , command = self.cmds[12] )
+			self.menu_events.add_command(label = "New Event Window"   , command = self.cmds[13] ); self.menu_events.add_separator()
+			self.menu_events.add_command(label = "Event Settings"     , command = self.cmds[14] )
 		except:
 			raise
 		return None
 
 	def create_selected_sprite_menu(self):
 		try:
-			self.menu_selected_sprites = tk.Menu(self.master_menu, tearoff = 0, bg = "Gray", fg = "White")
+			self.menu_selected_sprites = tk.Menu(self.master_menu, tearoff = 0, bg = "Gray50", fg = "Black")
 
 			self.menu_selected_sprites.add_command(label = "Delete"   , command = self.sub_cmds[0]); self.menu_selected_sprites.add_separator()
 			self.menu_selected_sprites.add_command(label = "Set Name" , command = self.sub_cmds[1])
@@ -351,7 +352,7 @@ class create_object_tree_view(object):
 
 	def up(self, bool):
 		try:
-			if bool == True:
+			if bool is True:
 				self.tree.place(width = self.master.winfo_width() - 25, height = self.master_master.winfo_height() - self.master_master.winfo_height() / 2)
 
 			elif bool is False:
