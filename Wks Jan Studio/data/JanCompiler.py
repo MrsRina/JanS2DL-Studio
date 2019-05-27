@@ -1,43 +1,80 @@
-class load_projetc(object):
-	def __init__(self, path):
-		try:
-			self.title_project = None
-			self.sprites       = None
-			self.objects       = None
-			self.cameras       = None
+import json
 
-			self.file = open(path, "r+")
-
-			self.read_and_get()
-		except:
-			raise
-		return None
-
-	def add_(self, type, what):
-		try:
-			if type is "title":
-				for file in self.file:
-					_find = line.strip().split()
-
-					if _find[0]:
-						cache_what = _find[0].replace(_find, what)
-						file.write(cache_what)
-
-					file.close()
-		except:
-			raise
-		return None
-
-	def read_and_get(self):
-		try:
-			for file in self.file:
-				_find = line.strip().split()
-
-				self.title_project = _find[0]
-				self.sprites       = _find[1]
-				self.objects       = _find[2]
-
+class create_project(object):
+		def __init__(self, local = None, name = None):
+			try:
+				self.local = local + "/{}.jan".format(name.replace(" ", "_"))
+				file       = open(self.local, "w")
+				file.write("{")
+				file.write('\n    "Name" : "{}"'.format(name))
+				file.write("\n}")
 				file.close()
+
+				self.path = open(self.local, "r+")
+				self.json = json.load(self.path)
+
+				self.json["Name"] = name
+
+				self.save()
+			except:
+				raise
+			return None
+
+		def save(self):
+			try:
+				self.path.seek(0)
+				json.dump(self.json, self.path, indent = 4)
+				self.path.truncate()
+			except:
+				raise
+			return None
+
+class open_project(object):
+	def __init__(self, path = None):
+		try:
+			self.path = open(path)
+			self.json = json.load(self.path)
+		except:
+			raise
+		return None
+
+	def add_sprite(self, sprite = None):
+		try:
+			self.json[sprite] = sprite
+		except:
+			raise
+		return None
+
+	def add_object(self, object = None):
+		try:
+			self.json[object] = object
+		except:
+			raise
+		return None
+
+	def add_camera(self, camera = None):
+		try:
+			self.json[camera] = camera
+		except:
+			raise
+		return None
+
+	def remove(self, sprite):
+		try:
+			if sprite is "Class Sprite":
+				del self.json[sprite]
+
+			elif sprite is "Calss Object":
+				del self.json[object]
+		except:
+			raise
+		return None
+
+	def save(self):
+		try:
+			self.path.seek(0)
+			json.dump(self.json, self.path, indent = 4)
+			self.path.truncate()
 		except:
 			raise
 		return None

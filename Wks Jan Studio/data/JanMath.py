@@ -29,8 +29,10 @@ def Sync_File(x):
 			return "disabled"
 
 		elif x is 2:
-			return "normal"
+			return "disabled"
 
+		elif x is 3:
+			return "normal"
 	except:
 		raise
 	return None
@@ -44,6 +46,9 @@ def Sync_File_As(x):
 			return "normal"
 
 		elif x is 2:
+			return "disabled"
+
+		elif x is 3:
 			return "disabled"
 
 	except:

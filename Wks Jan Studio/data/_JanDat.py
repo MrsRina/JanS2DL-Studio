@@ -13,6 +13,8 @@ from JanPort import filedialog
 from JanPort import JanMath
 from JanPort import tk
 
+from JanPort import JanCompiler
+
 int_engine = lambda _int: int(JAN_ENGINE_engine.get(_int))
 
 class load_type(object):
@@ -100,6 +102,7 @@ class DAT:
 
 			self.project = None
 			self.event_file = 0
+			self.new_folder_path = None
 
 			self.create_widget()
 
@@ -117,7 +120,6 @@ class DAT:
 			self.Tick_Fps = pygame.time.Clock()
 
 			while (self.JanRun):
-				self.Tick_Fps.tick(102)
 				self.JanPygame.fill((self.JanBackgroundColorPygame))
 
 				for event_ in pygame.event.get():
@@ -320,6 +322,7 @@ class DAT:
 
 	def delete_selected_sprite(self):
 		try:
+			self.project.remove("Class {}".format(self.sprites[self.selected].type))
 			self.tool_tree.delete("Class {} {}".format(self.sprites[self.selected].type, self.sprites[self.selected].tag))
 			self.sprites[self.selected].do("delete")
 			self.remove("sprite")
@@ -349,7 +352,7 @@ class DAT:
 
 			self.JanContainer.container.configure(width = self.JanWin.get("Width"), height = self.JanWin.get("Height"))
 			self.JanTree.up(self.bool_tool_tree)
-			self.tool_tree.heading("#0", text = "..." if self.project is None else self.project)
+			self.tool_tree.heading("#0", text = "..." if self.project is None else self.project.json["Name"])
 
 			self.JanMenu.menu_file_tools.entryconfig(2, state = JanMath.Sync_File(self.event_file))
 			self.JanMenu.menu_file_tools.entryconfig(3, state = JanMath.Sync_File_As(self.event_file))
@@ -378,50 +381,112 @@ class DAT:
 			raise
 		return None
 
-	def find_folder_and_return(self):
+	def create_new_project(self):
 		try:
-			find = filedialog.askdirectory()
+			if self.cache_project_name.get(1.0, tk.INSERT) != "":
+				try:
+					self.project = JanCompiler.create_project(local = self.new_folder_path, name = self.cache_project_name.get(1.0, tk.INSERT))
+				
+					self.new_folder_path = None
 
-			if find:
-				self.folder_path = find
+					self.event_file = 2
+					self.some_selected = False
 
-				self.folder_path_project_.insert("0", find)
+					self.project = JanCompiler.open_project(path = self.project.local)
+				
+					self.cache_project_window.destroy()
+
+					self.JanWin.get_master().update()
+
+				except:
+					def return_color(): self.cache_project_name.configure(bg = "Gray")
+
+					self.cache_project_name.configure(bg = "Red")
+
+					self.cache_project_name.after(2000, return_color)
+
+					self.JanWin.get_master().update()
+
+			else:
+				def return_color(): self.cache_project_name.configure(bg = "Gray")
+
+				self.cache_project_name.configure(bg = "Red")
+
+				self.cache_project_name.after(2000, return_color)
+
+				self.JanWin.get_master().update()
+		except:
+			raise
+		return None
+
+	def cancel_new_project(self):
+		try:
+			self.new_folder_path = None
+			self.some_selected   = False
+			self.cache_project_window.destroy()
+
+			self.JanWin.get_master().update()
 		except:
 			raise
 		return None
 
 	def new_project(self):
 		try:
-			project_window = tk.Toplevel()
-			project_window.transient(self.JanWin.get_master())
-			project_window.focus_force()
-			project_window.grab_set()
+			find = filedialog.askdirectory()
 
-			project_window.geometry("400x230")
-			project_window.config(background = "Gray")
-			project_window.resizable(0, 0)
+			if find:
+				self.new_folder_path = find
+				self.some_selected = True
 
-			text = tk.Label(project_window, text = "New Project", bg = "Gray", font = "None 16").place(x = 10, y = 10)
+				project_window = tk.Toplevel()
+				project_window.transient(self.JanWin.get_master())
+				project_window.focus_force()
+				project_window.grab_set()
 
-			text_name_project  = tk.Label(project_window, text = "Project Name:", bg = "Gray").place(x = 10, y = 50)
-			text_name_project_ = tk.Text(project_window, bg = "Gray", height = 1, width = 35); text_name_project_.place(x = 95, y = 50)
+				project_window.geometry("400x250")
+				project_window.config(background = "Gray")
+				project_window.resizable(0, 0)
 
-			text_widht_project  = tk.Label(project_window, text = "Width:", bg = "Gray").place(x = 10, y = 90)
-			text_widht_project_ = tk.Text(project_window, bg = "Gray", height = 1, width = 12); text_widht_project_.place(x = 95, y = 90)
+				text = tk.Label(project_window, text = "New Project", bg = "Gray", font = "None 16").place(x = 10, y = 10)
 
-			text_height_project  = tk.Label(project_window, text = "Height:", bg = "Gray").place(x = 200, y = 90)
-			text_height_project_ = tk.Text(project_window, bg = "Gray", height = 1, width = 16); text_height_project_.place(x = 246, y = 90)
+				text_name_project  = tk.Label(project_window, text = "Project Name:", bg = "Gray").place(x = 10, y = 50)
+				text_name_project_ = tk.Text(project_window, bg = "Gray", height = 1, width = 35); text_name_project_.place(x = 95, y = 50)
 
-			folder_path_project        = tk.Label(project_window, text = "Folder:", bg = "Gray"); folder_path_project.place(x = 10, y = 130)
-			self.folder_path_project_  = tk.Text(project_window, bg = "Gray", height = 1, width = 27, state = "disabled"); self.folder_path_project_.place(x = 95, y = 130)
+				text_widht_project  = tk.Label(project_window, text = "Width:", bg = "Gray").place(x = 10, y = 90)
+				text_widht_project_ = tk.Text(project_window, bg = "Gray", height = 1, width = 35); text_widht_project_.place(x = 95, y = 90)
+
+				text_height_project  = tk.Label(project_window, text = "Height:", bg = "Gray").place(x = 10, y = 120)
+				text_height_project_ = tk.Text(project_window, bg = "Gray", height = 1, width = 35); text_height_project_.place(x = 95, y = 120)
+
+				text_comment_project  = tk.Label(project_window, text = "Comment:", bg = "Gray").place(x = 10, y = 160)
+				text_comment_project_ = tk.Text(project_window, height = 2, width = 35, bg = "Gray"); text_comment_project_.place(x = 95, y = 160)
+
+				button_ok_project     = tk.Button(project_window, text = "Ok", bg = "Gray", width = 12, command = self.create_new_project).place(x = 285, y = 210)
+				button_cancel_project = tk.Button(project_window, text = "Cancel", bg = "Gray", width = 12, command = self.cancel_new_project).place(x = 180, y = 210)
+
+				self.cache_project_window = project_window
+				self.cache_project_name   = text_name_project_
+				self.cache_project_width  = text_widht_project_
+				self.cache_project_height = text_height_project_
+
+				project_window.wait_window()
+
+				self.JanWin.get_master().update()
+		except:
+			raise
+		return None
+
+	def open_project(self):
+		try:
 			
-			button_path_project        = tk.Button(project_window, text = "Find", bg = "Gray", width = 7, font = "None 7",
-			command = self.find_folder_and_return); button_path_project.place(x = 326, y = 130)
+		except:
+			raise
+		return None
 
-			button_ok_project     = tk.Button(project_window, text = "Ok", bg = "Gray", width = 12).place(x = 285, y = 190)
-			button_cancel_project = tk.Button(project_window, text = "Cancel", bg = "Gray", width = 12).place(x = 10, y = 190)
-
-			project_window.update()
+	def save_project(self):
+		try:
+			self.event_file = 0
+			self.project.save()
 		except:
 			raise
 		return None
@@ -448,7 +513,15 @@ class DAT:
 				text = self.sprites[self.selected].tag,
 				open = True)
 
-				self.selected = None
+				if self.project != None:
+					self.project.add_sprite(sprite = self.sprites[self.selected].tag)
+					self.selected   = None
+					self.event_file = 3
+
+				else:
+					self.selected   = None
+					self.event_file = 1
+
 				pygame.display.update()
 				self.JanWin.get_master().update()
 		except:
@@ -477,7 +550,15 @@ class DAT:
 				text = self.sprites[self.selected].tag,
 				open = True)
 
-				self.selected = None
+				if self.project != None:
+					self.project.add_object(sprite = self.sprites[self.selected].tag)
+					self.selected   = None
+					self.event_file = 3
+
+				else:
+					self.selected   = None
+					self.event_file = 1
+
 				pygame.display.update()
 				self.JanWin.get_master().update()
 		except:
@@ -554,8 +635,8 @@ class DAT:
 			self.JanMenu       = JanGui.create_menu(self.JanWin.get_master(),
 			(
 				# Main container and Events container	
-				self.new_project, None, None, None, self.load_sprite, self.load_object, None,
-				self.close, None, None, None, None, None, None, None
+				self.new_project, None, self.save_project, None, self.load_sprite, self.load_object, None,
+				None, None, self.close, None, None, None, None, None
 			),
 			(
 				self.delete_selected_sprite, None, None, None, None
