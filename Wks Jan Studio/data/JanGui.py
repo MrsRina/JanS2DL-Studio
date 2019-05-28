@@ -324,28 +324,37 @@ class create_frame_tools(object):
 class create_object_tree_view(object):
 	def __init__(self, master, icon_path_00, icon_path_01, icon_path_02):
 		try:
+			self.icon_path_00 = icon_path_00
+			self.icon_path_01 = icon_path_01
+			self.icon_path_02 = icon_path_02
+
 			self.master        = master.frame
 			self.master_master = master.master
 
 			self.tree = ttk.Treeview(self.master)
 
-			image_icone_00 = tk.PhotoImage(file = icon_path_00)
+			self.tree.place(x = 10, y = 10, width = self.master.winfo_width() - 25, height = self.master.winfo_height() - 50)
+		except:
+			raise
+		return None
+
+	def create_class(self):
+		try:
+			image_icone_00 = tk.PhotoImage(file = self.icon_path_00)
 			icone_00       = tk.Label(image = image_icone_00)
 			icone_00.photo = image_icone_00
 
-			image_icone_01 = tk.PhotoImage(file = icon_path_01)
+			image_icone_01 = tk.PhotoImage(file = self.icon_path_01)
 			icone_01       = tk.Label(image = image_icone_01)
 			icone_01.photo = image_icone_01
 
-			image_icone_02 = tk.PhotoImage(file = icon_path_02)
+			image_icone_02 = tk.PhotoImage(file = self.icon_path_02)
 			icone_02       = tk.Label(image = image_icone_02)
 			icone_02.photo = image_icone_02
 
 			self.sprites = self.tree.insert("", "end", "Sprites", image = icone_00.photo, text = " " + "Sprites")
 			self.objects = self.tree.insert("", 'end', "Objects", image = icone_01.photo, text = " " + "Objects")
 			self.cameras = self.tree.insert("", 'end', "Cameras", image = icone_02.photo, text = " " + "Cameras")
-
-			self.tree.place(x = 10, y = 10, width = self.master.winfo_width() - 25, height = self.master.winfo_height() - 50)
 		except:
 			raise
 		return None

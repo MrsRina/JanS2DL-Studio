@@ -32,8 +32,9 @@ class create_project(object):
 class open_project(object):
 	def __init__(self, path = None):
 		try:
-			self.path = open(path)
-			self.json = json.load(self.path)
+			self.local = path
+			self.path  = open(self.local, "r+")
+			self.json  = json.load(self.path)
 		except:
 			raise
 		return None
@@ -41,13 +42,15 @@ class open_project(object):
 	def add_sprite(self, sprite = None):
 		try:
 			self.json[sprite] = sprite
+			self.save()
 		except:
 			raise
 		return None
 
-	def add_object(self, object = None):
+	def add_object(self, _object = None):
 		try:
-			self.json[object] = object
+			self.json[_object] = _object
+			self.save()
 		except:
 			raise
 		return None
@@ -55,6 +58,7 @@ class open_project(object):
 	def add_camera(self, camera = None):
 		try:
 			self.json[camera] = camera
+			self.save()
 		except:
 			raise
 		return None

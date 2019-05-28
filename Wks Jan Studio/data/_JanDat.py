@@ -362,7 +362,8 @@ class DAT:
 			self.JanSpriteOptions.show(self.tool_tree, self.sprites, self.selected, up = self.bool_tool_tree)
 
 			try:
-				self.JanStatus.set_text("{}{} {} {} {}".format(
+				self.JanStatus.set_text("{} {}{} {} {} {}".format(
+					"" if self.project is None else self.project.local,
 					"" if self.selected is None else self.selected, 
 					pygame.mouse.get_pos() if self.selected is None else " %d" % self.sprites[self.selected].rect.x,
 					"" if self.selected is None else self.sprites[self.selected].rect.y,
@@ -389,8 +390,12 @@ class DAT:
 				
 					self.new_folder_path = None
 
+					self.clear()
+
 					self.event_file = 2
 					self.some_selected = False
+
+					self.JanTree.create_class()
 
 					self.project = JanCompiler.open_project(path = self.project.local)
 				
@@ -478,6 +483,21 @@ class DAT:
 
 	def open_project(self):
 		try:
+			find = filedialog.askopenfilename(initialdir = os.path.realpath(__file__), title = "Select file", filetypes = (
+			(
+				"files", "*.jan"
+			),
+			(
+				"all files", "*.*"
+			)))
+
+			if find:
+				self.clear()
+
+				self.project    = JanCompiler.open_project(path = find)
+				self.event_file = 2
+
+				self.JanTree.create_class()
 			
 		except:
 			raise
@@ -551,7 +571,7 @@ class DAT:
 				open = True)
 
 				if self.project != None:
-					self.project.add_object(sprite = self.sprites[self.selected].tag)
+					self.project.add_object(_object = self.sprites[self.selected].tag)
 					self.selected   = None
 					self.event_file = 3
 
@@ -561,6 +581,14 @@ class DAT:
 
 				pygame.display.update()
 				self.JanWin.get_master().update()
+		except:
+			raise
+		return None
+
+	def clear(self):
+		try:
+			self.tool_tree.delete(*self.tool_tree.get_children())
+			self.sprites = {}
 		except:
 			raise
 		return None
@@ -635,7 +663,7 @@ class DAT:
 			self.JanMenu       = JanGui.create_menu(self.JanWin.get_master(),
 			(
 				# Main container and Events container	
-				self.new_project, None, self.save_project, None, self.load_sprite, self.load_object, None,
+				self.new_project, self.open_project, self.save_project, None, self.load_sprite, self.load_object, None,
 				None, None, self.close, None, None, None, None, None
 			),
 			(
@@ -647,6 +675,8 @@ class DAT:
 				replace_folder("/_JanJa.py", "/splash/icone_00.png"),
 				replace_folder("/_JanJa.py", "/splash/icone_01.png"),
 				replace_folder("/_JanJa.py", "/splash/icone_02.png"))
+
+			self.JanTree.create_class()
 
 			self.tool_tree         = self.JanTree.tree
 			self.tool_tree_sprites = self.JanTree.sprites
@@ -694,5 +724,5 @@ if __name__ is "__main__":
 else:
 	JanGui.start_(replace_folder("/_JanJa.py", "/splash/logo_00.png"), DAT, hardware_res, JanMath,
 	json    = JAN_ENGINE_engine,
-	version = "Alpha 0.1.6"
+	version = "Alpha 0.1.7"
 	)
