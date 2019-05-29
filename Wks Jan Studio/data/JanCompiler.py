@@ -35,41 +35,47 @@ class open_project(object):
 			self.local = path
 			self.path  = open(self.local, "r+")
 			self.json  = json.load(self.path)
+
+			try:
+				self.json["Game Sprites"]
+				self.json["Game Objects"]
+				self.json["Game Cameras"]
+			except:
+				self.json["Game Sprites"] = {}
+				self.json["Game Objects"] = {}
+				self.json["Game Cameras"] = {}
 		except:
 			raise
 		return None
 
 	def add_sprite(self, sprite = None):
 		try:
-			self.json[sprite] = sprite
-			self.save()
+			self.json["Game Sprites"][sprite] = {}
 		except:
 			raise
 		return None
 
 	def add_object(self, _object = None):
 		try:
-			self.json[_object] = _object
-			self.save()
+			self.json["Game Objects"][_object] = {}
 		except:
 			raise
 		return None
 
 	def add_camera(self, camera = None):
 		try:
-			self.json[camera] = camera
-			self.save()
+			self.json["Game Cameras"][camera] = {}
 		except:
 			raise
 		return None
 
 	def remove(self, sprite):
 		try:
-			if sprite is "Class Sprite":
-				del self.json[sprite]
+			if sprite.find("Class Sprites"):
+				del self.json["Game Sprites"][sprite.replace("Class Sprite", "")]
 
-			elif sprite is "Calss Object":
-				del self.json[object]
+			elif sprite.find("Class Objects"):
+				del self.json["Game Objects"][sprite.replace("Class Object", "")]
 		except:
 			raise
 		return None

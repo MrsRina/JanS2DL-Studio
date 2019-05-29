@@ -1,0 +1,44 @@
+{
+    "Name": "Mokorno",
+    "Game Sprites": {
+        "banheira com agua posicao 2350": {
+            "Tag": "banheira com agua posicao 2350",
+            "Type": "Sprites",
+            "Width": 48,
+            "Height": "banheira com agua posicao 2350",
+            "X": 0,
+            "Y": 0,
+            "Path": "C:/Users/Sr_Rina/Documents/JanCreate Studio/Project_Game/Data _ Test/banheira com agua posicao 2.png"
+        },
+        "banheira com agua posicao 2514": {
+            "Tag": "banheira com agua posicao 2514",
+            "Type": "Sprites",
+            "Width": 48,
+            "Height": "banheira com agua posicao 2514",
+            "X": 0,
+            "Y": 0,
+            "Path": "C:/Users/Sr_Rina/Documents/JanCreate Studio/Project_Game/Data _ Test/banheira com agua posicao 2.png"
+        }
+    },
+    "Game Objects": {
+        "armario_cozinha982": {
+            "Tag": "armario_cozinha982",
+            "Type": "Objects",
+            "Width": 51,
+            "Height": 60,
+            "X": 0,
+            "Y": 0,
+            "Path": "C:/Users/Sr_Rina/Documents/JanCreate Studio/Project_Game/Data _ Test/armario_cozinha.png"
+        },
+        "geladeira_verde836": {
+            "Tag": "geladeira_verde836",
+            "Type": "Objects",
+            "Width": 48,
+            "Height": 96,
+            "X": 0,
+            "Y": 0,
+            "Path": "C:/Users/Sr_Rina/Documents/JanCreate Studio/Project_Game/Data _ Test/geladeira_verde.png"
+        }
+    },
+    "Game Cameras": {}
+}

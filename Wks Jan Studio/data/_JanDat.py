@@ -322,7 +322,11 @@ class DAT:
 
 	def delete_selected_sprite(self):
 		try:
-			self.project.remove("Class {}".format(self.sprites[self.selected].type))
+			if self.project is None:
+				self.project = None
+			else:
+				self.project.remove("Class {} {}".format(self.sprites[self.selected].type, self.sprites[self.selected].tag))
+			
 			self.tool_tree.delete("Class {} {}".format(self.sprites[self.selected].type, self.sprites[self.selected].tag))
 			self.sprites[self.selected].do("delete")
 			self.remove("sprite")
@@ -334,7 +338,7 @@ class DAT:
 			pygame.display.flip()
 			self.JanWin.get_master().update()
 		except:
-			pass
+			raise
 		return None
 
 	def remove(self, x):
@@ -390,14 +394,19 @@ class DAT:
 				
 					self.new_folder_path = None
 
-					self.clear()
+					self.project = JanCompiler.open_project(path = self.project.local)
+
+					if self.index_type is None:
+						self.clear()
+						self.JanTree.create_class()
+
+					else:
+						print(self.tool_tree_sprites)
+						print(self.tool_tree_objects)
+						print(self.tool_tree_cameras)
 
 					self.event_file = 2
 					self.some_selected = False
-
-					self.JanTree.create_class()
-
-					self.project = JanCompiler.open_project(path = self.project.local)
 				
 					self.cache_project_window.destroy()
 
@@ -435,7 +444,7 @@ class DAT:
 			raise
 		return None
 
-	def new_project(self):
+	def new_project(self, save = None):
 		try:
 			find = filedialog.askdirectory()
 
@@ -443,6 +452,8 @@ class DAT:
 				self.new_folder_path = find
 				self.some_selected = True
 
+				self.index_type = save
+				
 				project_window = tk.Toplevel()
 				project_window.transient(self.JanWin.get_master())
 				project_window.focus_force()
@@ -503,6 +514,13 @@ class DAT:
 			raise
 		return None
 
+	def save_as_project(self):
+		try:
+			self.new_project("Save As")
+		except:
+			raise
+		return None
+
 	def save_project(self):
 		try:
 			self.event_file = 0
@@ -535,6 +553,15 @@ class DAT:
 
 				if self.project != None:
 					self.project.add_sprite(sprite = self.sprites[self.selected].tag)
+					
+					self.project.json["Game Sprites"][self.sprites[self.selected].tag]["Tag"]    = self.sprites[self.selected].tag
+					self.project.json["Game Sprites"][self.sprites[self.selected].tag]["Type"]   = self.sprites[self.selected].type
+					self.project.json["Game Sprites"][self.sprites[self.selected].tag]["Width"]  = self.sprites[self.selected].rect.w
+					self.project.json["Game Sprites"][self.sprites[self.selected].tag]["Height"] = self.sprites[self.selected].tag
+					self.project.json["Game Sprites"][self.sprites[self.selected].tag]["X"]      = self.sprites[self.selected].rect.x
+					self.project.json["Game Sprites"][self.sprites[self.selected].tag]["Y"]      = self.sprites[self.selected].rect.y
+					self.project.json["Game Sprites"][self.sprites[self.selected].tag]["Path"]   = self.sprites[self.selected].path
+
 					self.selected   = None
 					self.event_file = 3
 
@@ -572,6 +599,15 @@ class DAT:
 
 				if self.project != None:
 					self.project.add_object(_object = self.sprites[self.selected].tag)
+
+					self.project.json["Game Objects"][self.sprites[self.selected].tag]["Tag"]    = self.sprites[self.selected].tag
+					self.project.json["Game Objects"][self.sprites[self.selected].tag]["Type"]   = self.sprites[self.selected].type
+					self.project.json["Game Objects"][self.sprites[self.selected].tag]["Width"]  = self.sprites[self.selected].rect.w
+					self.project.json["Game Objects"][self.sprites[self.selected].tag]["Height"] = self.sprites[self.selected].rect.h
+					self.project.json["Game Objects"][self.sprites[self.selected].tag]["X"]      = self.sprites[self.selected].rect.x
+					self.project.json["Game Objects"][self.sprites[self.selected].tag]["Y"]      = self.sprites[self.selected].rect.y
+					self.project.json["Game Objects"][self.sprites[self.selected].tag]["Path"]   = self.sprites[self.selected].path
+					
 					self.selected   = None
 					self.event_file = 3
 
@@ -663,7 +699,7 @@ class DAT:
 			self.JanMenu       = JanGui.create_menu(self.JanWin.get_master(),
 			(
 				# Main container and Events container	
-				self.new_project, self.open_project, self.save_project, None, self.load_sprite, self.load_object, None,
+				self.new_project, self.open_project, self.save_project, self.save_as_project, self.load_sprite, self.load_object, None,
 				None, None, self.close, None, None, None, None, None
 			),
 			(
