@@ -1,0 +1,16 @@
+{
+    "Name": "MokGame",
+    "Game Sprites": {
+        "Class Sprites armario_cozinha391": {
+            "Tag": "armario_cozinha391",
+            "Type": "Sprites",
+            "Width": 54,
+            "Height": 59,
+            "X": 13,
+            "Y": 12,
+            "Path": "C:/Users/Sr_Rina/Documents/JanCreate Studio/Project_Game/Data _ Test/armario_cozinha.png"
+        }
+    },
+    "Game Objects": {},
+    "Game Cameras": {}
+}

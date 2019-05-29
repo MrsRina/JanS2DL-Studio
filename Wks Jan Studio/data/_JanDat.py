@@ -4,6 +4,7 @@ from _JanJa import os
 
 from _JanJa import JanGui
 from _JanJa import hardware_res
+from _JanJa import load_type
 
 from _JanJa import JAN_ENGINE_engine
 from _JanJa import replace_folder
@@ -16,71 +17,6 @@ from JanPort import tk
 from JanPort import JanCompiler
 
 int_engine = lambda _int: int(JAN_ENGINE_engine.get(_int))
-
-class load_type(object):
-	def __init__(self, type, tag, master, path):
-		try:
-			self.type    = type
-			self.path    = path
-			self.tag     = tag
-			self.img     = pygame.image.load(self.path)
-			self.rect    = self.img.get_rect()
-
-			self.master    = master
-			self.move      = False
-			self.resize    = False
-			self.rotate    = False
-			self.rendering = True
-			self.selected  = False
-		except:
-			raise
-		return None
-
-	def do(self, type):
-		try:
-			if (type) is ("delete"):
-				self.path    = None
-				self.img     = None
-				self.rect    = None
-				self.effect_ = None
-				self.master  = None
-				self.tag     = ("deleted")
-
-				self.move      = False
-				self.resize    = False
-				self.rotate    = False
-				self.rendering = False
-				self.selected  = False
-		except:
-			raise
-		return None
-
-	def render(self):
-		try:
-			if self.rendering:
-				self.master.blit(self.img, (self.rect.x, self.rect.y))
-
-				if self.selected:
-					if self.move:
-						self.rect.center = pygame.mouse.get_pos()
-
-					if self.rotate:
-						pass
-
-					if self.resize:
-						self.rect.w, self.rect.h = pygame.mouse.get_pos()
-						
-						self.img = pygame.transform.scale(pygame.image.load(self.path), (self.rect.w, self.rect.h))
-
-						pygame.display.flip()
-
-					self.effect_ = pygame.Surface((self.rect.w, self.rect.h), pygame.SRCALPHA)
-					self.effect_.fill((255, 0, 0, 50))
-
-					self.master.blit(self.effect_, self.rect)
-		except:
-			raise
-		return None
 
 class DAT:
 	def __init__(self):
@@ -283,11 +219,11 @@ class DAT:
 	
 					if event.button is 3:
 						try:
-							if self.sprites[self.selected].type is ("Sprites"):
+							if self.sprites[self.selected].type is "Sprites":
 								if self.sprites[self.selected].selected:
 									self.create_selected_sprite_menu()
 
-							elif self.sprites[self.selected].type is ("Objects"):
+							elif self.sprites[self.selected].type is "Objects":
 								if self.sprites[self.selected].selected:
 									pass
 						except:
@@ -321,12 +257,7 @@ class DAT:
 		return None
 
 	def delete_selected_sprite(self):
-		try:
-			if self.project is None:
-				self.project = None
-			else:
-				self.project.remove("Class {} {}".format(self.sprites[self.selected].type, self.sprites[self.selected].tag))
-			
+		try:		
 			self.tool_tree.delete("Class {} {}".format(self.sprites[self.selected].type, self.sprites[self.selected].tag))
 			self.sprites[self.selected].do("delete")
 			self.remove("sprite")
@@ -343,7 +274,7 @@ class DAT:
 
 	def remove(self, x):
 		try:
-			if (x) is ("sprite"):
+			if x is "sprite":
 				return self.sprites.pop(self.selected)
 		except:
 			pass
@@ -523,7 +454,12 @@ class DAT:
 
 	def save_project(self):
 		try:
-			self.event_file = 0
+			if self.event_file is 3:
+				self.event_file = 2
+
+			elif self.event_file is 1:
+				self.event_file = 2
+
 			self.project.save()
 		except:
 			raise
@@ -543,7 +479,7 @@ class DAT:
 				import random
 
 				self.selected = os.path.splitext(os.path.basename(find))[0] + str(random.randint(100, 1000))
-				self.sprites[self.selected] = load_type("Sprites", self.selected, self.JanPygame, find)
+				self.sprites[self.selected] = load_type([self.project, "load"], "Sprites", self.selected, self.JanPygame, find, self)
 				
 				self.tool_tree.insert(
 				self.tool_tree_sprites, "end",
@@ -552,16 +488,6 @@ class DAT:
 				open = True)
 
 				if self.project != None:
-					self.project.add_sprite(sprite = self.sprites[self.selected].tag)
-					
-					self.project.json["Game Sprites"][self.sprites[self.selected].tag]["Tag"]    = self.sprites[self.selected].tag
-					self.project.json["Game Sprites"][self.sprites[self.selected].tag]["Type"]   = self.sprites[self.selected].type
-					self.project.json["Game Sprites"][self.sprites[self.selected].tag]["Width"]  = self.sprites[self.selected].rect.w
-					self.project.json["Game Sprites"][self.sprites[self.selected].tag]["Height"] = self.sprites[self.selected].tag
-					self.project.json["Game Sprites"][self.sprites[self.selected].tag]["X"]      = self.sprites[self.selected].rect.x
-					self.project.json["Game Sprites"][self.sprites[self.selected].tag]["Y"]      = self.sprites[self.selected].rect.y
-					self.project.json["Game Sprites"][self.sprites[self.selected].tag]["Path"]   = self.sprites[self.selected].path
-
 					self.selected   = None
 					self.event_file = 3
 
@@ -589,7 +515,7 @@ class DAT:
 				import random
 
 				self.selected = os.path.splitext(os.path.basename(find))[0] + str(random.randint(100, 1000))
-				self.sprites[self.selected] = load_type("Objects", self.selected, self.JanPygame, find)
+				self.sprites[self.selected] = load_type([self.project, "load"], "Objects", self.selected, self.JanPygame, find, self)
 
 				self.tool_tree.insert(
 				self.tool_tree_objects, "end",
@@ -598,16 +524,6 @@ class DAT:
 				open = True)
 
 				if self.project != None:
-					self.project.add_object(_object = self.sprites[self.selected].tag)
-
-					self.project.json["Game Objects"][self.sprites[self.selected].tag]["Tag"]    = self.sprites[self.selected].tag
-					self.project.json["Game Objects"][self.sprites[self.selected].tag]["Type"]   = self.sprites[self.selected].type
-					self.project.json["Game Objects"][self.sprites[self.selected].tag]["Width"]  = self.sprites[self.selected].rect.w
-					self.project.json["Game Objects"][self.sprites[self.selected].tag]["Height"] = self.sprites[self.selected].rect.h
-					self.project.json["Game Objects"][self.sprites[self.selected].tag]["X"]      = self.sprites[self.selected].rect.x
-					self.project.json["Game Objects"][self.sprites[self.selected].tag]["Y"]      = self.sprites[self.selected].rect.y
-					self.project.json["Game Objects"][self.sprites[self.selected].tag]["Path"]   = self.sprites[self.selected].path
-					
 					self.selected   = None
 					self.event_file = 3
 
@@ -726,10 +642,10 @@ class DAT:
 
 	def close(self):
 		try:
-			if not JAN_ENGINE_engine.get("Devolper") is (False):
+			if not JAN_ENGINE_engine.get("Devolper") is False:
 				self.JanRun = False; self.JanWin.close(); os.startfile(replace_folder("data/_JanJa.py", "run.cmd"))
 
-			elif not JAN_ENGINE_engine.get("Devolper") is (True):
+			elif not JAN_ENGINE_engine.get("Devolper") is True:
 				if self.JanWin.askExit("Do you want to quit?"):
 					self.JanRun = False; self.JanWin.close(); sys.exit()
 		except:
@@ -759,6 +675,8 @@ if __name__ is "__main__":
 	JanGui.start_(replace_folder("/_JanJa.py", "/splash/logo_00.png"), DAT)
 else:
 	JanGui.start_(replace_folder("/_JanJa.py", "/splash/logo_00.png"), DAT, hardware_res, JanMath,
-	json    = JAN_ENGINE_engine,
-	version = "Alpha 0.1.7"
-	)
+
+json    = JAN_ENGINE_engine,
+version = "Alpha 0.1.7"
+
+)
