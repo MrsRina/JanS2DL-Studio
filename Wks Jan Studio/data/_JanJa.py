@@ -103,6 +103,8 @@ from JanPort import pygame
 class load_type(object):
 	def __init__(self, project, type, tag, master, path, state):
 		try:
+			import base64
+
 			self.project    = project
 			self.master     = master
 			self.move       = False
@@ -111,13 +113,16 @@ class load_type(object):
 			self.rendering  = True
 			self.selected   = False
 			self.state      = state
-
+			self.base64     = base64
+			
 			if self.project[1] is "load":
-				self.type    = type
-				self.path    = path
-				self.tag     = tag
-				self.img     = pygame.image.load(self.path)
-				self.rect    = self.img.get_rect()
+				self.type      = type
+				self.path      = path
+				self.tag       = tag
+				self.extension = os.path.splitext(os.path.basename(self.path))[1]
+				self.img       = pygame.image.load(self.path)
+				self.rect      = self.img.get_rect()
+				self.img_data  = self.base64.b64encode(open(self.path, "rb").read()).decode("utf-8")
 
 				self.do("load")
 
@@ -129,6 +134,8 @@ class load_type(object):
 				self.tag     = tag
 				self.img     = pygame.image.load(self.path)
 				self.rect    = self.img.get_rect()
+				self.img_data = self.base64.b64encode(open(self.path, "rb").read()).decode("utf-8")
+
 		except:
 			raise
 		return None
@@ -144,6 +151,8 @@ class load_type(object):
 				self.rect      = None
 				self.effect_   = None
 				self.master    = None
+				self.img_data  = None
+				self.extension = None
 				self.tag       = "deleted"
 
 				self.move      = False
@@ -165,11 +174,13 @@ class load_type(object):
 						
 					self.project[0].json[self.json_class][self.json_name]["Tag"]    = self.tag
 					self.project[0].json[self.json_class][self.json_name]["Type"]   = self.type
+					self.project[0].json[self.json_class][self.json_name]["Ext"]    = self.extension
 					self.project[0].json[self.json_class][self.json_name]["Width"]  = self.rect.w
 					self.project[0].json[self.json_class][self.json_name]["Height"] = self.rect.h
 					self.project[0].json[self.json_class][self.json_name]["X"]      = self.rect.x
 					self.project[0].json[self.json_class][self.json_name]["Y"]      = self.rect.y
 					self.project[0].json[self.json_class][self.json_name]["Path"]   = self.path
+					self.project[0].json[self.json_class][self.json_name]["Data"]   = self.img_data
 
 			elif type is "project_load":
 				if self.project[0] is None:
@@ -188,13 +199,15 @@ class load_type(object):
 	
 					self.json_class = "Game {}".format(self.project[0].json["Game Sprites"][self.json_name]["Type"])
 	
-					self.tag    = self.project[0].json[self.json_class][self.json_name]["Tag"]
-					self.type   = self.project[0].json[self.json_class][self.json_name]["Type"]
-					self.rect.w = self.project[0].json[self.json_class][self.json_name]["Width"]
-					self.rect.h = self.project[0].json[self.json_class][self.json_name]["Height"]
-					self.rect.x = self.project[0].json[self.json_class][self.json_name]["X"]
-					self.rect.y = self.project[0].json[self.json_class][self.json_name]["Y"]
-					self.path   = self.project[0].json[self.json_class][self.json_name]["Path"]
+					self.tag       = self.project[0].json[self.json_class][self.json_name]["Tag"]
+					self.type      = self.project[0].json[self.json_class][self.json_name]["Type"]
+					self.extension = self.project[0].json[self.json_class][self.json_name]["Ext"]
+					self.rect.w    = self.project[0].json[self.json_class][self.json_name]["Width"]
+					self.rect.h    = self.project[0].json[self.json_class][self.json_name]["Height"]
+					self.rect.x    = self.project[0].json[self.json_class][self.json_name]["X"]
+					self.rect.y    = self.project[0].json[self.json_class][self.json_name]["Y"]
+					self.path      = self.project[0].json[self.json_class][self.json_name]["Path"]
+					self.img_data  = self.project[0].json[self.json_class][self.json_name]["Data"]
 
 			elif type is "load":
 				self.json_name  = "Class {} {}".format(self.type, self.tag)
@@ -211,11 +224,13 @@ class load_type(object):
 
 					self.project[0].json[self.json_class][self.json_name]["Tag"]    = self.tag
 					self.project[0].json[self.json_class][self.json_name]["Type"]   = self.type
+					self.project[0].json[self.json_class][self.json_name]["Ext"]    = self.extension
 					self.project[0].json[self.json_class][self.json_name]["Width"]  = self.rect.w
 					self.project[0].json[self.json_class][self.json_name]["Height"] = self.rect.h
 					self.project[0].json[self.json_class][self.json_name]["X"]      = self.rect.x
 					self.project[0].json[self.json_class][self.json_name]["Y"]      = self.rect.y
 					self.project[0].json[self.json_class][self.json_name]["Path"]   = self.path
+					self.project[0].json[self.json_class][self.json_name]["Data"]   = self.img_data
 
 			elif type is "delete_sprites_project":
 				if self.project[0] is None:
@@ -224,11 +239,13 @@ class load_type(object):
 				else:
 					del self.project[0].json[self.json_class][self.json_name]["Tag"]
 					del self.project[0].json[self.json_class][self.json_name]["Type"]
+					del self.project[0].json[self.json_class][self.json_name]["Ext"]
 					del self.project[0].json[self.json_class][self.json_name]["Width"]
 					del self.project[0].json[self.json_class][self.json_name]["Height"]
 					del self.project[0].json[self.json_class][self.json_name]["X"]
 					del self.project[0].json[self.json_class][self.json_name]["Y"]
 					del self.project[0].json[self.json_class][self.json_name]["Path"]
+					del self.project[0].json[self.json_class][self.json_name]["Data"]
 
 					del self.project[0].json[self.json_class][self.json_name]
 		except:
