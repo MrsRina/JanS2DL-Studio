@@ -36,8 +36,8 @@ class DAT:
 			self.selected             = None
 			self.sprites              = {}
 
-			self.project = None
-			self.event_file = 0
+			self.project         = None
+			self.event_file      = 0
 			self.new_folder_path = None
 
 			self.create_widget()
@@ -332,12 +332,11 @@ class DAT:
 						self.JanTree.create_class()
 
 					else:
-						print(self.tool_tree_sprites)
-						print(self.tool_tree_objects)
-						print(self.tool_tree_cameras)
+						for sprites in self.sprites.values():
+							sprites.do("save")
 
-					self.event_file = 2
-					self.some_selected = False
+					self.event_file           = 2
+					self.some_selected        = False
 				
 					self.cache_project_window.destroy()
 
