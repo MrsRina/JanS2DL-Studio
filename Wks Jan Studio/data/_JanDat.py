@@ -10,6 +10,8 @@ from _JanJa import JAN_ENGINE_engine
 from _JanJa import replace_folder
 from _JanJa import replace
 
+from _JanJa import start_thread
+
 from JanPort import filedialog
 from JanPort import JanMath
 from JanPort import tk
@@ -326,6 +328,7 @@ class DAT:
 					self.new_folder_path = None
 
 					self.project = JanCompiler.open_project(path = self.project.local)
+					self.project.save()
 
 					if self.index_type is None:
 						self.clear()
@@ -334,6 +337,8 @@ class DAT:
 					else:
 						for sprites in self.sprites.values():
 							sprites.do("save")
+
+					self.project.save()
 
 					self.event_file           = 2
 					self.some_selected        = False
@@ -671,11 +676,23 @@ class DAT:
 		return None
 
 if __name__ is "__main__":
-	JanGui.start_(replace_folder("/_JanJa.py", "/splash/logo_00.png"), DAT)
-else:
-	JanGui.start_(replace_folder("/_JanJa.py", "/splash/logo_00.png"), DAT, hardware_res, JanMath,
+	start_thread(
+
+JanGui.start_(replace_folder("/_JanJa.py", "/splash/logo_00.png"), DAT, hardware_res, JanMath,
 
 json    = JAN_ENGINE_engine,
-version = "Alpha 0.1.7"
+version = "Alpha 0.1.8"
 
+)
+)
+
+else:
+	start_thread(
+
+JanGui.start_(replace_folder("/_JanJa.py", "/splash/logo_00.png"), DAT, hardware_res, JanMath,
+
+json    = JAN_ENGINE_engine,
+version = "Alpha 0.1.8"
+
+)
 )

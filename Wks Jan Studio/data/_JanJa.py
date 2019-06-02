@@ -94,6 +94,10 @@ def replace(variable, to, new):
 		raise
 	return None
 
+import _thread
+
+start_thread = lambda x: _thread.start_new_thread(x)
+
 JAN_ENGINE_engine = load(replace_folder("data/_JanJa.py", "JanConfig.json"))
 
 from JanPort import JanMath
@@ -258,8 +262,6 @@ class load_type(object):
 					""" No project """
 
 				else:
-					self.project[0].save()
-
 					self.json_name  = "Class {} {}".format(self.type, self.tag)
 					self.json_class = "Game {}".format(self.type)
 					
@@ -277,8 +279,6 @@ class load_type(object):
 					self.project[0].json[self.json_class][self.json_name]["Y"]      = self.rect.y
 					self.project[0].json[self.json_class][self.json_name]["Path"]   = self.path
 					self.project[0].json[self.json_class][self.json_name]["Data"]   = self.img_data
-
-					self.project[0].save()
 		except:
 			raise
 		return None

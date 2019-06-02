@@ -40,10 +40,13 @@ class open_project(object):
 				self.json["Game Sprites"]
 				self.json["Game Objects"]
 				self.json["Game Cameras"]
+
 			except:
 				self.json["Game Sprites"] = {}
 				self.json["Game Objects"] = {}
 				self.json["Game Cameras"] = {}
+
+				self.save()
 		except:
 			raise
 		return None
