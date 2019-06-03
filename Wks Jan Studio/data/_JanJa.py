@@ -258,27 +258,23 @@ class load_type(object):
 					del self.project[0].json[self.json_class][self.json_name]
 
 			elif type is "save":
-				if self.project[0] is None:
-					""" No project """
-
-				else:
-					self.json_name  = "Class {} {}".format(self.type, self.tag)
-					self.json_class = "Game {}".format(self.type)
+				self.json_name  = "Class {} {}".format(self.type, self.tag)
+				self.json_class = "Game {}".format(self.type)
 					
-					try:
-						self.project[0].json[self.json_class][self.json_name]
-					except:
-						self.project[0].json[self.json_class][self.json_name] = {}
+				try:
+					self.project[0].json[self.json_class][self.json_name]
+				except:
+					self.project[0].json[self.json_class][self.json_name] = {}
 
-					self.project[0].json[self.json_class][self.json_name]["Tag"]    = self.tag
-					self.project[0].json[self.json_class][self.json_name]["Type"]   = self.type
-					self.project[0].json[self.json_class][self.json_name]["Ext"]    = self.extension
-					self.project[0].json[self.json_class][self.json_name]["Width"]  = self.rect.w
-					self.project[0].json[self.json_class][self.json_name]["Height"] = self.rect.h
-					self.project[0].json[self.json_class][self.json_name]["X"]      = self.rect.x
-					self.project[0].json[self.json_class][self.json_name]["Y"]      = self.rect.y
-					self.project[0].json[self.json_class][self.json_name]["Path"]   = self.path
-					self.project[0].json[self.json_class][self.json_name]["Data"]   = self.img_data
+				self.project[0].json[self.json_class][self.json_name]["Tag"]    = self.tag
+				self.project[0].json[self.json_class][self.json_name]["Type"]   = self.type
+				self.project[0].json[self.json_class][self.json_name]["Ext"]    = self.extension
+				self.project[0].json[self.json_class][self.json_name]["Width"]  = self.rect.w
+				self.project[0].json[self.json_class][self.json_name]["Height"] = self.rect.h
+				self.project[0].json[self.json_class][self.json_name]["X"]      = self.rect.x
+				self.project[0].json[self.json_class][self.json_name]["Y"]      = self.rect.y
+				self.project[0].json[self.json_class][self.json_name]["Path"]   = self.path
+				self.project[0].json[self.json_class][self.json_name]["Data"]   = self.img_data
 		except:
 			raise
 		return None

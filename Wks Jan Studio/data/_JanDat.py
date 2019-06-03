@@ -289,6 +289,7 @@ class DAT:
 
 			self.JanContainer.container.configure(width = self.JanWin.get("Width"), height = self.JanWin.get("Height"))
 			self.JanTree.up(self.bool_tool_tree)
+			self.JanDebugTools.up()
 			self.tool_tree.heading("#0", text = "..." if self.project is None else self.project.json["Name"])
 
 			self.JanMenu.menu_file_tools.entryconfig(2, state = JanMath.Sync_File(self.event_file))
@@ -348,13 +349,14 @@ class DAT:
 					self.JanWin.get_master().update()
 
 				except:
-					def return_color(): self.cache_project_name.configure(bg = "Gray")
-
-					self.cache_project_name.configure(bg = "Red")
-
-					self.cache_project_name.after(2000, return_color)
-
-					self.JanWin.get_master().update()
+					raise
+#					def return_color(): self.cache_project_name.configure(bg = "Gray")
+#
+#					self.cache_project_name.configure(bg = "Red")
+#
+#					self.cache_project_name.after(2000, return_color)
+#
+#					self.JanWin.get_master().update()
 
 			else:
 				def return_color(): self.cache_project_name.configure(bg = "Gray")
@@ -615,7 +617,6 @@ class DAT:
 			self.JanFrameTools = JanGui.create_frame_tools(self.JanWin.get_master())
 			self.JanContainer  = JanGui.create_container(self.JanWin.get_master(), self.JanFrameTools.resize, "Container Developer")
 			self.JanFrameTools.resize_config(self.JanContainer.container)
-			self.JanStatus     = JanGui.create_status(self.JanWin.get_master(), "JanJaEngine")
 			self.JanMenu       = JanGui.create_menu(self.JanWin.get_master(),
 			(
 				# Main container and Events container	
@@ -626,6 +627,10 @@ class DAT:
 				self.delete_selected_sprite, None, None, None, None
 			)
 			)
+
+			self.JanDebugTools = JanGui.frame_debug_tools(self.JanWin.get_master(), self.JanFrameTools.resize, self.JanContainer)
+
+			self.JanStatus     = JanGui.create_status(self.JanWin.get_master(), "JanJaEngine")
 
 			self.JanTree = JanGui.create_object_tree_view(self.JanFrameTools,
 				replace_folder("/_JanJa.py", "/splash/icone_00.png"),

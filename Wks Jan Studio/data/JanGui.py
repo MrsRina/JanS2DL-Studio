@@ -448,3 +448,28 @@ class sprite_options(object):
 		except:
 			raise
 		return None
+
+class frame_debug_tools(object):
+	def __init__(self, master, left_widget, container):
+		try:
+			self.master      = master
+			self.left_widget = left_widget
+			self.container   = container
+			
+			self.resize = tk.Frame(master, width = master.winfo_width(), height = 200, bg = "Gray", bd = 5)
+			self.frame  = tk.Frame(master, width = master.winfo_width(), height = 200, bg = "Gray")
+			self.container.container.configure(height = self.container.container.winfo_screenheight() - self.resize.winfo_screenheight())
+
+			self.frame.place(x = self.left_widget.winfo_width() + 5, y = self.master.winfo_height() - 200)
+			self.resize.place(x = self.left_widget.winfo_width() + 5, y = self.master.winfo_height() - 200)
+		except:
+			raise
+		return None
+
+	def up(self):
+		try:
+			self.frame.place(x = self.left_widget.winfo_width() + 5, y = self.master.winfo_height() - 200)
+			self.resize.place(x = self.left_widget.winfo_width() + 5, y = self.master.winfo_height() - 200)
+		except:
+			raise
+		return None
