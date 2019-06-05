@@ -341,6 +341,8 @@ class DAT:
 						for sprites in self.sprites.values():
 							sprites.do("save", project = self.project)
 
+					self.project.save()
+
 					self.event_file    = 2
 					self.some_selected = False
 
@@ -476,15 +478,35 @@ class DAT:
 					find_sprites = list(self.project.json["Game Sprites"])
 
 					for sprites in find_sprites:
-						self.sprites[sprites.replace("Class Sprites", "")] = load_type([self.project, "project_load"], master = self.JanPygame, state = self,
-						_class = sprites, type_ = "Sprites")
+						self.selected = sprites.replace("Class Sprites ", "")
+
+						self.sprites[self.selected] = load_type([self.project, "project_load"], master = self.JanPygame, state = self,
+						tag = sprites.replace("Class Sprites ", ""), type = "Sprites")
+
+						self.tool_tree.insert(
+						self.tool_tree_sprites, "end",
+						"Class Sprites {}".format(self.sprites[self.selected].tag),
+						text = self.sprites[self.selected].tag,
+						open = True)
+
+						self.selected = None
 
 				if len(self.project.json["Game Objects"]) > 0:
 					find_objects = list(self.project.json["Game Objects"])
 
 					for objects in find_objects:
-						self.sprites[objects.replace("Class Objects", "")] = load_type([self.project, "project_load"], master = self.JanPygame, state = self,
-						_class = objects, type_ = "Objects")
+						self.selected = objects.replace("Class Objects ", "")
+
+						self.sprites[self.selected] = load_type([self.project, "project_load"], master = self.JanPygame, state = self,
+						tag = objects.replace("Class Objects ", ""), type = "Objects")
+
+						self.tool_tree.insert(
+						self.tool_tree_objects, "end",
+						"Class Objects {}".format(self.sprites[self.selected].tag),
+						text = self.sprites[self.selected].tag,
+						open = True)
+
+						self.selected = None
 		except:
 			raise
 		return None
@@ -735,7 +757,7 @@ else:
 JanGui.start_(replace_folder("/_JanJa.py", "/splash/logo_00.png"), DAT, hardware_res, JanMath,
 
 json    = JAN_ENGINE_engine,
-version = "Alpha 0.1.8"
+version = "Alpha 0.1.9"
 
 )
 )

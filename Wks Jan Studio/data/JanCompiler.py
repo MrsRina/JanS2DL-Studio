@@ -17,7 +17,6 @@ class create_project(object):
 				self.json["Game Sprites"]  = {}
 				self.json["Game Objects"]  = {}
 				self.json["Game Cameras"]  = {}
-				self.json["Game Credits"]  = {}
 				self.json["Game Comments"] = comments
 
 				self.save()
