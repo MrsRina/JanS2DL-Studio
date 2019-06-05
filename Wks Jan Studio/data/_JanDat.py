@@ -26,11 +26,10 @@ class DAT:
 			self.JanWin = JanGui.create_window(int_engine("Width"), int_engine("Height"), "JanCreate Studio", "Gray",
 				r"{}".format(replace_folder("/_JanJa.py", "/icone.ico")))
 
-			self.bool_click           = 0
-
-			self.tread_load           = False
-			self.some_selected        = False
-			self.bool_tool_tree       = False
+			self.bool_click     = 0
+			self.tread_load     = False
+			self.some_selected  = False
+			self.bool_tool_tree = False
 
 			self.selected_pos_sprites = None
 			self.selected_tree_view   = None
@@ -54,7 +53,7 @@ class DAT:
 			self.JanBackgroundColorPygame = (127, 127, 127, 0)
 
 			self.create_frame(self.JanContainer.get_id())
-			
+
 			self.Tick_Fps = pygame.time.Clock()
 
 			while (self.JanRun):
@@ -79,7 +78,7 @@ class DAT:
 					for item in self.tool_tree.selection():
 						if not item.find("Class Sprites"):
 							selected_now = replace(item, "Class Sprites ", "")
-	
+
 							# Remove taf Class Sprite for select
 							if self.selected is None:
 								self.bool_tool_tree = True
@@ -88,16 +87,16 @@ class DAT:
 								self.sprites[self.selected].selected = True
 
 								self.some_selected = True
-	
+
 							elif self.selected != None:
-								self.sprites[self.selected].selected = False	
-								self.selected                        = selected_now	
+								self.sprites[self.selected].selected = False
+								self.selected                        = selected_now
 								self.sprites[self.selected].selected = True
 								self.some_selected                   = True
 
 						elif not item.find("Class Objects"):
 							selected_now = replace(item, "Class Objects ", "")
-	
+
 							# Remove taf Class Sprite for select
 							if self.selected is None:
 								self.bool_tool_tree = True
@@ -106,10 +105,10 @@ class DAT:
 								self.sprites[self.selected].selected = True
 
 								self.some_selected = True
-	
+
 							elif self.selected != None:
-								self.sprites[self.selected].selected = False	
-								self.selected                        = selected_now	
+								self.sprites[self.selected].selected = False
+								self.selected                        = selected_now
 								self.sprites[self.selected].selected = True
 								self.some_selected                   = True
 
@@ -141,16 +140,16 @@ class DAT:
 							if sprite_selected.rect.collidepoint(event.pos):
 								if self.bool_click is 0:
 									self.bool_click = 0.1
-	
+
 								elif self.bool_click <= 1.5:
 									if self.selected != None:
 										self.sprites[self.selected].selected = False
 										self.sprites[self.selected].move     = False
 										self.selected = sprite_selected.tag
-	
+
 										self.sprites[self.selected].selected = True
 										self.sprites[self.selected].move     = True
-										
+
 										self.bool_tool_tree = True
 										self.some_selected  = True
 
@@ -165,7 +164,7 @@ class DAT:
 
 									elif self.selected is None:
 										self.selected = sprite_selected.tag
-	
+
 										self.sprites[self.selected].selected = True
 										self.sprites[self.selected].move     = True
 
@@ -173,7 +172,7 @@ class DAT:
 
 										self.bool_tool_tree = True
 										self.some_selected  = True
-										
+
 										self.tool_tree.item("Class {} {}".format(self.sprites[self.selected].type, self.sprites[self.selected].tag), open = True)
 										self.tool_tree.selection_set("Class {} {}".format(self.sprites[self.selected].type, self.sprites[self.selected].tag))
 										self.tool_tree.focus_set()
@@ -198,7 +197,7 @@ class DAT:
 										self.sprites[self.selected].move     = False
 
 										self.JanSpriteOptions.up = False
-										
+
 										self.bool_tool_tree = False
 										self.selected       = None
 										self.some_selected  = False
@@ -218,7 +217,7 @@ class DAT:
 										self.JanWin.get_master().update()
 						except:
 							pass
-	
+
 					if event.button is 3:
 						try:
 							if self.sprites[self.selected].type is "Sprites":
@@ -259,7 +258,7 @@ class DAT:
 		return None
 
 	def delete_selected_sprite(self):
-		try:		
+		try:
 			self.tool_tree.delete("Class {} {}".format(self.sprites[self.selected].type, self.sprites[self.selected].tag))
 			self.sprites[self.selected].do("delete")
 			self.remove("sprite")
@@ -302,7 +301,7 @@ class DAT:
 			try:
 				self.JanStatus.set_text("{} {}{} {} {} {}".format(
 					"" if self.project is None else self.project.local,
-					"" if self.selected is None else self.selected, 
+					"" if self.selected is None else self.selected,
 					pygame.mouse.get_pos() if self.selected is None else " %d" % self.sprites[self.selected].rect.x,
 					"" if self.selected is None else self.sprites[self.selected].rect.y,
 					"" if self.selected is None else self.sprites[self.selected].rect.w,
@@ -324,12 +323,15 @@ class DAT:
 		try:
 			if self.cache_project_name.get(1.0, tk.INSERT) != "":
 				try:
-					self.project = JanCompiler.create_project(local = self.new_folder_path, name = self.cache_project_name.get(1.0, tk.INSERT))
-				
+					self.project = JanCompiler.create_project(
+					local    = self.new_folder_path,
+					name     = self.cache_project_name.get(1.0, tk.INSERT),
+					comments = self.cache_project_comment.get(1.0, tk.INSERT)
+					)
+
 					self.new_folder_path = None
 
 					self.project = JanCompiler.open_project(path = self.project.local)
-					self.project.save()
 
 					if self.index_type is None:
 						self.clear()
@@ -337,35 +339,54 @@ class DAT:
 
 					else:
 						for sprites in self.sprites.values():
-							sprites.do("save")
+							sprites.do("save", project = self.project)
 
-					self.project.save()
+					self.event_file    = 2
+					self.some_selected = False
 
-					self.event_file           = 2
-					self.some_selected        = False
-				
 					self.cache_project_window.destroy()
 
 					self.JanWin.get_master().update()
 
 				except:
-					raise
-#					def return_color(): self.cache_project_name.configure(bg = "Gray")
-#
-#					self.cache_project_name.configure(bg = "Red")
-#
-#					self.cache_project_name.after(2000, return_color)
-#
-#					self.JanWin.get_master().update()
+					def return_color():
+						try:
+							self.cache_project_name.configure(bg = "Gray")
+							self.cache_project_width.configure(bg = "Gray")
+							self.cache_project_height.configure(bg = "Gray")
+							self.cache_project_comment.configure(bg = "Gray")
+						except:
+							raise
+						return None
+
+					self.cache_project_name.configure(bg = "Red")
+					self.cache_project_width.configure(bg = "Red")
+					self.cache_project_height.configure(bg = "Red")
+					self.cache_project_comment.configure(bg = "Red")
+
+					self.cache_project_name.after(2000, return_color)
+
+					self.JanWin.get_master().update()
 
 			else:
-				def return_color(): self.cache_project_name.configure(bg = "Gray")
+					def return_color():
+						try:
+							self.cache_project_name.configure(bg = "Gray")
+							self.cache_project_width.configure(bg = "Gray")
+							self.cache_project_height.configure(bg = "Gray")
+							self.cache_project_comment.configure(bg = "Gray")
+						except:
+							raise
+						return None
 
-				self.cache_project_name.configure(bg = "Red")
+					self.cache_project_name.configure(bg = "Red")
+					self.cache_project_width.configure(bg = "Red")
+					self.cache_project_height.configure(bg = "Red")
+					self.cache_project_comment.configure(bg = "Red")
 
-				self.cache_project_name.after(2000, return_color)
+					self.cache_project_name.after(2000, return_color)
 
-				self.JanWin.get_master().update()
+					self.JanWin.get_master().update()
 		except:
 			raise
 		return None
@@ -390,7 +411,7 @@ class DAT:
 				self.some_selected = True
 
 				self.index_type = save
-				
+
 				project_window = tk.Toplevel()
 				project_window.transient(self.JanWin.get_master())
 				project_window.focus_force()
@@ -417,10 +438,11 @@ class DAT:
 				button_ok_project     = tk.Button(project_window, text = "Ok", bg = "Gray", width = 12, command = self.create_new_project).place(x = 285, y = 210)
 				button_cancel_project = tk.Button(project_window, text = "Cancel", bg = "Gray", width = 12, command = self.cancel_new_project).place(x = 180, y = 210)
 
-				self.cache_project_window = project_window
-				self.cache_project_name   = text_name_project_
-				self.cache_project_width  = text_widht_project_
-				self.cache_project_height = text_height_project_
+				self.cache_project_window  = project_window
+				self.cache_project_name    = text_name_project_
+				self.cache_project_width   = text_widht_project_
+				self.cache_project_height  = text_height_project_
+				self.cache_project_comment = text_comment_project_
 
 				project_window.wait_window()
 
@@ -446,7 +468,23 @@ class DAT:
 				self.event_file = 2
 
 				self.JanTree.create_class()
-			
+
+				find_sprites = None
+				find_objects = None
+
+				if len(self.project.json["Game Sprites"]) > 0:
+					find_sprites = list(self.project.json["Game Sprites"])
+
+					for sprites in find_sprites:
+						self.sprites[sprites.replace("Class Sprites", "")] = load_type([self.project, "project_load"], master = self.JanPygame, state = self,
+						_class = sprites, type_ = "Sprites")
+
+				if len(self.project.json["Game Objects"]) > 0:
+					find_objects = list(self.project.json["Game Objects"])
+
+					for objects in find_objects:
+						self.sprites[objects.replace("Class Objects", "")] = load_type([self.project, "project_load"], master = self.JanPygame, state = self,
+						_class = objects, type_ = "Objects")
 		except:
 			raise
 		return None
@@ -486,7 +524,7 @@ class DAT:
 
 				self.selected = os.path.splitext(os.path.basename(find))[0] + str(random.randint(100, 1000))
 				self.sprites[self.selected] = load_type([self.project, "load"], "Sprites", self.selected, self.JanPygame, find, self)
-				
+
 				self.tool_tree.insert(
 				self.tool_tree_sprites, "end",
 				"Class Sprites {}".format(self.sprites[self.selected].tag),
@@ -576,7 +614,7 @@ class DAT:
 		return None
 
 	def create_file_tool_menu(self):
-		try:			
+		try:
 			try:
 				self.JanMenu.get("Main").tk_popup(self.x_main, self.y_main, 0)
 			finally:
@@ -619,7 +657,7 @@ class DAT:
 			self.JanFrameTools.resize_config(self.JanContainer.container)
 			self.JanMenu       = JanGui.create_menu(self.JanWin.get_master(),
 			(
-				# Main container and Events container	
+				# Main container and Events container
 				self.new_project, self.open_project, self.save_project, self.save_as_project, self.load_sprite, self.load_object, None,
 				None, None, self.close, None, None, None, None, None
 			),
@@ -671,7 +709,7 @@ class DAT:
 		return None
 
 	def window_loop(self):
-		try:			
+		try:
 			self.JanWin.get_master().protocol("WM_DELETE_WINDOW", self.close)
 
 			pygame.display.flip()

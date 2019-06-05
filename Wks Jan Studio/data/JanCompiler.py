@@ -1,7 +1,7 @@
 import json
 
 class create_project(object):
-		def __init__(self, local = None, name = None):
+		def __init__(self, local = None, name = None, comments = None):
 			try:
 				self.local = local + "/{}.jan".format(name.replace(" ", "_"))
 				file       = open(self.local, "w")
@@ -13,7 +13,12 @@ class create_project(object):
 				self.path = open(self.local, "r+")
 				self.json = json.load(self.path)
 
-				self.json["Name"] = name
+				self.json["Name"]          = name
+				self.json["Game Sprites"]  = {}
+				self.json["Game Objects"]  = {}
+				self.json["Game Cameras"]  = {}
+				self.json["Game Credits"]  = {}
+				self.json["Game Comments"] = comments
 
 				self.save()
 			except:
@@ -35,20 +40,6 @@ class open_project(object):
 			self.local = path
 			self.path  = open(self.local, "r+")
 			self.json  = json.load(self.path)
-
-			try:
-				self.json["Game Sprites"]
-				self.json["Game Objects"]
-				self.json["Game Cameras"]
-				self.json["Game Credits"]
-
-			except:
-				self.json["Game Sprites"] = {}
-				self.json["Game Objects"] = {}
-				self.json["Game Cameras"] = {}
-				self.json["Game Credits"] = {}
-
-				self.save()
 		except:
 			raise
 		return None
