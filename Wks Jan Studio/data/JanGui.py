@@ -231,7 +231,7 @@ class create_container(object):
 		try:
 			self.master = master
 
-			self.resize_height = tk.Frame(self.master, bg = "Gray")
+			self.resize_height = tk.Frame(self.master, bg = "Gray49")
 
 			self.container = ttk.Notebook(self.master)
 
@@ -249,7 +249,7 @@ class create_container(object):
 
 	def resize_config(self, bottom_widget):
 		try:
-			self.resize_height.place(width = self.master.winfo_screenheight())
+			self.resize_height.place(width = self.master.winfo_width(), height = self.master.winfo_height())
 
 			def mouse(event):
 				try:
@@ -260,10 +260,19 @@ class create_container(object):
 
 			def res(event):
 				try:
-					if event.y > 0:
+					if event.y < self.master.winfo_height() - 30:
 						self.container.place(height = event.y)
-						self.resize_height.place(height = event.y + 15)
-						bottom_widget.place(y = event.y + 15)
+						self.resize_height.place(height = event.y + 7.5)
+
+						bottom_widget.place(y = event.y + 7.5)
+						bottom_widget.place(height = self.master.winfo_screenheight())
+
+					else:
+						bottom_widget.place(y = self.master.winfo_height() - 215)
+						bottom_widget.place(height = self.master.winfo_screenheight())
+
+						self.resize_height.place(height = self.master.winfo_height() - 215)
+						self.container.place(height = self.master.winfo_height() - 222.5)
 				except:
 					raise
 				return None
@@ -305,7 +314,7 @@ class create_frame_tools(object):
 		try:
 			self.master    = master
 
-			self.resize = tk.Frame(master, width = 400, height = master.winfo_screenheight(), bg = "Gray", bd = 5)
+			self.resize = tk.Frame(master, width = 400, height = master.winfo_screenheight(), bg = "Gray49", bd = 5)
 			self.frame  = tk.Frame(master, width = 400, height = master.winfo_screenheight(), bg = "Gray")
 
 			self.resize.place(x = 3, y = 0)
@@ -491,7 +500,7 @@ class frame_debug_tools(object):
 
 			left_widget.update()
 
-			self.frame = tk.Frame(self.master, width = master.winfo_screenwidth(), height = 200, bg = "Red")
+			self.frame = tk.Frame(self.master, width = master.winfo_screenwidth(), height = 200, bg = "Gray")
 
 			self.frame.place(x = self.left_widget.winfo_width() + 5, y = self.master.winfo_height() - 200)
 		except:

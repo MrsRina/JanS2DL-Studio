@@ -688,6 +688,9 @@ class DAT:
 			self.JanContainer  = JanGui.create_container(self.JanWin.get_master(), self.JanFrameTools.resize, "Container Developer")
 
 			self.JanDebugTools = JanGui.frame_debug_tools(self.JanWin.get_master(), self.JanFrameTools.resize, self.JanContainer)
+			
+			self.JanFrameTools.resize_config([self.JanContainer.container, self.JanContainer.resize_height], self.JanDebugTools)
+			self.JanContainer.resize_config(self.JanDebugTools.frame)
 
 			self.JanStatus = JanGui.create_status(self.JanWin.get_master(), "JanJaEngine")
 
@@ -705,8 +708,6 @@ class DAT:
 
 			self.JanSpriteOptions = JanGui.sprite_options(self.JanWin.window, self.JanFrameTools, self.sprites, self.selected, self.tool_tree)
 
-			self.JanFrameTools.resize_config([self.JanContainer.container, self.JanContainer.resize_height], self.JanDebugTools)
-			self.JanContainer.resize_config(self.JanDebugTools.frame)
 		except:
 			raise
 		return None
