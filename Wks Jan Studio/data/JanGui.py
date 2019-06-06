@@ -231,15 +231,45 @@ class create_container(object):
 		try:
 			self.master = master
 
+			self.resize_height = tk.Frame(self.master, bg = "Gray")
+
 			self.container = ttk.Notebook(self.master)
 
-			self.frame_game_developer = tk.Frame(self.master, width = self.master.winfo_screenwidth  () , height = self.master.winfo_screenheight(), bg = "Gray")
-			self.frame_event_game     = tk.Frame(self.master, width = self.master.winfo_screenheight () , height = self.master.winfo_screenheight(), bg = "Gray")
+			self.frame_game_developer = tk.Frame(self.master, bg = "Gray")
+			self.frame_event_game     = tk.Frame(self.master, bg = "Gray")
 
-			self.container.add(self.frame_game_developer , text = "Game    "   )
-			self.container.add(self.frame_event_game     , text = "Events    " )
+			self.container.add(self.frame_game_developer, text = "Game")
+			self.container.add(self.frame_event_game, text = "Events")
 
-			self.container.place(x = 405, y = 0)
+			self.resize_height.place(x = 405, y = 0, width = self.master.winfo_screenwidth() - 215)
+			self.container.place(x = 405, y = 0, height = self.master.winfo_screenheight() - 230)
+		except:
+			raise
+		return None
+
+	def resize_config(self, bottom_widget):
+		try:
+			self.resize_height.place(width = self.master.winfo_screenheight())
+
+			def mouse(event):
+				try:
+					return self.resize_height.config(cursor = "sb_v_double_arrow")
+				except:
+					raise
+				return None
+
+			def res(event):
+				try:
+					if event.y > 0:
+						self.container.place(height = event.y)
+						self.resize_height.place(height = event.y + 15)
+						bottom_widget.place(y = event.y + 15)
+				except:
+					raise
+				return None
+
+			self.resize_height.bind("<B1-Motion>", res)
+			self.resize_height.bind("<Enter>", mouse)
 		except:
 			raise
 		return None
@@ -280,13 +310,11 @@ class create_frame_tools(object):
 
 			self.resize.place(x = 3, y = 0)
 			self.frame.place(x = 0, y = 0)
-
-			self.container = ttk.Notebook(self.resize)
 		except:
 			raise
 		return None
 
-	def resize_config(self, container):
+	def resize_config(self, container, widget_right):
 		try:
 			def mouse(event):
 				try:
@@ -298,8 +326,13 @@ class create_frame_tools(object):
 			def res(event):
 				try:
 					if event.x > 0:
-						self.frame.config(width = event.x); self.resize.config(width = event.x)
-						container.place(x = event.x + 5)
+						self.frame.config(width = event.x)
+						self.resize.config(width = event.x)
+
+						container[0].place(x = event.x + 5)
+						container[1].place(x = event.x + 5)
+
+						widget_right.frame.place(x = event.x)
 
 					else:
 						self.frame.config(width = 2); self.resize.config(width = 2)
@@ -455,21 +488,12 @@ class frame_debug_tools(object):
 			self.master      = master
 			self.left_widget = left_widget
 			self.container   = container
-			
-			self.resize = tk.Frame(master, width = master.winfo_width(), height = 200, bg = "Gray", bd = 5)
-			self.frame  = tk.Frame(master, width = master.winfo_width(), height = 200, bg = "Gray")
-			self.container.container.configure(height = self.container.container.winfo_screenheight() - self.resize.winfo_screenheight())
+
+			left_widget.update()
+
+			self.frame = tk.Frame(self.master, width = master.winfo_screenwidth(), height = 200, bg = "Red")
 
 			self.frame.place(x = self.left_widget.winfo_width() + 5, y = self.master.winfo_height() - 200)
-			self.resize.place(x = self.left_widget.winfo_width() + 5, y = self.master.winfo_height() - 200)
-		except:
-			raise
-		return None
-
-	def up(self):
-		try:
-			self.frame.place(x = self.left_widget.winfo_width() + 5, y = self.master.winfo_height() - 200)
-			self.resize.place(x = self.left_widget.winfo_width() + 5, y = self.master.winfo_height() - 200)
 		except:
 			raise
 		return None

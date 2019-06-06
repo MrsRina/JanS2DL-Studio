@@ -288,7 +288,6 @@ class DAT:
 
 			self.JanContainer.container.configure(width = self.JanWin.get("Width"), height = self.JanWin.get("Height"))
 			self.JanTree.up(self.bool_tool_tree)
-			self.JanDebugTools.up()
 			self.tool_tree.heading("#0", text = "..." if self.project is None else self.project.json["Name"])
 
 			self.JanMenu.menu_file_tools.entryconfig(2, state = JanMath.Sync_File(self.event_file))
@@ -675,8 +674,6 @@ class DAT:
 	def create_widget(self):
 		try:
 			self.JanFrameTools = JanGui.create_frame_tools(self.JanWin.get_master())
-			self.JanContainer  = JanGui.create_container(self.JanWin.get_master(), self.JanFrameTools.resize, "Container Developer")
-			self.JanFrameTools.resize_config(self.JanContainer.container)
 			self.JanMenu       = JanGui.create_menu(self.JanWin.get_master(),
 			(
 				# Main container and Events container
@@ -688,9 +685,11 @@ class DAT:
 			)
 			)
 
+			self.JanContainer  = JanGui.create_container(self.JanWin.get_master(), self.JanFrameTools.resize, "Container Developer")
+
 			self.JanDebugTools = JanGui.frame_debug_tools(self.JanWin.get_master(), self.JanFrameTools.resize, self.JanContainer)
 
-			self.JanStatus     = JanGui.create_status(self.JanWin.get_master(), "JanJaEngine")
+			self.JanStatus = JanGui.create_status(self.JanWin.get_master(), "JanJaEngine")
 
 			self.JanTree = JanGui.create_object_tree_view(self.JanFrameTools,
 				replace_folder("/_JanJa.py", "/splash/icone_00.png"),
@@ -705,6 +704,9 @@ class DAT:
 			self.tool_tree_cameras = self.JanTree.cameras
 
 			self.JanSpriteOptions = JanGui.sprite_options(self.JanWin.window, self.JanFrameTools, self.sprites, self.selected, self.tool_tree)
+
+			self.JanFrameTools.resize_config([self.JanContainer.container, self.JanContainer.resize_height], self.JanDebugTools)
+			self.JanContainer.resize_config(self.JanDebugTools.frame)
 		except:
 			raise
 		return None

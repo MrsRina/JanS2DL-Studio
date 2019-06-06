@@ -90,7 +90,7 @@ def replace(variable, to, new):
 
 import _thread
 
-start_thread = lambda x: _thread.start_new_thread(x)
+start_thread = lambda x: _thread.start_new_thread(x, None)
 
 JAN_ENGINE_engine = load(replace_folder("data/_JanJa.py", "JanConfig.json"))
 
@@ -120,7 +120,7 @@ class load_type(object):
 				self.img_path  = io.BytesIO(base64.b64decode(self.img_data))
 				self.type      = type
 				self.tag       = tag
-				self.extension = os.path.splitext(os.path.basename(self.path))[1]
+				self.extension = os.path .splitext(os.path.basename(self.path))[1]
 				self.img       = pygame.image.load(self.img_path)
 				self.rect      = self.img.get_rect()
 
