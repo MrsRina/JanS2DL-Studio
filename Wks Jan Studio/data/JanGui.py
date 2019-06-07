@@ -268,11 +268,11 @@ class create_container(object):
 						bottom_widget.place(height = self.master.winfo_screenheight())
 
 					else:
-						bottom_widget.place(y = self.master.winfo_height() - 215)
+						bottom_widget.place(y = self.master.winfo_height() - 15)
 						bottom_widget.place(height = self.master.winfo_screenheight())
 
-						self.resize_height.place(height = self.master.winfo_height() - 215)
-						self.container.place(height = self.master.winfo_height() - 222.5)
+						self.resize_height.place(height = self.master.winfo_height() - 15)
+						self.container.place(height = self.master.winfo_height() - 37.5)
 				except:
 					raise
 				return None
@@ -344,8 +344,12 @@ class create_frame_tools(object):
 						widget_right.frame.place(x = event.x)
 
 					else:
-						self.frame.config(width = 2); self.resize.config(width = 2)
-						container.place(x = 5)
+						self.frame.config(width = 2)
+						self.resize.config(width = 2)
+
+						container[0].place(x = 5)
+						container[1].place(x = 5)						
+						widget_right.frame.place(x = 5)
 				except:
 					pass
 				return None
@@ -503,6 +507,22 @@ class frame_debug_tools(object):
 			self.frame = tk.Frame(self.master, width = master.winfo_screenwidth(), height = 200, bg = "Gray")
 
 			self.frame.place(x = self.left_widget.winfo_width() + 5, y = self.master.winfo_height() - 200)
+		except:
+			raise
+		return None
+
+class console_debug(object):
+	def __init__(self, master, master_):
+		try:
+			self.master  = master
+			self.master_ = master_
+
+			master_.update()
+			master.update()
+
+			self.console = tk.Text(self.master)
+			
+			self.console.place(x = 10, y = 10, width = 250, height = 250)
 		except:
 			raise
 		return None

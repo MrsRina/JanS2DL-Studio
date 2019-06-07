@@ -287,7 +287,9 @@ class DAT:
 			self.poop_up()
 
 			self.JanContainer.container.configure(width = self.JanWin.get("Width"), height = self.JanWin.get("Height"))
+			self.JanConsoleDebug.up()
 			self.JanTree.up(self.bool_tool_tree)
+
 			self.tool_tree.heading("#0", text = "..." if self.project is None else self.project.json["Name"])
 
 			self.JanMenu.menu_file_tools.entryconfig(2, state = JanMath.Sync_File(self.event_file))
@@ -708,6 +710,7 @@ class DAT:
 
 			self.JanSpriteOptions = JanGui.sprite_options(self.JanWin.window, self.JanFrameTools, self.sprites, self.selected, self.tool_tree)
 
+			self.JanConsoleDebug = JanGui.console_debug(self.JanDebugTools.frame, self.JanWin.get_master())
 		except:
 			raise
 		return None
