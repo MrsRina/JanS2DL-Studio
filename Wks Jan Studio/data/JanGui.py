@@ -517,12 +517,26 @@ class console_debug(object):
 			self.master  = master
 			self.master_ = master_
 
-			master_.update()
-			master.update()
+			self.master_.update()
+			self.master.update()
 
-			self.console = tk.Text(self.master)
-			
-			self.console.place(x = 10, y = 10, width = 250, height = 250)
+			self.console = tk.Text(self.master, bg = "Gray49", state = "disabled")
+		except:
+			raise
+		return None
+
+	def ENGINE_PROCESS_PRINT_FROM_CONSOLE(self, x):
+		try:
+			self.console.config(state = "normal")
+			self.console.insert(tk.END, "{}\n".format(x))
+			self.console.config(state = "disabled")
+		except:
+			raise
+		return None
+
+	def up(self):
+		try:
+			self.console.place(x = 150, y = 10, width = self.master_.winfo_width() - self.master.winfo_x() - 165, height = self.master_.winfo_height() - self.master.winfo_y() - 50)
 		except:
 			raise
 		return None

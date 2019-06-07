@@ -287,8 +287,8 @@ class DAT:
 			self.poop_up()
 
 			self.JanContainer.container.configure(width = self.JanWin.get("Width"), height = self.JanWin.get("Height"))
-			self.JanConsoleDebug.up()
 			self.JanTree.up(self.bool_tool_tree)
+			self.JanConsoleDebug.up()
 
 			self.tool_tree.heading("#0", text = "..." if self.project is None else self.project.json["Name"])
 
@@ -491,6 +491,8 @@ class DAT:
 						open = True)
 
 						self.selected = None
+
+						self.console_print("{}".format(self.project.json["Game Comments"]))
 
 				if len(self.project.json["Game Objects"]) > 0:
 					find_objects = list(self.project.json["Game Objects"])
@@ -711,6 +713,15 @@ class DAT:
 			self.JanSpriteOptions = JanGui.sprite_options(self.JanWin.window, self.JanFrameTools, self.sprites, self.selected, self.tool_tree)
 
 			self.JanConsoleDebug = JanGui.console_debug(self.JanDebugTools.frame, self.JanWin.get_master())
+
+			self.console_print("WKs Jan Studio")
+		except:
+			raise
+		return None
+
+	def console_print(self, item):
+		try:
+			return self.JanConsoleDebug.ENGINE_PROCESS_PRINT_FROM_CONSOLE(item)
 		except:
 			raise
 		return None
