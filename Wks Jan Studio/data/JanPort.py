@@ -44,4 +44,4 @@ except:
 try:
 	import JanCompiler
 except:
-	pass
+	raise

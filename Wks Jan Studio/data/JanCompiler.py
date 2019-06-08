@@ -1,9 +1,10 @@
 import json
+import os
 
 class create_project(object):
-		def __init__(self, local = None, name = None, comments = None):
+		def __init__(self, local = None, name = None, comments = None, version = None):
 			try:
-				self.local = local + "/{}.jan".format(name.replace(" ", "_"))
+				self.local = local + "/{}.jpf".format(name.replace(" ", "_"))
 				file       = open(self.local, "w")
 				file.write("{")
 				file.write('\n    "Name" : "{}"'.format(name))
@@ -13,11 +14,13 @@ class create_project(object):
 				self.path = open(self.local, "r+")
 				self.json = json.load(self.path)
 
-				self.json["Name"]          = name
-				self.json["Game Sprites"]  = {}
-				self.json["Game Objects"]  = {}
-				self.json["Game Cameras"]  = {}
-				self.json["Game Comments"] = comments
+				self.json["Name"]               = name
+				self.json["Local Path Project"] = local
+				self.json["Game Sprites"]       = {}
+				self.json["Game Objects"]       = {}
+				self.json["Game Cameras"]       = {}
+				self.json["Game Comments"]      = comments
+				self.json["File Version"]       = version
 
 				self.save()
 			except:
@@ -37,7 +40,8 @@ class open_project(object):
 	def __init__(self, path = None):
 		try:
 			self.local = path
-			self.path  = open(self.local, "r+")
+			
+			self.path  = open("{}.jpf".format(self.local.replace("{}".format(os.path.splitext(os.path.basename(self.local))[1]), "")), "r+")
 			self.json  = json.load(self.path)
 		except:
 			raise

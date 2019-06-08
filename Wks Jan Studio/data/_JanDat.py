@@ -1,21 +1,4 @@
-from _JanJa import pygame
-from _JanJa import sys
-from _JanJa import os
-
-from _JanJa import JanGui
-from _JanJa import hardware_res
-from _JanJa import load_type
-
-from _JanJa import JAN_ENGINE_engine
-from _JanJa import replace_folder
-from _JanJa import replace
-
-from _JanJa import start_thread
-
-from JanPort import filedialog
-from JanPort import JanMath
-from JanPort import tk
-
+from _JanJa  import *
 from JanPort import JanCompiler
 
 int_engine = lambda _int: int(JAN_ENGINE_engine.get(_int))
@@ -327,7 +310,8 @@ class DAT:
 					self.project = JanCompiler.create_project(
 					local    = self.new_folder_path,
 					name     = self.cache_project_name.get(1.0, tk.INSERT),
-					comments = self.cache_project_comment.get(1.0, tk.INSERT)
+					comments = self.cache_project_comment.get(1.0, tk.INSERT),
+					version  = "1.2"
 					)
 
 					self.new_folder_path = None
@@ -352,24 +336,25 @@ class DAT:
 					self.JanWin.get_master().update()
 
 				except:
-					def return_color():
-						try:
-							self.cache_project_name.configure(bg = "Gray")
-							self.cache_project_width.configure(bg = "Gray")
-							self.cache_project_height.configure(bg = "Gray")
-							self.cache_project_comment.configure(bg = "Gray")
-						except:
-							raise
-						return None
-
-					self.cache_project_name.configure(bg = "Red")
-					self.cache_project_width.configure(bg = "Red")
-					self.cache_project_height.configure(bg = "Red")
-					self.cache_project_comment.configure(bg = "Red")
-
-					self.cache_project_name.after(2000, return_color)
-
-					self.JanWin.get_master().update()
+					raise
+					# def return_color():
+						# try:
+							# self.cache_project_name.configure(bg = "Gray")
+							# self.cache_project_width.configure(bg = "Gray")
+							# self.cache_project_height.configure(bg = "Gray")
+							# self.cache_project_comment.configure(bg = "Gray")
+						# except:
+							# raise
+						# return None
+# 
+					# self.cache_project_name.configure(bg = "Red")
+					# self.cache_project_width.configure(bg = "Red")
+					# self.cache_project_height.configure(bg = "Red")
+					# self.cache_project_comment.configure(bg = "Red")
+# 
+					# self.cache_project_name.after(2000, return_color)
+# 
+					# self.JanWin.get_master().update()
 
 			else:
 					def return_color():
@@ -415,39 +400,15 @@ class DAT:
 
 				self.index_type = save
 
-				project_window = tk.Toplevel()
-				project_window.transient(self.JanWin.get_master())
-				project_window.focus_force()
-				project_window.grab_set()
-
-				project_window.geometry("400x250")
-				project_window.config(background = "Gray")
-				project_window.resizable(0, 0)
-
-				text = tk.Label(project_window, text = "New Project", bg = "Gray", font = "None 16").place(x = 10, y = 10)
-
-				text_name_project  = tk.Label(project_window, text = "Project Name:", bg = "Gray").place(x = 10, y = 50)
-				text_name_project_ = tk.Text(project_window, bg = "Gray", height = 1, width = 35); text_name_project_.place(x = 95, y = 50)
-
-				text_widht_project  = tk.Label(project_window, text = "Width:", bg = "Gray").place(x = 10, y = 90)
-				text_widht_project_ = tk.Text(project_window, bg = "Gray", height = 1, width = 35); text_widht_project_.place(x = 95, y = 90)
-
-				text_height_project  = tk.Label(project_window, text = "Height:", bg = "Gray").place(x = 10, y = 120)
-				text_height_project_ = tk.Text(project_window, bg = "Gray", height = 1, width = 35); text_height_project_.place(x = 95, y = 120)
-
-				text_comment_project  = tk.Label(project_window, text = "Comment:", bg = "Gray").place(x = 10, y = 160)
-				text_comment_project_ = tk.Text(project_window, height = 2, width = 35, bg = "Gray"); text_comment_project_.place(x = 95, y = 160)
-
-				button_ok_project     = tk.Button(project_window, text = "Ok", bg = "Gray", width = 12, command = self.create_new_project).place(x = 285, y = 210)
-				button_cancel_project = tk.Button(project_window, text = "Cancel", bg = "Gray", width = 12, command = self.cancel_new_project).place(x = 180, y = 210)
+				project_window = JanGui.project_window(self.JanWin.get_master(), self.create_new_project, self.cancel_new_project)
 
 				self.cache_project_window  = project_window
-				self.cache_project_name    = text_name_project_
-				self.cache_project_width   = text_widht_project_
-				self.cache_project_height  = text_height_project_
-				self.cache_project_comment = text_comment_project_
+				self.cache_project_name    = project_window.text_name_project_
+				self.cache_project_width   = project_window.text_widht_project_
+				self.cache_project_height  = project_window.text_height_project_
+				self.cache_project_comment = project_window.text_comment_project_
 
-				project_window.wait_window()
+				project_window.tought_loop()
 
 				self.JanWin.get_master().update()
 		except:
@@ -458,13 +419,14 @@ class DAT:
 		try:
 			find = filedialog.askopenfilename(initialdir = os.path.realpath(__file__), title = "Select file", filetypes = (
 			(
-				"files", "*.jan"
+				"files", "*.jpf"
 			),
 			(
 				"all files", "*.*"
 			)))
+			self.console_print("Project JPF: {}".format(is_project_file(find)))
 
-			if find:
+			if is_project_file(find):
 				self.clear()
 
 				self.project    = JanCompiler.open_project(path = find)
@@ -492,8 +454,6 @@ class DAT:
 
 						self.selected = None
 
-						self.console_print("{}".format(self.project.json["Game Comments"]))
-
 				if len(self.project.json["Game Objects"]) > 0:
 					find_objects = list(self.project.json["Game Objects"])
 
@@ -510,6 +470,8 @@ class DAT:
 						open = True)
 
 						self.selected = None
+
+				self.console_print(print_load_project(self.project.json))
 		except:
 			raise
 		return None
@@ -524,12 +486,15 @@ class DAT:
 	def save_project(self):
 		try:
 			if self.event_file is 3:
+				self.console_print("{} Saving".format(self.project.json["Name"]))
 				self.event_file = 2
 
 			elif self.event_file is 1:
+				self.console_print("{} Saving".format(self.project.json["Name"]))
 				self.event_file = 2
 
 			self.project.save()
+			self.console_print("{} Saved".format(self.project.json["Name"]))
 		except:
 			raise
 		return None
@@ -610,6 +575,8 @@ class DAT:
 		try:
 			self.tool_tree.delete(*self.tool_tree.get_children())
 			self.sprites = {}
+
+			self.console_print("Work cleaned")
 		except:
 			raise
 		return None

@@ -1,4 +1,4 @@
-from JanPort import os, sys, math, ctypes, json
+from JanPort import *
 
 hardware_dll = ctypes.windll.user32
 
@@ -94,10 +94,6 @@ start_thread = lambda x: _thread.start_new_thread(x, None)
 
 JAN_ENGINE_engine = load(replace_folder("data/_JanJa.py", "JanConfig.json"))
 
-from JanPort import JanMath
-from JanPort import JanGui
-from JanPort import pygame
-
 class load_type(object): 
 	def __init__(self, project = None, type = None, tag = None, master = None, path = None, state = None):
 		try:
@@ -135,12 +131,14 @@ class load_type(object):
 				self.do("project_load")
 
 				self.img_path = io.BytesIO(base64.b64decode(self.img_data))
-				self.img      = pygame.image.load(self.img_path)
-				self.rect     = self.img.get_rect()
-				self.rect.w   = self.project[0].json[self.json_class][self.json_name]["Width"]
-				self.rect.h   = self.project[0].json[self.json_class][self.json_name]["Height"]
-				self.rect.x   = self.project[0].json[self.json_class][self.json_name]["X"]
-				self.rect.y   = self.project[0].json[self.json_class][self.json_name]["Y"]
+				self.img      = self.img = pygame.transform.scale(pygame.image.load(self.path), 
+				(self.project[0].json[self.json_class][self.json_name]["Width"], self.project[0].json[self.json_class][self.json_name]["Height"]))
+				
+				self.rect   = self.img.get_rect()
+				self.rect.w = self.project[0].json[self.json_class][self.json_name]["Width"]
+				self.rect.h = self.project[0].json[self.json_class][self.json_name]["Height"]
+				self.rect.x = self.project[0].json[self.json_class][self.json_name]["X"]
+				self.rect.y = self.project[0].json[self.json_class][self.json_name]["Y"]
 		except:
 			raise
 		return None
@@ -303,3 +301,62 @@ class load_type(object):
 		except:
 			raise
 		return None
+
+def is_project_file(path):
+	try:
+		try:
+			with open(("{}.jpf".format(path.replace("{}".format(os.path.splitext(os.path.basename(path))[1]), ""))), "r"):
+				return True
+		except FileNotFoundError:
+			return False
+	except:
+		raise
+	return None
+
+def print_load_project(json):
+	try:
+		return (
+"""
+Opened The Project File .JPF
+Project Name: {PN}
+Master Path Project: {MPP}
+len Sprites: {lS}
+len Objects: {lO}
+Project Comments: 
+{PC}
+Version Project: {VP}
+"""
+			.format(
+			PN  = json["Name"],
+			MPP = json["Local Path Project"],
+			lS  = len(json["Game Sprites"]),
+			lO  = len(json["Game Objects"]),
+			PC  = json["Game Comments"],
+			VP  = json["File Version"]))
+	except:
+		raise
+	return None
+
+def print_create_project(json):
+	try:
+		return (
+"""
+Created New File Project .JPF
+Project Name: {PN}
+Master Path Project: {MPP}
+len Sprites: {lS}
+len Objects: {lO}
+Project Comments: 
+{PC}
+Version Project: {VP}
+"""
+			.format(
+			PN  = json["Name"],
+			MPP = json["Local Path Project"],
+			lS  = len(json["Game Sprites"]),
+			lO  = len(json["Game Objects"]),
+			PC  = json["Game Comments"],
+			VP  = json["File Version"]))
+	except:
+		raise
+	return None

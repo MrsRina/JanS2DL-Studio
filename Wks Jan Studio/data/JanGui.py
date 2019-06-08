@@ -1,4 +1,4 @@
-from JanPort import tk, ttk, messagebox, _JanJa, os
+from JanPort import *
 
 class start_(object):
 	def __init__(self, image, callback, hardware, math, json = None, version = None):
@@ -537,6 +537,51 @@ class console_debug(object):
 	def up(self):
 		try:
 			self.console.place(x = 150, y = 10, width = self.master_.winfo_width() - self.master.winfo_x() - 165, height = self.master_.winfo_height() - self.master.winfo_y() - 50)
+		except:
+			raise
+		return None
+
+class project_window(object):
+	def __init__(self, master, create_new_project, cancel_new_project):
+		try:
+			self.project_window = tk.Toplevel()
+			self.project_window.transient(master)
+			self.project_window.focus_force()
+			self.project_window.grab_set()
+			self.project_window.geometry("400x250")
+			self.project_window.config(background = "Gray")
+			self.project_window.resizable(0, 0)
+
+			self.text = tk.Label(self.project_window, text = "New Project", bg = "Gray", font = "None 16").place(x = 10, y = 10)
+
+			self.text_name_project  = tk.Label(self.project_window, text = "Project Name:", bg = "Gray").place(x = 10, y = 50)
+			self.text_name_project_ = tk.Text(self.project_window, bg = "Gray", height = 1, width = 35); self.text_name_project_.place(x = 95, y = 50)
+
+			self.text_widht_project  = tk.Label(self.project_window, text = "Width:", bg = "Gray").place(x = 10, y = 90)
+			self.text_widht_project_ = tk.Text(self.project_window, bg = "Gray", height = 1, width = 35); self.text_widht_project_.place(x = 95, y = 90)
+
+			self.text_height_project  = tk.Label(self.project_window, text = "Height:", bg = "Gray").place(x = 10, y = 120)
+			self.text_height_project_ = tk.Text(self.project_window, bg = "Gray", height = 1, width = 35); self.text_height_project_.place(x = 95, y = 120)
+
+			self.text_comment_project  = tk.Label(self.project_window, text = "Comment:", bg = "Gray").place(x = 10, y = 160)
+			self.text_comment_project_ = tk.Text(self.project_window, height = 2, width = 35, bg = "Gray"); self.text_comment_project_.place(x = 95, y = 160)
+			
+			self.button_ok_project     = tk.Button(self.project_window, text = "Ok", bg = "Gray", width = 12, command = create_new_project).place(x = 285, y = 210)
+			self.button_cancel_project = tk.Button(self.project_window, text = "Cancel", bg = "Gray", width = 12, command = cancel_new_project).place(x = 180, y = 210)
+		except:
+			raise
+		return None
+
+	def destroy(self):
+		try:
+			return self.project_window.destroy()
+		except:
+			raise
+		return None
+
+	def tought_loop(self):
+		try:
+			return self.project_window.wait_window()
 		except:
 			raise
 		return None
