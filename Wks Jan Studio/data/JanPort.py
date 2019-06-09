@@ -45,3 +45,8 @@ try:
 	import JanCompiler
 except:
 	raise
+
+try:
+	import JanConsoleText
+except:
+	pass

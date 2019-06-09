@@ -1,5 +1,5 @@
 from _JanJa  import *
-from JanPort import JanCompiler
+from JanPort import JanCompiler, JanConsoleText
 
 int_engine = lambda _int: int(JAN_ENGINE_engine.get(_int))
 
@@ -336,27 +336,6 @@ class DAT:
 					self.JanWin.get_master().update()
 
 				except:
-					raise
-					# def return_color():
-						# try:
-							# self.cache_project_name.configure(bg = "Gray")
-							# self.cache_project_width.configure(bg = "Gray")
-							# self.cache_project_height.configure(bg = "Gray")
-							# self.cache_project_comment.configure(bg = "Gray")
-						# except:
-							# raise
-						# return None
-# 
-					# self.cache_project_name.configure(bg = "Red")
-					# self.cache_project_width.configure(bg = "Red")
-					# self.cache_project_height.configure(bg = "Red")
-					# self.cache_project_comment.configure(bg = "Red")
-# 
-					# self.cache_project_name.after(2000, return_color)
-# 
-					# self.JanWin.get_master().update()
-
-			else:
 					def return_color():
 						try:
 							self.cache_project_name.configure(bg = "Gray")
@@ -371,10 +350,29 @@ class DAT:
 					self.cache_project_width.configure(bg = "Red")
 					self.cache_project_height.configure(bg = "Red")
 					self.cache_project_comment.configure(bg = "Red")
-
+ 
 					self.cache_project_name.after(2000, return_color)
-
+ 
 					self.JanWin.get_master().update()
+			else:
+				def return_color():
+					try:
+						self.cache_project_name.configure(bg = "Gray")
+						self.cache_project_width.configure(bg = "Gray")
+						self.cache_project_height.configure(bg = "Gray")
+						self.cache_project_comment.configure(bg = "Gray")
+					except:
+						raise
+					return None
+
+				self.cache_project_name.configure(bg = "Red")
+				self.cache_project_width.configure(bg = "Red")
+				self.cache_project_height.configure(bg = "Red")
+				self.cache_project_comment.configure(bg = "Red")
+
+				self.cache_project_name.after(2000, return_color)
+
+				self.JanWin.get_master().update()
 		except:
 			raise
 		return None
@@ -424,9 +422,9 @@ class DAT:
 			(
 				"all files", "*.*"
 			)))
-			self.console_print("Project JPF: {}".format(is_project_file(find)))
+			self.console_print("Project JPF: {}".format(JanConsoleText.is_project_file(find)))
 
-			if is_project_file(find):
+			if JanConsoleText.is_project_file(find):
 				self.clear()
 
 				self.project    = JanCompiler.open_project(path = find)
@@ -471,7 +469,7 @@ class DAT:
 
 						self.selected = None
 
-				self.console_print(print_load_project(self.project.json))
+				self.console_print(JanConsoleText.print_load_project(self.project.json))
 		except:
 			raise
 		return None
