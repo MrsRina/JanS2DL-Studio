@@ -20,6 +20,9 @@ class DAT:
 			self.selected             = None
 			self.sprites              = {}
 
+			self.camera_x = 0
+			self.camera_y = 0
+
 			self.project         = None
 			self.event_file      = 0
 			self.new_folder_path = None
@@ -126,6 +129,8 @@ class DAT:
 
 								elif self.bool_click <= 1.5:
 									if self.selected != None:
+										self.handling_cmouse = False
+
 										self.sprites[self.selected].selected = False
 										self.sprites[self.selected].move     = False
 										self.selected = sprite_selected.tag
@@ -146,6 +151,8 @@ class DAT:
 										self.JanWin.get_master().update()
 
 									elif self.selected is None:
+										self.handling_cmouse = False
+
 										self.selected = sprite_selected.tag
 
 										self.sprites[self.selected].selected = True
@@ -181,9 +188,9 @@ class DAT:
 
 										self.JanSpriteOptions.up = False
 
-										self.bool_tool_tree = False
-										self.selected       = None
-										self.some_selected  = False
+										self.bool_tool_tree  = False
+										self.selected        = None
+										self.some_selected   = False
 
 										self.JanWin.get_master().update()
 
@@ -193,11 +200,18 @@ class DAT:
 
 										self.JanSpriteOptions.up = False
 
-										self.bool_tool_tree = False
-										self.selected       = None
-										self.some_selected  = False
+										self.bool_tool_tree  = False
+										self.selected        = None
+										self.some_selected   = False
 
 										self.JanWin.get_master().update()
+						except:
+							pass
+
+					if event.button is 2:
+						try:
+							if self.sprites[self.selected].selected:
+								self.sprites[self.selected].resize = True
 						except:
 							pass
 
@@ -213,11 +227,13 @@ class DAT:
 						except:
 							pass
 
-					if event.button is 2:
-						try:
-							self.sprites[self.selected].resize = True
-						except:
-							pass
+			if event.type is pygame.MOUSEMOTION:
+				if event.buttons[1]:
+					if self.selected is None:
+						for sprites in self.sprites.values():
+							sprites.cam   = True
+							self.camera_x = self.camera_x + event.rel[0]
+							self.camera_y = self.camera_y + event.rel[1]
 
 			if event.type is pygame.MOUSEBUTTONUP:
 				if event.button is 1:
@@ -228,10 +244,14 @@ class DAT:
 						pass
 
 				if event.button is 2:
-					try:
-						self.sprites[self.selected].resize = False
-					except:
-						pass
+					if self.selected != None:
+						try:
+							self.sprites[self.selected].resize = False
+						except:
+							pass
+					else:
+						for sprites in self.sprites.values():
+							sprites.cam = False
 
 			if event.type is pygame.KEYUP:
 				if event.key is pygame.K_DELETE:
@@ -442,7 +462,7 @@ class DAT:
 						self.selected = sprites.replace("Class Sprites ", "")
 
 						self.sprites[self.selected] = load_type([self.project, "project_load"], master = self.JanPygame, state = self,
-						tag = sprites.replace("Class Sprites ", ""), type = "Sprites")
+						tag = sprites.replace("Class Sprites ", ""), type = "Sprites", cam_x = self.camera_x, cam_y = self.camera_y)
 
 						self.tool_tree.insert(
 						self.tool_tree_sprites, "end",
@@ -459,7 +479,7 @@ class DAT:
 						self.selected = objects.replace("Class Objects ", "")
 
 						self.sprites[self.selected] = load_type([self.project, "project_load"], master = self.JanPygame, state = self,
-						tag = objects.replace("Class Objects ", ""), type = "Objects")
+						tag = objects.replace("Class Objects ", ""), type = "Objects", cam_x = self.camera_x, cam_y = self.camera_y)
 
 						self.tool_tree.insert(
 						self.tool_tree_objects, "end",
@@ -706,7 +726,7 @@ class DAT:
 	def refresh(self):
 		try:
 			for sprites in self.sprites.values():
-				sprites.render()
+				sprites.render(self.camera_x, self.camera_y)
 
 		except:
 			raise

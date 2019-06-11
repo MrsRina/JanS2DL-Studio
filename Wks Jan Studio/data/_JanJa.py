@@ -95,7 +95,7 @@ start_thread = lambda x: _thread.start_new_thread(x, None)
 JAN_ENGINE_engine = load(replace_folder("data/_JanJa.py", "JanConfig.json"))
 
 class load_type(object): 
-	def __init__(self, project = None, type = None, tag = None, master = None, path = None, state = None):
+	def __init__(self, project = None, type = None, tag = None, master = None, path = None, state = None, cam_x = None, cam_y = 0):
 		try:
 			import base64
 			import io
@@ -109,6 +109,9 @@ class load_type(object):
 			self.selected   = False
 			self.state      = state
 			self.base64     = base64
+			self.cam_x      = cam_x
+			self.cam_y      = cam_y
+			self.cam        = False
 
 			if self.project[1] is "load":
 				self.path      = path
@@ -165,6 +168,9 @@ class load_type(object):
 				self.rendering = False
 				self.selected  = False
 				self.state     = None
+				self.cam_x     = None
+				self.cam_y     = None
+				self.cam       = False
 
 			elif type is "auto_cache_save":
 				if self.project[0] is None:
@@ -261,14 +267,23 @@ class load_type(object):
 			raise
 		return None
 
-	def render(self):
+	def render(self, cam_y, cam_x):
 		try:
 			if self.rendering:
-				self.master.blit(self.img, (self.rect.x, self.rect.y))
+				self.cam_x = cam_y
+				self.cam_y = cam_x
+
+				self.master.blit(self.img, self.rect)
+
+				if self.cam:
+					self.rect.x = - self.cam_x
+					self.rect.y = - self.cam_y
+					self.cam    = False
 
 				if self.selected:
 					if self.move:
-						self.rect.x, self.rect.y = pygame.mouse.get_pos()
+						self.rect.centerx = pygame.mouse.get_pos()[0]
+						self.rect.centery = pygame.mouse.get_pos()[1]
 
 						if self.state.event_file is 0:
 							self.state.event_file = 1
@@ -289,8 +304,6 @@ class load_type(object):
 
 						elif self.state.event_file is 2:
 							self.state.event_file = 3
-
-						pygame.display.flip()
 
 					self.do("auto_cache_save")
 
