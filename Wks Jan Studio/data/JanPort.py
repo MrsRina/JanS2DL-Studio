@@ -50,3 +50,8 @@ try:
 	import JanConsoleText
 except:
 	pass
+
+try:
+	import JanDecode
+except:
+	pass

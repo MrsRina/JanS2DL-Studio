@@ -1,5 +1,5 @@
 from _JanJa  import *
-from JanPort import JanCompiler, JanConsoleText
+from JanPort import JanCompiler, JanConsoleText, JanDecode
 
 int_engine = lambda _int: int(JAN_ENGINE_engine.get(_int))
 
@@ -44,6 +44,7 @@ class DAT:
 
 			while (self.JanRun):
 				self.JanPygame.fill((self.JanBackgroundColorPygame))
+				self.background_(JanDecode.JAN_IMAGE_DECODE_ALPHA)
 
 				for event_ in pygame.event.get():
 					self.events_sprite(event_)
@@ -303,16 +304,17 @@ class DAT:
 			self.JanSpriteOptions.show(self.tool_tree, self.sprites, self.selected, up = self.bool_tool_tree)
 
 			try:
-				self.JanStatus.set_text("{} {}{} {} {} {}".format(
+				self.JanStatus.set_text("{} {}{} {} {} {} {}".format(
 					"" if self.project is None else self.project.local,
 					"" if self.selected is None else self.selected,
-					pygame.mouse.get_pos() if self.selected is None else " %d" % self.sprites[self.selected].rect.x,
-					"" if self.selected is None else self.sprites[self.selected].rect.y,
-					"" if self.selected is None else self.sprites[self.selected].rect.w,
-					"" if self.selected is None else self.sprites[self.selected].rect.h)
+					pygame.mouse.get_pos() if self.selected is None else " ",
+					"" if self.selected is None else self.sprites[self.selected].x,
+					"" if self.selected is None else self.sprites[self.selected].y,
+					"" if self.selected is None else self.sprites[self.selected].w,
+					"" if self.selected is None else self.sprites[self.selected].h)
 				)
 			except:
-				pass
+				raise
 
 			if self.bool_click != 0:
 				self.bool_click += 0.1
@@ -656,6 +658,15 @@ class DAT:
 	def poop_up(self):
 		try:
 			self.JanContainer.frame_event_game.bind("<Button-3>", self.create_event_menu)
+		except:
+			raise
+		return None
+
+	def background_(self, img):
+		try:
+			import io
+			import base64
+			return self.JanPygame.blit(pygame.transform.scale(pygame.image.load(io.BytesIO(base64.b64decode(img))), (self.JanPygame.get_size())), (0, 0))
 		except:
 			raise
 		return None

@@ -112,6 +112,10 @@ class load_type(object):
 			self.cam_x      = cam_x
 			self.cam_y      = cam_y
 			self.cam        = False
+			self.x          = 0
+			self.y          = 0
+			self.w          = 0
+			self.h          = 0
 
 			if self.project[1] is "load":
 				self.path      = path
@@ -121,7 +125,10 @@ class load_type(object):
 				self.tag       = tag
 				self.extension = os.path .splitext(os.path.basename(self.path))[1]
 				self.img       = pygame.image.load(self.img_path)
-				self.rect      = self.img.get_rect()
+				self.x         = self.img.get_rect().x
+				self.y         = self.img.get_rect().y
+				self.w         = self.img.get_rect().w
+				self.h         = self.img.get_rect().h
 
 				self.do("load")
 
@@ -134,14 +141,13 @@ class load_type(object):
 				self.do("project_load")
 
 				self.img_path = io.BytesIO(base64.b64decode(self.img_data))
-				self.img      = self.img = pygame.transform.scale(pygame.image.load(self.path), 
+				self.img      = self.img = pygame.transform.scale(pygame.image.load(self.img_path), 
 				(self.project[0].json[self.json_class][self.json_name]["Width"], self.project[0].json[self.json_class][self.json_name]["Height"]))
 				
-				self.rect   = self.img.get_rect()
-				self.rect.w = self.project[0].json[self.json_class][self.json_name]["Width"]
-				self.rect.h = self.project[0].json[self.json_class][self.json_name]["Height"]
-				self.rect.x = self.project[0].json[self.json_class][self.json_name]["X"]
-				self.rect.y = self.project[0].json[self.json_class][self.json_name]["Y"]
+				self.x = self.project[0].json[self.json_class][self.json_name]["X"]
+				self.y = self.project[0].json[self.json_class][self.json_name]["Y"]
+				self.w = self.project[0].json[self.json_class][self.json_name]["Width"]
+				self.h = self.project[0].json[self.json_class][self.json_name]["Height"]
 		except:
 			raise
 		return None
@@ -171,6 +177,10 @@ class load_type(object):
 				self.cam_x     = None
 				self.cam_y     = None
 				self.cam       = False
+				self.x         = 0
+				self.y         = 0
+				self.w         = 0
+				self.h         = 0
 
 			elif type is "auto_cache_save":
 				if self.project[0] is None:
@@ -185,10 +195,10 @@ class load_type(object):
 					self.project[0].json[self.json_class][self.json_name]["Tag"]    = self.tag
 					self.project[0].json[self.json_class][self.json_name]["Type"]   = self.type
 					self.project[0].json[self.json_class][self.json_name]["Ext"]    = self.extension
-					self.project[0].json[self.json_class][self.json_name]["Width"]  = self.rect.w
-					self.project[0].json[self.json_class][self.json_name]["Height"] = self.rect.h
-					self.project[0].json[self.json_class][self.json_name]["X"]      = self.rect.x
-					self.project[0].json[self.json_class][self.json_name]["Y"]      = self.rect.y
+					self.project[0].json[self.json_class][self.json_name]["Width"]  = self.w
+					self.project[0].json[self.json_class][self.json_name]["Height"] = self.h
+					self.project[0].json[self.json_class][self.json_name]["X"]      = self.x
+					self.project[0].json[self.json_class][self.json_name]["Y"]      = self.y
 					self.project[0].json[self.json_class][self.json_name]["Path"]   = self.path
 					self.project[0].json[self.json_class][self.json_name]["Data"]   = self.img_data
 
@@ -220,10 +230,10 @@ class load_type(object):
 					self.project[0].json[self.json_class][self.json_name]["Tag"]    = self.tag
 					self.project[0].json[self.json_class][self.json_name]["Type"]   = self.type
 					self.project[0].json[self.json_class][self.json_name]["Ext"]    = self.extension
-					self.project[0].json[self.json_class][self.json_name]["Width"]  = self.rect.w
-					self.project[0].json[self.json_class][self.json_name]["Height"] = self.rect.h
-					self.project[0].json[self.json_class][self.json_name]["X"]      = self.rect.x
-					self.project[0].json[self.json_class][self.json_name]["Y"]      = self.rect.y
+					self.project[0].json[self.json_class][self.json_name]["Width"]  = self.w
+					self.project[0].json[self.json_class][self.json_name]["Height"] = self.h
+					self.project[0].json[self.json_class][self.json_name]["X"]      = self.x
+					self.project[0].json[self.json_class][self.json_name]["Y"]      = self.y
 					self.project[0].json[self.json_class][self.json_name]["Path"]   = self.path
 					self.project[0].json[self.json_class][self.json_name]["Data"]   = self.img_data
 
@@ -257,10 +267,10 @@ class load_type(object):
 				self.project[0].json[self.json_class][self.json_name]["Tag"]    = self.tag
 				self.project[0].json[self.json_class][self.json_name]["Type"]   = self.type
 				self.project[0].json[self.json_class][self.json_name]["Ext"]    = self.extension
-				self.project[0].json[self.json_class][self.json_name]["Width"]  = self.rect.w
-				self.project[0].json[self.json_class][self.json_name]["Height"] = self.rect.h
-				self.project[0].json[self.json_class][self.json_name]["X"]      = self.rect.x
-				self.project[0].json[self.json_class][self.json_name]["Y"]      = self.rect.y
+				self.project[0].json[self.json_class][self.json_name]["Width"]  = self.w
+				self.project[0].json[self.json_class][self.json_name]["Height"] = self.h
+				self.project[0].json[self.json_class][self.json_name]["X"]      = self.x
+				self.project[0].json[self.json_class][self.json_name]["Y"]      = self.y
 				self.project[0].json[self.json_class][self.json_name]["Path"]   = self.path
 				self.project[0].json[self.json_class][self.json_name]["Data"]   = self.img_data
 		except:
@@ -273,17 +283,13 @@ class load_type(object):
 				self.cam_x = cam_y
 				self.cam_y = cam_x
 
-				self.master.blit(self.img, self.rect)
-
-				if self.cam:
-					self.rect.x = - self.cam_x
-					self.rect.y = - self.cam_y
-					self.cam    = False
+				self.rect = pygame.rect.Rect((self.x - self.cam_x, self.y - self.cam_y), (self.w, self.h))
+				self.master.blit(self.img, (self.x - self.cam_x, self.y - self.cam_y))
 
 				if self.selected:
 					if self.move:
-						self.rect.centerx = pygame.mouse.get_pos()[0]
-						self.rect.centery = pygame.mouse.get_pos()[1]
+						self.x = pygame.mouse.get_pos()[0] + self.cam_x
+						self.y = pygame.mouse.get_pos()[1] + self.cam_y
 
 						if self.state.event_file is 0:
 							self.state.event_file = 1
@@ -295,22 +301,29 @@ class load_type(object):
 						pass
 
 					if self.resize:
-						self.rect.w, self.rect.h = pygame.mouse.get_pos()
+						try:
+							import base64
+							import io
 
-						self.img = pygame.transform.scale(pygame.image.load(self.path), (self.rect.w, self.rect.h))
+							self.w = pygame.mouse.get_pos()[0]
+							self.h = pygame.mouse.get_pos()[1]
 
-						if self.state.event_file is 0:
-							self.state.event_file = 1
-
-						elif self.state.event_file is 2:
-							self.state.event_file = 3
-
+							self.img = pygame.transform.scale(pygame.image.load(io.BytesIO(base64.b64decode(self.img_data))), (self.w, self.h))
+	
+							if self.state.event_file is 0:
+								self.state.event_file = 1
+	
+							elif self.state.event_file is 2:
+								self.state.event_file = 3
+						except:
+							raise
+	
 					self.do("auto_cache_save")
 
-					self.effect_ = pygame.Surface((self.rect.w, self.rect.h), pygame.SRCALPHA)
+					self.effect_ = pygame.Surface((self.w, self.h), pygame.SRCALPHA)
 					self.effect_.fill((255, 0, 0, 50))
 
-					self.master.blit(self.effect_, self.rect)
+					self.master.blit(self.effect_, (self.x - self.cam_x, self.y - self.cam_y))
 		except:
 			raise
 		return None

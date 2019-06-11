@@ -462,10 +462,10 @@ class sprite_options(object):
 					self.tag      = sprites[selected].tag
 					self.path     = sprites[selected].path
 	
-					self.x = sprites[selected].rect.x
-					self.y = sprites[selected].rect.y
-					self.w = sprites[selected].rect.w
-					self.h = sprites[selected].rect.h
+					self.x = sprites[selected].x
+					self.y = sprites[selected].y
+					self.w = sprites[selected].w
+					self.h = sprites[selected].h
 	
 					self.canvas.configure(width = self.master.winfo_width() - 5, height = self.master.winfo_height() - 66)
 	
