@@ -22,6 +22,7 @@ class DAT:
 
 			self.camera_x = 0
 			self.camera_y = 0
+			self.camera_z = 0
 
 			self.project         = None
 			self.event_file      = 0
@@ -45,7 +46,7 @@ class DAT:
 			while (self.JanRun):
 				self.JanPygame.fill((self.JanBackgroundColorPygame))
 				self.background_(JanDecode.JAN_IMAGE_DECODE_ALPHA)
-
+				
 				for event_ in pygame.event.get():
 					self.events_sprite(event_)
 					self.dynamic_popup(event_)
@@ -230,11 +231,8 @@ class DAT:
 
 			if event.type is pygame.MOUSEMOTION:
 				if event.buttons[1]:
-					if self.selected is None:
-						for sprites in self.sprites.values():
-							sprites.cam   = True
-							self.camera_x = self.camera_x + event.rel[0]
-							self.camera_y = self.camera_y + event.rel[1]
+					self.camera_x = self.camera_x + event.rel[0]
+					self.camera_y = self.camera_y + event.rel[1]
 
 			if event.type is pygame.MOUSEBUTTONUP:
 				if event.button is 1:
@@ -250,9 +248,6 @@ class DAT:
 							self.sprites[self.selected].resize = False
 						except:
 							pass
-					else:
-						for sprites in self.sprites.values():
-							sprites.cam = False
 
 			if event.type is pygame.KEYUP:
 				if event.key is pygame.K_DELETE:
@@ -314,7 +309,7 @@ class DAT:
 					"" if self.selected is None else self.sprites[self.selected].h)
 				)
 			except:
-				raise
+				pass
 
 			if self.bool_click != 0:
 				self.bool_click += 0.1

@@ -111,7 +111,6 @@ class load_type(object):
 			self.base64     = base64
 			self.cam_x      = cam_x
 			self.cam_y      = cam_y
-			self.cam        = False
 			self.x          = 0
 			self.y          = 0
 			self.w          = 0
@@ -168,19 +167,18 @@ class load_type(object):
 				self.img_path  = None
 				self.tag       = "deleted"
 
-				self.move      = False
-				self.resize    = False
-				self.rotate    = False
-				self.rendering = False
-				self.selected  = False
+				self.move      = None
+				self.resize    = None
+				self.rotate    = None
+				self.rendering = None
+				self.selected  = None
 				self.state     = None
 				self.cam_x     = None
 				self.cam_y     = None
-				self.cam       = False
-				self.x         = 0
-				self.y         = 0
-				self.w         = 0
-				self.h         = 0
+				self.x         = None
+				self.y         = None
+				self.w         = None
+				self.h         = None
 
 			elif type is "auto_cache_save":
 				if self.project[0] is None:
@@ -284,7 +282,7 @@ class load_type(object):
 				self.cam_y = cam_x
 
 				self.rect = pygame.rect.Rect((self.x - self.cam_x, self.y - self.cam_y), (self.w, self.h))
-				self.master.blit(self.img, (self.x - self.cam_x, self.y - self.cam_y))
+				self.master.blit(self.img, self.rect)
 
 				if self.selected:
 					if self.move:
@@ -323,7 +321,7 @@ class load_type(object):
 					self.effect_ = pygame.Surface((self.w, self.h), pygame.SRCALPHA)
 					self.effect_.fill((255, 0, 0, 50))
 
-					self.master.blit(self.effect_, (self.x - self.cam_x, self.y - self.cam_y))
+					self.master.blit(self.effect_, self.rect)
 		except:
 			raise
 		return None
