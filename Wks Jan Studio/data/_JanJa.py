@@ -286,8 +286,11 @@ class load_type(object):
 
 				if self.selected:
 					if self.move:
-						self.x = pygame.mouse.get_pos()[0] + self.cam_x
-						self.y = pygame.mouse.get_pos()[1] + self.cam_y
+						self.rect.centerx = pygame.mouse.get_pos()[0] + self.cam_x
+						self.rect.centery = pygame.mouse.get_pos()[1] + self.cam_y
+
+						self.x = self.rect.x
+						self.y = self.rect.y
 
 						if self.state.event_file is 0:
 							self.state.event_file = 1
@@ -321,7 +324,7 @@ class load_type(object):
 					self.effect_ = pygame.Surface((self.w, self.h), pygame.SRCALPHA)
 					self.effect_.fill((255, 0, 0, 50))
 
-					self.master.blit(self.effect_, self.rect)
+					self.master.blit(self.effect_, (self.x - self.cam_x, self.y - self.cam_y))
 		except:
 			raise
 		return None

@@ -22,7 +22,6 @@ class DAT:
 
 			self.camera_x = 0
 			self.camera_y = 0
-			self.camera_z = 0
 
 			self.project         = None
 			self.event_file      = 0
@@ -230,9 +229,10 @@ class DAT:
 							pass
 
 			if event.type is pygame.MOUSEMOTION:
-				if event.buttons[1]:
-					self.camera_x = self.camera_x + event.rel[0]
-					self.camera_y = self.camera_y + event.rel[1]
+				if event.buttons[0]:
+					if self.selected is None:
+						self.camera_x = self.camera_x + event.rel[0]
+						self.camera_y = self.camera_y + event.rel[1]
 
 			if event.type is pygame.MOUSEBUTTONUP:
 				if event.button is 1:
