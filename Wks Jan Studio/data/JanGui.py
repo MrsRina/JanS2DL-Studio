@@ -434,21 +434,27 @@ class sprite_options(object):
 			self.w = 0
 			self.h = 0
 
-			self.width  = 0
-			self.height = 0
-
 			self.canvas = tk.Canvas(self.master, width = self.master.winfo_width() - 5, height = self.master.winfo_height() - 66, bg = "Gray")
 
-			self.text_tag    = tk.Label(self.canvas, text = self.tag, bg = "Gray")
-			self.text_xpos   = tk.Label(self.canvas, text = "x {}".format(self.x), bg = "Gray")
-			self.text_ypos   = tk.Label(self.canvas, text = "y {}".format(self.y), bg = "Gray")
-			self.text_width  = tk.Label(self.canvas, text = "width {}".format(self.w), bg = "Gray")
-			self.text_height = tk.Label(self.canvas, text = "height {}".format(self.h), bg = "Gray")
-			self.text_path   = tk.Label(self.canvas, text = "Path: {}".format(self.path), bg = "Gray")
+			self.text_tag  = tk.Label(self.canvas, text = "Tag: ", bg = "Gray")
+			self.entry_tag = tk.Entry(self.canvas, bg = "Gray")
+
+			self.text_xpos  = tk.Label(self.canvas, text = "X: ", bg = "Gray")
+			self.entry_xpos = tk.Entry(self.canvas, bg = "Gray")
+
+			self.text_ypos  = tk.Label(self.canvas, text = "Y: ", bg = "Gray")
+			self.entry_ypos = tk.Entry(self.canvas, bg = "Gray")
+
+			self.text_width  = tk.Label(self.canvas, text = "Width: ", bg = "Gray")
+			self.entry_width = tk.Entry(self.canvas, bg = "Gray")
+
+			self.text_height  = tk.Label(self.canvas, text = "Height: ", bg = "Gray")
+			self.entry_height = tk.Entry(self.canvas, bg = "Gray")
+
+			self.text_path  = tk.Label(self.canvas, text = "Path: ", bg = "Gray")
+			self.entry_path = tk.Entry(self.canvas, bg = "Gray")
 
 			self.canvas.place(x = 10, y = self.about_frame.winfo_height() - 25)
-
-			self.widgets = [self.canvas]
 		except:
 			raise
 		return None
@@ -470,16 +476,10 @@ class sprite_options(object):
 					self.canvas.configure(width = self.master.winfo_width() - 5, height = self.master.winfo_height() - 66)
 	
 					self.canvas.place(x = 10, y = self.about_frame.winfo_height() + 25)
-					
-					self.text_tag.configure(text = self.tag)
-					self.text_path.configure(text = "{}".format(self.path))
-					self.text_xpos.configure(text = "x: {}".format(self.x))
-					self.text_ypos.configure(text = "y: {}".format(self.y))
-					self.text_width.configure(text = "Width: {}".format(self.w))
-					self.text_height.configure(text = "Height: {}".format(self.h))
 	
 					self.text_tag.place(x = 10, y = 10)
-					self.text_path.place(x = 10, y = 25)
+					self.entry_tag.place(x = self.text_tag.winfo_width() + 25, y = 10, width = self.master.winfo_width() - 75)
+					self.text_path.place(x = 10, y = self.entry_tag.winfo_height() +  25)
 					self.text_xpos.place(x = 10, y = 50)
 					self.text_ypos.place(x = 10, y = 75)
 					self.text_width.place(x = 75, y = 50)
@@ -489,8 +489,7 @@ class sprite_options(object):
 				except:
 					pass
 			else:
-				for widgets in self.widgets:
-					widgets.place_forget()
+				self.canvas.place_forget()
 		except:
 			raise
 		return None

@@ -6,7 +6,7 @@ int_engine = lambda _int: int(JAN_ENGINE_engine.get(_int))
 class DAT:
 	def __init__(self):
 		try:
-			self.JanWin = JanGui.create_window(int_engine("Width"), int_engine("Height"), "JanCreate Studio", "Gray",
+			self.JanWin = JanGui.create_window(int_engine("Width"), int_engine("Height"), "JanS2DL-Studio", "Gray",
 				r"{}".format(replace_folder("/_JanJa.py", "/icone.ico")))
 
 			self.bool_click     = 0
