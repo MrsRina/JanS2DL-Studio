@@ -2,7 +2,7 @@ import json
 import os
 
 class create_project(object):
-		def __init__(self, local = None, name = None, comments = None, version = None):
+		def __init__(self, local = None, name = None, camera = None, comments = None, version = None):
 			try:
 				self.local = local + "/{}.jpf".format(name.replace(" ", "_"))
 				file       = open(self.local, "w")
@@ -16,6 +16,7 @@ class create_project(object):
 
 				self.json["Name"]               = name
 				self.json["Local Path Project"] = local
+				self.json["Project Camera Pos"] = camera
 				self.json["Game Sprites"]       = {}
 				self.json["Game Objects"]       = {}
 				self.json["Game Cameras"]       = {}

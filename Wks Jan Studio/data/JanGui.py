@@ -69,16 +69,31 @@ class start_(object):
 				self.loading["value"] = self.load_number
 
 				if self.load_number >= 25:
-					self.progress_text.configure(text = self.json.get("Default Resolution"))
+					self.progress_text.configure(text = "Checking file integrity ...")
 
 				if self.load_number >= 50:
-					self.progress_text.configure(text = self.json.get("Width"))
+					try:
+						pass
+					except:
+						raise
+
+					self.progress_text.configure(text = "Python ...")
 
 				if self.load_number >= 75:
-					self.progress_text.configure(text = self.json.get("Height"))
+					try:
+						import tkinter
+					except:
+						raise
+
+					self.progress_text.configure(text = "Tkinter ...")
 
 				if self.load_number >= 100:
-					self.progress_text.configure(text = self.json.get("Devolper"))
+					try:
+						import pygame
+					except:
+						raise
+
+					self.progress_text.configure(text = "Pygame ...")
 
 				if self.load_number >= 125:
 					self.math.Sync_Resolution(self.json, self.hardware)
@@ -304,7 +319,7 @@ class create_status(object):
 
 	def set_text(self, text):
 		try:
-			return self.label.configure(text = text)
+			return self.label.config(text = text)
 		except:
 			raise
 		return None
@@ -312,7 +327,7 @@ class create_status(object):
 class create_frame_tools(object):
 	def __init__(self, master):
 		try:
-			self.master    = master
+			self.master = master
 
 			self.resize = tk.Frame(master, width = 400, height = master.winfo_screenheight(), bg = "Gray49", bd = 5)
 			self.frame  = tk.Frame(master, width = 400, height = master.winfo_screenheight(), bg = "Gray")
@@ -426,6 +441,8 @@ class sprite_options(object):
 			self.selected    = selected
 			self.about_frame = about_frame
 
+			self.bool_entry_tag = True
+
 			self.tag    = None
 			self.path   = None
 
@@ -436,34 +453,124 @@ class sprite_options(object):
 
 			self.canvas = tk.Canvas(self.master, width = self.master.winfo_width() - 5, height = self.master.winfo_height() - 66, bg = "Gray")
 
-			self.text_tag  = tk.Label(self.canvas, text = "Tag: ", bg = "Gray")
-			self.entry_tag = tk.Entry(self.canvas, bg = "Gray")
+			self.text_tag  = tk.Label(self.canvas, text = self.tag, bg = "Gray")
+			self.entry_tag = tk.Entry(self.canvas, bg = "Gray49", disabledbackground = "Gray49")
 
-			self.text_xpos  = tk.Label(self.canvas, text = "X: ", bg = "Gray")
-			self.entry_xpos = tk.Entry(self.canvas, bg = "Gray")
+			self.text_xpos  = tk.Label(self.canvas, text = "X:", bg = "Gray")
+			self.entry_xpos = tk.Entry(self.canvas, bg = "Gray49", disabledbackground = "Gray49")
 
-			self.text_ypos  = tk.Label(self.canvas, text = "Y: ", bg = "Gray")
-			self.entry_ypos = tk.Entry(self.canvas, bg = "Gray")
+			self.text_ypos  = tk.Label(self.canvas, text = "Y:", bg = "Gray")
+			self.entry_ypos = tk.Entry(self.canvas, bg = "Gray49", disabledbackground = "Gray49")
 
-			self.text_width  = tk.Label(self.canvas, text = "Width: ", bg = "Gray")
-			self.entry_width = tk.Entry(self.canvas, bg = "Gray")
+			self.text_width  = tk.Label(self.canvas, text = "Width:", bg = "Gray")
+			self.entry_width = tk.Entry(self.canvas, bg = "Gray", disabledbackground = "Gray49")
 
-			self.text_height  = tk.Label(self.canvas, text = "Height: ", bg = "Gray")
-			self.entry_height = tk.Entry(self.canvas, bg = "Gray")
+			self.text_height  = tk.Label(self.canvas, text = "Height:", bg = "Gray")
+			self.entry_height = tk.Entry(self.canvas, bg = "Gray49", disabledbackground = "Gray49")
 
-			self.text_path  = tk.Label(self.canvas, text = "Path: ", bg = "Gray")
-			self.entry_path = tk.Entry(self.canvas, bg = "Gray")
+			self.text_path  = tk.Label(self.canvas, text = "Path:", bg = "Gray")
+			self.entry_path = tk.Entry(self.canvas, bg = "Gray49", disabledbackground = "Gray49")
 
 			self.canvas.place(x = 10, y = self.about_frame.winfo_height() - 25)
 		except:
 			raise
 		return None
 
-	def show(self, master, sprites, selected, up = None):
+	def rect(self, type, widget):
+		try:
+			if type is "x":
+				return widget.winfo_x() + widget.winfo_width()
+
+			else:
+				return widget.winfo_y() + widget.winfo_height()
+		except:
+			raise
+		return None
+
+	def set(self, what, value):
+		try:
+			so = True
+			while so:
+				what.config(state = "normal")
+				what.delete(0, tk.END)
+				what.insert(0, value)
+				what.config(state = "disabled")
+
+				so = False
+		except:
+			raise
+		return None
+
+	def handler_entry(self, state, widget):
+		try:
+			if widget is self.entry_tag:
+				self.bool_entry_tag = False
+
+			widget.config(state = state)
+		except:
+			raise
+		return None
+
+	def ds_all(self, state, final):
+		try:
+			if self.bool_entry_tag is False:
+				self.handler_entry(state, self.entry_tag)
+				
+				if final is "Save":
+					self.function(old = self.tag, replace = self.entry_tag.get())
+					self.bool_entry_tag = True
+
+				else:
+					self.handler_entry("normal", self.entry_tag)
+					self.entry_tag.delete(0, tk.END)
+					self.entry_tag.insert(0, self.tag)
+					self.handler_entry("disabled", self.entry_tag)
+					self.bool_entry_tag = True
+		except:
+			raise
+		return None
+
+	def _tag(self):
+		try:
+			self.entry_tag.bind("<Double-Button-1>", lambda x: self.handler_entry("normal", self.entry_tag))
+
+			self.text_tag.config(text = self.tag)
+			self.text_tag.place(x = 10,  y = 10)
+
+			if self.bool_entry_tag:
+				self.entry_tag.insert(0, self.tag)
+				self.entry_tag.config(state = "disabled")
+
+			self.entry_tag.place(x = 10, y = self.rect("y", self.text_tag), width = self.canvas.winfo_width() - 25)
+		except:
+			raise
+		return None
+
+	def _path(self):
+		try:
+			self.entry_path.insert(0, self.path)
+
+			self.text_path.place(x = 10, y = self.rect("y", self.entry_tag), width = self.canvas.winfo_width()/self.canvas.winfo_width() + 25)
+
+			self.entry_path.config(state = "disabled", disabledbackground = "Gray49")
+			self.entry_path.place(x = 10, y = self.rect("y", self.text_path), width = self.canvas.winfo_width() - 25)
+		except:
+			raise
+		return None
+
+	def _wx(self):
+		try:
+			pass
+		except:
+			raise
+		return None
+
+	def show(self, master, sprites, selected, ref = None, up = None):
 		try:
 			if up:
 				try:
 					self.master   = master
+					self.sprites  = sprites
 					self.selected = sprites[selected]
 					self.tag      = sprites[selected].tag
 					self.path     = sprites[selected].path
@@ -472,23 +579,24 @@ class sprite_options(object):
 					self.y = sprites[selected].y
 					self.w = sprites[selected].w
 					self.h = sprites[selected].h
+
+					self.function = ref
 	
-					self.canvas.configure(width = self.master.winfo_width() - 5, height = self.master.winfo_height() - 66)
-	
+					self.canvas.config(width = self.master.winfo_width() - 5, height = self.master.winfo_height() - 66)
 					self.canvas.place(x = 10, y = self.about_frame.winfo_height() + 25)
-	
-					self.text_tag.place(x = 10, y = 10)
-					self.entry_tag.place(x = self.text_tag.winfo_width() + 25, y = 10, width = self.master.winfo_width() - 75)
-					self.text_path.place(x = 10, y = self.entry_tag.winfo_height() +  25)
-					self.text_xpos.place(x = 10, y = 50)
-					self.text_ypos.place(x = 10, y = 75)
-					self.text_width.place(x = 75, y = 50)
-					self.text_height.place(x = 75, y = 75)
-	
-					self.master_win.update()
+
+					self.canvas.bind("<Button-1>", lambda x: self.ds_all("disabled", "Save"))
+
+					self.canvas.update()
+					self.master.update()
+
+					self._tag()
+					self._path()
+					self._wx()
 				except:
 					pass
 			else:
+				self.ds_all("disabled", "Leave")
 				self.canvas.place_forget()
 		except:
 			raise
@@ -499,7 +607,7 @@ class frame_debug_tools(object):
 		try:
 			self.master      = master
 			self.left_widget = left_widget
-			self.container   = container
+			self.container   = container#
 
 			left_widget.update()
 

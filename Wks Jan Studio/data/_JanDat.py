@@ -52,6 +52,9 @@ class DAT:
 
 				self.up_events()
 
+				
+				print(self.sprites)
+
 				self.refresh()
 				self.window_loop()
 		except:
@@ -296,7 +299,7 @@ class DAT:
 
 			self.x_main, self.y_main = JanMath.Sync_Resolution_Pos(self.JanWin.get_master())
 
-			self.JanSpriteOptions.show(self.tool_tree, self.sprites, self.selected, up = self.bool_tool_tree)
+			self.JanSpriteOptions.show(self.tool_tree, self.sprites, self.selected, ref = self.ref_sprite, up = self.bool_tool_tree)
 
 			try:
 				self.JanStatus.set_text("{} {}{} {} {} {} {}".format(
@@ -308,6 +311,10 @@ class DAT:
 					"" if self.selected is None else self.sprites[self.selected].w,
 					"" if self.selected is None else self.sprites[self.selected].h)
 				)
+
+				self.JanEditorStatus.set_text("{} x {}".format(
+					self.camera_x, self.camera_y
+					))
 			except:
 				pass
 
@@ -327,8 +334,9 @@ class DAT:
 					self.project = JanCompiler.create_project(
 					local    = self.new_folder_path,
 					name     = self.cache_project_name.get(1.0, tk.INSERT),
+					camera   = (self.camera_x, self.camera_y),
 					comments = self.cache_project_comment.get(1.0, tk.INSERT),
-					version  = "1.2"
+					version  = "1.3"
 					)
 
 					self.new_folder_path = None
@@ -439,54 +447,60 @@ class DAT:
 			(
 				"all files", "*.*"
 			)))
+
 			self.console_print("Project JPF: {}".format(JanConsoleText.is_project_file(find)))
 
 			if JanConsoleText.is_project_file(find):
-				self.clear()
+				try:
+					self.clear()
+	
+					self.project    = JanCompiler.open_project(path = find)
+					self.event_file = 2
+	
+					self.JanTree.create_class()
+	
+					self.camera_x, self.camera_y = self.project.json["Project Camera Pos"]
+	
+					find_sprites = None
+					find_objects = None
+	
+					if len(self.project.json["Game Sprites"]) > 0:
+						find_sprites = list(self.project.json["Game Sprites"])
+	
+						for sprites in find_sprites:
+							self.selected = sprites.replace("Class Sprites ", "")
+	
+							self.sprites[self.selected] = load_type([self.project, "project_load"], master = self.JanPygame, state = self,
+							tag = sprites.replace("Class Sprites ", ""), type = "Sprites", cam_x = self.camera_x, cam_y = self.camera_y)
+	
+							self.tool_tree.insert(
+							self.tool_tree_sprites, "end",
+							"Class Sprites {}".format(self.sprites[self.selected].tag),
+							text = self.sprites[self.selected].tag,
+							open = True)
+	
+							self.selected = None
+	
+					if len(self.project.json["Game Objects"]) > 0:
+						find_objects = list(self.project.json["Game Objects"])
+	
+						for objects in find_objects:
+							self.selected = objects.replace("Class Objects ", "")
+	
+							self.sprites[self.selected] = load_type([self.project, "project_load"], master = self.JanPygame, state = self,
+							tag = objects.replace("Class Objects ", ""), type = "Objects", cam_x = self.camera_x, cam_y = self.camera_y)
+	
+							self.tool_tree.insert(
+							self.tool_tree_objects, "end",
+							"Class Objects {}".format(self.sprites[self.selected].tag),
+							text = self.sprites[self.selected].tag,
+							open = True)
+	
+							self.selected = None
 
-				self.project    = JanCompiler.open_project(path = find)
-				self.event_file = 2
-
-				self.JanTree.create_class()
-
-				find_sprites = None
-				find_objects = None
-
-				if len(self.project.json["Game Sprites"]) > 0:
-					find_sprites = list(self.project.json["Game Sprites"])
-
-					for sprites in find_sprites:
-						self.selected = sprites.replace("Class Sprites ", "")
-
-						self.sprites[self.selected] = load_type([self.project, "project_load"], master = self.JanPygame, state = self,
-						tag = sprites.replace("Class Sprites ", ""), type = "Sprites", cam_x = self.camera_x, cam_y = self.camera_y)
-
-						self.tool_tree.insert(
-						self.tool_tree_sprites, "end",
-						"Class Sprites {}".format(self.sprites[self.selected].tag),
-						text = self.sprites[self.selected].tag,
-						open = True)
-
-						self.selected = None
-
-				if len(self.project.json["Game Objects"]) > 0:
-					find_objects = list(self.project.json["Game Objects"])
-
-					for objects in find_objects:
-						self.selected = objects.replace("Class Objects ", "")
-
-						self.sprites[self.selected] = load_type([self.project, "project_load"], master = self.JanPygame, state = self,
-						tag = objects.replace("Class Objects ", ""), type = "Objects", cam_x = self.camera_x, cam_y = self.camera_y)
-
-						self.tool_tree.insert(
-						self.tool_tree_objects, "end",
-						"Class Objects {}".format(self.sprites[self.selected].tag),
-						text = self.sprites[self.selected].tag,
-						open = True)
-
-						self.selected = None
-
-				self.console_print(JanConsoleText.print_load_project(self.project.json))
+					self.console_print(JanConsoleText.print_load_project(self.project.json))
+				except:
+					self.console_print("This file corrupted or old version ... \n{}".format(find))
 		except:
 			raise
 		return None
@@ -508,6 +522,7 @@ class DAT:
 				self.console_print("{} Saving".format(self.project.json["Name"]))
 				self.event_file = 2
 
+			self.project.json["Project Camera Pos"] = (self.camera_x, self.camera_y)
 			self.project.save()
 			self.console_print("{} Saved".format(self.project.json["Name"]))
 		except:
@@ -527,7 +542,7 @@ class DAT:
 			if find:
 				import random
 
-				self.selected = os.path.splitext(os.path.basename(find))[0] + str(random.randint(100, 1000))
+				self.selected               = os.path.splitext(os.path.basename(find))[0] + str(random.randint(100, 1000))
 				self.sprites[self.selected] = load_type([self.project, "load"], "Sprites", self.selected, self.JanPygame, find, self)
 
 				self.tool_tree.insert(
@@ -563,7 +578,7 @@ class DAT:
 			if find:
 				import random
 
-				self.selected = os.path.splitext(os.path.basename(find))[0] + str(random.randint(100, 1000))
+				self.selected               = os.path.splitext(os.path.basename(find))[0] + str(random.randint(100, 1000))
 				self.sprites[self.selected] = load_type([self.project, "load"], "Objects", self.selected, self.JanPygame, find, self)
 
 				self.tool_tree.insert(
@@ -596,6 +611,22 @@ class DAT:
 			raise
 		return None
 
+	def ref_sprite(self, old = None, replace = None):
+		try:
+			if old is replace:
+				pass
+
+			else:
+				self.sprites[replace]     = self.sprites[self.selected]
+				self.sprites[replace].tag = replace
+	
+				del self.sprites[self.selected]
+	
+				self.selected = self.sprites[replace].tag
+		except:
+			raise
+		return None
+
 	def create_frame(self, id):
 		try:
 			os.environ["SDL_WINDOWID"] = str(id.winfo_id())
@@ -604,6 +635,8 @@ class DAT:
 			pygame.init()
 
 			self.JanPygame = pygame.display.set_mode((id.winfo_screenwidth(), id.winfo_screenheight()), pygame.DOUBLEBUF)
+
+			self.JanEditorStatus = JanGui.create_status(id, (self.camera_x, self.camera_y))
 		except:
 			raise
 		return None
@@ -754,7 +787,7 @@ if __name__ is "__main__":
 JanGui.start_(replace_folder("/_JanJa.py", "/splash/logo_00.png"), DAT, hardware_res, JanMath,
 
 json    = JAN_ENGINE_engine,
-version = "Alpha 0.1.8"
+version = "Alpha 0.2.1"
 
 )
 )
@@ -765,7 +798,7 @@ else:
 JanGui.start_(replace_folder("/_JanJa.py", "/splash/logo_00.png"), DAT, hardware_res, JanMath,
 
 json    = JAN_ENGINE_engine,
-version = "Alpha 0.1.9"
+version = "Alpha 0.2.1"
 
 )
 )
