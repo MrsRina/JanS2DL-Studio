@@ -441,7 +441,8 @@ class sprite_options(object):
 			self.selected    = selected
 			self.about_frame = about_frame
 
-			self.bool_entry_tag = True
+			self.bool_entry_tag  = True
+			self.bool_entry_path = True
 
 			self.tag    = None
 			self.path   = None
@@ -489,14 +490,10 @@ class sprite_options(object):
 
 	def set(self, what, value):
 		try:
-			so = True
-			while so:
-				what.config(state = "normal")
-				what.delete(0, tk.END)
-				what.insert(0, value)
-				what.config(state = "disabled")
-
-				so = False
+			what.config(state = "normal")
+			what.delete(0, tk.END)
+			what.insert(0, value)
+			what.config(state = "disabled")
 		except:
 			raise
 		return None
@@ -507,6 +504,7 @@ class sprite_options(object):
 				self.bool_entry_tag = False
 
 			widget.config(state = state)
+			widget.bind("<Return>", lambda x: self.ds_all("disabled", "Save"))
 		except:
 			raise
 		return None
@@ -538,7 +536,7 @@ class sprite_options(object):
 			self.text_tag.place(x = 10,  y = 10)
 
 			if self.bool_entry_tag:
-				self.entry_tag.insert(0, self.tag)
+				self.set(self.entry_tag, self.tag)
 				self.entry_tag.config(state = "disabled")
 
 			self.entry_tag.place(x = 10, y = self.rect("y", self.text_tag), width = self.canvas.winfo_width() - 25)
@@ -565,24 +563,22 @@ class sprite_options(object):
 			raise
 		return None
 
-	def show(self, master, sprites, selected, ref = None, up = None):
+	def show(self, selected, ref = None, up = None):
 		try:
 			if up:
 				try:
-					self.master   = master
-					self.sprites  = sprites
-					self.selected = sprites[selected]
-					self.tag      = sprites[selected].tag
-					self.path     = sprites[selected].path
+					self.selected = selected
+					self.tag      = self.sprites[self.selected].tag
+					self.path     = self.sprites[self.selected].path
 	
-					self.x = sprites[selected].x
-					self.y = sprites[selected].y
-					self.w = sprites[selected].w
-					self.h = sprites[selected].h
+					self.x = self.sprites[self.selected].x
+					self.y = self.sprites[self.selected].y
+					self.w = self.sprites[self.selected].w
+					self.h = self.sprites[self.selected].h
 
 					self.function = ref
 	
-					self.canvas.config(width = self.master.winfo_width() - 5, height = self.master.winfo_height() - 66)
+					self.canvas.config(width = self.master.winfo_width() - 29, height = self.master.winfo_height() - 66)
 					self.canvas.place(x = 10, y = self.about_frame.winfo_height() + 25)
 
 					self.canvas.bind("<Button-1>", lambda x: self.ds_all("disabled", "Save"))
@@ -594,9 +590,10 @@ class sprite_options(object):
 					self._path()
 					self._wx()
 				except:
-					pass
+					raise
 			else:
 				self.ds_all("disabled", "Leave")
+
 				self.canvas.place_forget()
 		except:
 			raise
