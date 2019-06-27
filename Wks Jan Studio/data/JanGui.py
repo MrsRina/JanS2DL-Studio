@@ -218,11 +218,11 @@ class create_menu(object):
 		try:
 			self.menu_selected_sprites = tk.Menu(self.master_menu, tearoff = 0, bg = "Gray50", fg = "Black")
 
-			self.menu_selected_sprites.add_command(label = "Delete"   , command = self.sub_cmds[0]); self.menu_selected_sprites.add_separator()
-			self.menu_selected_sprites.add_command(label = "Set Name" , command = self.sub_cmds[1])
-			self.menu_selected_sprites.add_command(label = "Set Size" , command = self.sub_cmds[2])
-			self.menu_selected_sprites.add_command(label = "Collide"  , command = self.sub_cmds[3])
-			self.menu_selected_sprites.add_command(label = "Color"    , command = self.sub_cmds[4])
+			self.menu_selected_sprites.add_command(label = "Delete (del)"   , command = self.sub_cmds[0]); self.menu_selected_sprites.add_separator()
+			self.menu_selected_sprites.add_command(label = "Set Name"       , command = self.sub_cmds[1])
+			self.menu_selected_sprites.add_command(label = "Set Size"       , command = self.sub_cmds[2])
+			self.menu_selected_sprites.add_command(label = "Collide"        , command = self.sub_cmds[3])
+			self.menu_selected_sprites.add_command(label = "Color"          , command = self.sub_cmds[4])
 		except:
 			raise
 		return None
@@ -444,33 +444,27 @@ class sprite_options(object):
 			self.bool_entry_tag  = True
 			self.bool_entry_path = True
 
-			self.tag    = None
-			self.path   = None
+			self.tag  = None
+			self.path = None
 
 			self.x = 0
 			self.y = 0
 			self.w = 0
 			self.h = 0
 
-			self.canvas = tk.Canvas(self.master, width = self.master.winfo_width() - 5, height = self.master.winfo_height() - 66, bg = "Gray")
-
-			self.text_tag  = tk.Label(self.canvas, text = self.tag, bg = "Gray")
-			self.entry_tag = tk.Entry(self.canvas, bg = "Gray49", disabledbackground = "Gray49")
-
-			self.text_xpos  = tk.Label(self.canvas, text = "X:", bg = "Gray")
-			self.entry_xpos = tk.Entry(self.canvas, bg = "Gray49", disabledbackground = "Gray49")
-
-			self.text_ypos  = tk.Label(self.canvas, text = "Y:", bg = "Gray")
-			self.entry_ypos = tk.Entry(self.canvas, bg = "Gray49", disabledbackground = "Gray49")
-
-			self.text_width  = tk.Label(self.canvas, text = "Width:", bg = "Gray")
-			self.entry_width = tk.Entry(self.canvas, bg = "Gray", disabledbackground = "Gray49")
-
+			self.canvas       = tk.Canvas(self.master, width = self.master.winfo_width() - 5, height = self.master.winfo_height() - 66, bg = "Gray")
+			self.text_tag     = tk.Label(self.canvas, text = self.tag, bg = "Gray")
+			self.entry_tag    = tk.Entry(self.canvas, bg = "Gray49", disabledbackground = "Gray49")
+			self.text_xpos    = tk.Label(self.canvas, text = "X:", bg = "Gray")
+			self.entry_xpos   = tk.Entry(self.canvas, bg = "Gray49", disabledbackground = "Gray49")
+			self.text_ypos    = tk.Label(self.canvas, text = "Y:", bg = "Gray")
+			self.entry_ypos   = tk.Entry(self.canvas, bg = "Gray49", disabledbackground = "Gray49")
+			self.text_width   = tk.Label(self.canvas, text = "Width:", bg = "Gray")
+			self.entry_width  = tk.Entry(self.canvas, bg = "Gray", disabledbackground = "Gray49")
 			self.text_height  = tk.Label(self.canvas, text = "Height:", bg = "Gray")
 			self.entry_height = tk.Entry(self.canvas, bg = "Gray49", disabledbackground = "Gray49")
-
-			self.text_path  = tk.Label(self.canvas, text = "Path:", bg = "Gray")
-			self.entry_path = tk.Entry(self.canvas, bg = "Gray49", disabledbackground = "Gray49")
+			self.text_path    = tk.Label(self.canvas, text = "Path:", bg = "Gray")
+			self.entry_path   = tk.Entry(self.canvas, bg = "Gray49", disabledbackground = "Gray49")
 
 			self.canvas.place(x = 10, y = self.about_frame.winfo_height() - 25)
 		except:
@@ -563,10 +557,11 @@ class sprite_options(object):
 			raise
 		return None
 
-	def show(self, selected, ref = None, up = None):
+	def show(self, sprites, selected, ref = None, up = None):
 		try:
 			if up:
 				try:
+					self.sprites  = sprites
 					self.selected = selected
 					self.tag      = self.sprites[self.selected].tag
 					self.path     = self.sprites[self.selected].path

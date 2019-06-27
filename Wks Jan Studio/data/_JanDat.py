@@ -42,7 +42,7 @@ class DAT:
 
 			self.Tick_Fps = pygame.time.Clock()
 
-			while (self.JanRun):
+			while self.JanRun:
 				self.JanPygame.fill((self.JanBackgroundColorPygame))
 				self.background_(JanDecode.JAN_IMAGE_DECODE_ALPHA)
 				
@@ -78,6 +78,7 @@ class DAT:
 							elif self.selected != None:
 								self.sprites[self.selected].selected = False
 								self.selected                        = selected_now
+
 								self.sprites[self.selected].selected = True
 								self.some_selected                   = True
 
@@ -96,20 +97,23 @@ class DAT:
 							elif self.selected != None:
 								self.sprites[self.selected].selected = False
 								self.selected                        = selected_now
+
 								self.sprites[self.selected].selected = True
 								self.some_selected                   = True
 
 						else:
 							if self.selected is None:
 								self.bool_tool_tree = False
-								self.some_selected  = False
-								self.selected       = None
+
+								self.some_selected = False
+								self.selected      = None
 
 							elif self.selected != None:
 								self.sprites[self.selected].selected = False
 								self.bool_tool_tree                  = False
-								self.some_selected                   = False
-								self.selected                        = None
+
+								self.some_selected = False
+								self.selected      = None
 				except:
 					pass
 
@@ -296,7 +300,7 @@ class DAT:
 
 			self.x_main, self.y_main = JanMath.Sync_Resolution_Pos(self.JanWin.get_master())
 
-			self.JanSpriteOptions.show(self.selected, ref = self.ref_sprite, up = self.bool_tool_tree)
+			self.JanSpriteOptions.show(self.sprites, self.selected, ref = self.ref_sprite, up = self.bool_tool_tree)
 
 			try:
 				self.JanStatus.set_text("{} {}{} {} {} {} {}".format(

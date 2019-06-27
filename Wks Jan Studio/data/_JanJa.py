@@ -100,21 +100,21 @@ class load_type(object):
 			import base64
 			import io
 
-			self.project    = project
-			self.master     = master
-			self.move       = False
-			self.resize     = False
-			self.rotate     = False
-			self.rendering  = True
-			self.selected   = False
-			self.state      = state
-			self.base64     = base64
-			self.cam_x      = cam_x
-			self.cam_y      = cam_y
-			self.x          = 0
-			self.y          = 0
-			self.w          = 0
-			self.h          = 0
+			self.project   = project
+			self.master    = master
+			self.move      = False
+			self.resize    = False
+			self.rotate    = False
+			self.rendering = True
+			self.selected  = False
+			self.state     = state
+			self.base64    = base64
+			self.cam_x     = cam_x
+			self.cam_y     = cam_y
+			self.x         = 0
+			self.y         = 0
+			self.w         = 0
+			self.h         = 0
 
 			if self.project[1] is "load":
 				self.path      = path
