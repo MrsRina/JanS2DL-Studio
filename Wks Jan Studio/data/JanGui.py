@@ -466,7 +466,21 @@ class sprite_options(object):
 			self.text_path    = tk.Label(self.canvas, text = "Path:", bg = "Gray")
 			self.entry_path   = tk.Entry(self.canvas, bg = "Gray49", disabledbackground = "Gray49")
 
-			self.canvas.place(x = 10, y = self.about_frame.winfo_height() - 25)
+			self.widgets = [
+			self.canvas,
+			self.text_tag,
+			self.entry_tag,
+			self.text_xpos,
+			self.entry_xpos,
+			self.text_ypos,
+			self.entry_ypos,
+			self.text_width,
+			self.entry_width,
+			self.text_height,
+			self.entry_height,
+			self.text_path,
+			self.entry_path
+			]
 		except:
 			raise
 		return None
@@ -589,7 +603,8 @@ class sprite_options(object):
 			else:
 				self.ds_all("disabled", "Leave")
 
-				self.canvas.place_forget()
+				for widget in self.widgets:
+					widget.place_forget()
 		except:
 			raise
 		return None
