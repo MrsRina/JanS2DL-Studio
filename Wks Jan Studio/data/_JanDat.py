@@ -625,7 +625,7 @@ class DAT:
 	
 				del self.sprites[old]
 	
-				self.selected = self.sprites[replace].tag
+				self.selected = replace
 
 				self.tool_tree.insert(
 				self.tool_tree_sprites if self.sprites[self.selected].type is "Sprites" else self.tool_tree_objects,
@@ -795,13 +795,13 @@ if __name__ is "__main__":
 	JanGui.start_(replace_folder("/_JanJa.py", "/splash/logo_00.png"), DAT, hardware_res, JanMath,
 
 json    = JAN_ENGINE_engine,
-version = "Alpha 0.2.1"
+version = "Alpha 0.2.2"
 )
 
 else:
 	JanGui.start_(replace_folder("/_JanJa.py", "/splash/logo_00.png"), DAT, hardware_res, JanMath,
 
 json    = JAN_ENGINE_engine,
-version = "Alpha 0.2.1"
+version = "Alpha 0.2.2"
 
 )

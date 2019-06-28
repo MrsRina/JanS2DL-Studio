@@ -452,7 +452,7 @@ class sprite_options(object):
 			self.w = 0
 			self.h = 0
 
-			self.canvas       = tk.Canvas(self.master, width = self.master.winfo_width() - 5, height = self.master.winfo_height() - 66, bg = "Gray")
+			self.canvas       = tk.Canvas(self.master, width = self.master.winfo_width() - 5, height = self.master.winfo_height() - 66, bd = 1, bg = "Gray")
 			self.text_tag     = tk.Label(self.canvas, text = self.tag, bg = "Gray")
 			self.entry_tag    = tk.Entry(self.canvas, bg = "Gray49", disabledbackground = "Gray49")
 			self.text_xpos    = tk.Label(self.canvas, text = "X:", bg = "Gray")
@@ -586,14 +586,14 @@ class sprite_options(object):
 					self.h = self.sprites[self.selected].h
 
 					self.function = ref
-	
-					self.canvas.config(width = self.master.winfo_width() - 29, height = self.master.winfo_height() - 66)
-					self.canvas.place(x = 10, y = self.about_frame.winfo_height() + 25)
-
-					self.canvas.bind("<Button-1>", lambda x: self.ds_all("disabled", "Save"))
 
 					self.canvas.update()
 					self.master.update()
+	
+					self.canvas.place(x = 10, y = self.about_frame.winfo_height() + 25)
+					self.canvas.place(width = self.master.winfo_width() - 25, height = self.master.winfo_screenheight() - 487)
+
+					self.canvas.bind("<Button-1>", lambda x: self.ds_all("disabled", "Save"))
 
 					self._tag()
 					self._path()
