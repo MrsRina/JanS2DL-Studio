@@ -3,7 +3,7 @@ from JanPort import JanCompiler, JanConsoleText, JanDecode
 
 int_engine = lambda _int: int(JAN_ENGINE_engine.get(_int))
 
-class DAT:
+class DAT(object):
 	def __init__(self):
 		try:
 			self.JanWin = JanGui.create_window(int_engine("Width"), int_engine("Height"), "JanS2DL-Studio", "Gray",
@@ -40,11 +40,12 @@ class DAT:
 
 			self.create_frame(self.JanContainer.get_id())
 
-			self.Tick_Fps = pygame.time.Clock()
+			self.clock = pygame.time.Clock()
 
 			while self.JanRun:
 				self.JanPygame.fill((self.JanBackgroundColorPygame))
 				self.background_(JanDecode.JAN_IMAGE_DECODE_ALPHA)
+				self.clock.tick(120)
 				
 				for event_ in pygame.event.get():
 					self.events_sprite(event_)
@@ -118,6 +119,8 @@ class DAT:
 					pass
 
 			self.tool_tree.bind("<<TreeviewSelect>>", selected_some_tree)
+
+			self.JanWin.get_master().update()
 		except:
 			raise
 		return None
@@ -500,8 +503,14 @@ class DAT:
 							self.selected = None
 
 					self.console_print(JanConsoleText.print_load_project(self.project.json))
+
+					pygame.display.update()
+					self.JanWin.get_master().update()
 				except:
 					self.console_print("This file corrupted or old version ... \n{}".format(find))
+					
+					pygame.display.update()
+					self.JanWin.get_master().update()
 		except:
 			raise
 		return None
@@ -608,22 +617,26 @@ class DAT:
 			self.sprites = {}
 
 			self.console_print("Work cleaned")
+
+			pygame.display.update()
+			self.JanWin.get_master().update()
 		except:
 			raise
 		return None
 
 	def ref_sprite(self, old = None, replace = None):
 		try:
-			if old is replace:
+			if old == replace:
 				pass
 
 			else:
 				self.tool_tree.delete("Class {} {}".format(self.sprites[old].type, self.sprites[old].tag))
 
-				self.sprites[old].tag = replace
 				self.sprites[replace] = self.sprites[old]
 	
 				del self.sprites[old]
+
+				self.sprites[replace].tag = replace
 	
 				self.selected = replace
 
@@ -633,6 +646,9 @@ class DAT:
 				"Class {} {}".format(self.sprites[self.selected].type, self.sprites[self.selected].tag),
 				text = self.sprites[self.selected].tag,
 				open = True)
+
+				pygame.display.update()
+				self.JanWin.get_master().update()
 		except:
 			raise
 		return None
@@ -647,6 +663,9 @@ class DAT:
 			self.JanPygame = pygame.display.set_mode((id.winfo_screenwidth(), id.winfo_screenheight()), pygame.DOUBLEBUF)
 
 			self.JanEditorStatus = JanGui.create_status(id, (self.camera_x, self.camera_y))
+
+			pygame.display.update()
+			self.JanWin.get_master().update()
 		except:
 			raise
 		return None
@@ -791,15 +810,7 @@ class DAT:
 			raise
 		return None
 
-if __name__ is "__main__":
-	JanGui.start_(replace_folder("/_JanJa.py", "/splash/logo_00.png"), DAT, hardware_res, JanMath,
-
-json    = JAN_ENGINE_engine,
-version = "Alpha 0.2.2"
-)
-
-else:
-	JanGui.start_(replace_folder("/_JanJa.py", "/splash/logo_00.png"), DAT, hardware_res, JanMath,
+JanGui.start_(replace_folder("/_JanJa.py", "/splash/logo_00.png"), DAT, hardware_res, JanMath,
 
 json    = JAN_ENGINE_engine,
 version = "Alpha 0.2.2"

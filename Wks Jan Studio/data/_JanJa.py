@@ -88,10 +88,6 @@ def replace(variable, to, new):
 		raise
 	return None
 
-import _thread
-
-start_thread = lambda x: _thread.start_new_thread(x, None)
-
 JAN_ENGINE_engine = load(replace_folder("data/_JanJa.py", "JanConfig.json"))
 
 class load_type(object): 
