@@ -127,6 +127,7 @@ class create_window(object):
 			self.style.theme_use("clam")
 
 			self.style.configure("Treeview", background = "Gray", fieldbackground = "Gray")
+			self.style.configure("gray.TButton", background = "Gray")
 
 			self.window.update()
 		except:
@@ -642,6 +643,75 @@ class frame_debug_tools(object):
 			self.frame = tk.Frame(self.master, width = master.winfo_screenwidth(), height = 200, bg = "Gray")
 
 			self.frame.place(x = self.left_widget.winfo_width() + 5, y = self.master.winfo_height() - 200)
+
+			self.master.update()
+		except:
+			raise
+		return None
+
+	def rect(self, type, widget):
+		try:
+			if type is "x":
+				return widget.winfo_x() + widget.winfo_width()
+			else:
+				return widget.winfo_y() + widget.winfo_height()
+		except:
+			raise
+		return None
+
+	def pass_color(self, widget):
+		try:
+			def color_pass(event): widget.configure(background = "Gray")
+			def color_norm(event): widget.configure(background = "Gray")
+
+			widget.bind("<Enter>", color_pass)
+			widget.bind("<Leave>", color_norm)
+		except:
+			raise
+		return None
+
+	def set_state(self, button, state):
+		try:
+			if button is "play":
+				if state is "normal":
+					self.pause.configure(state = "disabled")
+
+				self.play.configure(state = state)
+
+			elif button is "pause":
+				if state is "normal":
+					self.play.configure(state = "disabled")
+
+				self.pause.configure(state = state)
+		except:
+			raise
+		return None
+
+	def create_debug_buttons(self, path_icone_00, path_icone_01, path_icone_02):
+		try:
+			image_icone_00 = tk.PhotoImage(file = path_icone_00)
+			icone_00       = tk.Label(image = image_icone_00)
+			icone_00.photo = image_icone_00
+
+			image_icone_01 = tk.PhotoImage(file = path_icone_01)
+			icone_01       = tk.Label(image = image_icone_01)
+			icone_01.photo = image_icone_01
+
+			image_icone_02 = tk.PhotoImage(file = path_icone_02)
+			icone_02       = tk.Label(image = image_icone_02)
+			icone_02.photo = image_icone_02
+
+			self.play   = tk.Button(self.frame, image = icone_00.photo, bg = "Gray")
+			self.pause  = tk.Button(self.frame, image = icone_01.photo, bg = "Gray")
+			self.config = tk.Button(self.frame, image = icone_02.photo, bg = "Gray")
+
+			self.pass_color(self.play)
+			self.pass_color(self.pause)
+			self.pass_color(self.config)
+
+			self.play.place(x = 10, y = 10)
+			self.pause.place(x = self.rect("x", self.play) + 55, y = 10)
+			self.config.place(x = self.rect("x", self.pause) + 100, y = 10)
 		except:
 			raise
 		return None
@@ -671,7 +741,7 @@ class console_debug(object):
 
 	def up(self):
 		try:
-			self.console.place(x = 150, y = 10, width = self.master_.winfo_width() - self.master.winfo_x() - 165, height = self.master_.winfo_height() - self.master.winfo_y() - 50)
+			self.console.place(x = 160, y = 10, width = self.master_.winfo_width() - self.master.winfo_x() - 165, height = self.master_.winfo_height() - self.master.winfo_y() - 50)
 		except:
 			raise
 		return None

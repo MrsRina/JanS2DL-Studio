@@ -45,7 +45,6 @@ class DAT(object):
 			while self.JanRun:
 				self.JanPygame.fill((self.JanBackgroundColorPygame))
 				self.background_(JanDecode.JAN_IMAGE_DECODE_ALPHA)
-				self.clock.tick(120)
 				
 				for event_ in pygame.event.get():
 					self.events_sprite(event_)
@@ -764,6 +763,15 @@ class DAT(object):
 			self.tool_tree_cameras = self.JanTree.cameras
 
 			self.JanSpriteOptions = JanGui.sprite_options(self.JanWin.window, self.JanFrameTools, self.sprites, self.selected, self.tool_tree)
+
+			self.JanDebugTools.create_debug_buttons(
+				replace_folder("/_JanJa.py", "/splash/icone_debug_00.png"),
+				replace_folder("/_JanJa.py", "/splash/icone_debug_01.png"),
+				replace_folder("/_JanJa.py", "/splash/icone_debug_02.png"))
+
+			self.debug_state = self.JanDebugTools.set_state
+
+			self.debug_state("play", "normal")
 
 			self.JanConsoleDebug = JanGui.console_debug(self.JanDebugTools.frame, self.JanWin.get_master())
 
