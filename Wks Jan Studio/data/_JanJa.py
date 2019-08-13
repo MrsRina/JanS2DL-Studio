@@ -118,7 +118,7 @@ class load_type(object):
 				self.img_path  = io.BytesIO(base64.b64decode(self.img_data))
 				self.type      = type
 				self.tag       = tag
-				self.extension = os.path .splitext(os.path.basename(self.path))[1]
+				self.extension = os.path.splitext(os.path.basename(self.path))[1]
 				self.img       = pygame.image.load(self.img_path)
 				self.x         = self.img.get_rect().x
 				self.y         = self.img.get_rect().y
@@ -136,7 +136,7 @@ class load_type(object):
 				self.do("project_load")
 
 				self.img_path = io.BytesIO(base64.b64decode(self.img_data))
-				self.img      = self.img = pygame.transform.scale(pygame.image.load(self.img_path), 
+				self.img      = pygame.transform.scale(pygame.image.load(self.img_path), 
 				(self.project[0].json[self.json_class][self.json_name]["Width"], self.project[0].json[self.json_class][self.json_name]["Height"]))
 				
 				self.x = self.project[0].json[self.json_class][self.json_name]["X"]
