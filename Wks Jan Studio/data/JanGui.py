@@ -573,7 +573,7 @@ class sprite_options(object):
 			raise
 		return None
 
-	def _wx(self):
+	def _xywh(self):
 		try:
 			self.text_xpos.place(x = 10, y = self.rect("y", self.entry_path))
 
@@ -594,6 +594,20 @@ class sprite_options(object):
 			raise
 		return None
 
+	def write(self):
+		try:
+			if not self.bool_entry_tag:
+				pass
+
+			if not self.bool_entry_xpos:
+				pass
+
+			if not self.bool_entry_ypos:
+				pass
+		except:
+			raise
+		return None
+
 	def show(self, sprites, selected, ref = None, up = None):
 		try:
 			if up:
@@ -608,6 +622,11 @@ class sprite_options(object):
 				self.w = self.sprites[self.selected].w
 				self.h = self.sprites[self.selected].h
 
+				self.var_tag  = tk.StringVar()
+
+				self.var_xpos = tk.IntVar()
+				self.var_ypos = tk.IntVar()
+
 				self.function = ref
 
 				self.master.update()
@@ -619,7 +638,7 @@ class sprite_options(object):
 
 				self._tag()
 				self._path()
-				self._wx()
+				self._xywh()
 			else:
 				self.ds_all("disabled", "Leave")
 

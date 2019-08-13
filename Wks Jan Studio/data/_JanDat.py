@@ -49,7 +49,8 @@ class DAT(object):
 				for event_ in pygame.event.get():
 					self.events_sprite(event_)
 					self.dynamic_popup(event_)
-
+				
+				self.events_whiles("Write")
 				self.up_events()
 
 				self.refresh()
@@ -776,6 +777,13 @@ class DAT(object):
 			self.JanConsoleDebug = JanGui.console_debug(self.JanDebugTools.frame, self.JanWin.get_master())
 
 			self.console_print("WKs Jan Studio")
+		except:
+			raise
+		return None
+
+	def events_whiles(self, tag):
+		try:
+			return self.JanSpriteOptions.write()
 		except:
 			raise
 		return None
