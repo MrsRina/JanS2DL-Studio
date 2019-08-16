@@ -64,7 +64,7 @@ class start_(object):
 			self.loading["maximum"] = 200
 			
 			run = True
-			while (run):
+			while run:
 				self.load_number += 0.1
 				self.loading["value"] = self.load_number
 
@@ -77,7 +77,7 @@ class start_(object):
 					except:
 						raise
 
-					self.progress_text.configure(text = "Python ...")
+					self.progress_text.configure(text = "Python...")
 
 				if self.load_number >= 75:
 					try:
@@ -85,7 +85,7 @@ class start_(object):
 					except:
 						raise
 
-					self.progress_text.configure(text = "Tkinter ...")
+					self.progress_text.configure(text = "Tkinter...")
 
 				if self.load_number >= 100:
 					try:
@@ -507,12 +507,44 @@ class sprite_options(object):
 			raise
 		return None
 
-	def handler_entry(self, state, widget):
+	def handler_entry(self, state, widget, type):
 		try:
 			self.master.update()
 
-			if widget is self.entry_tag:
-				self.bool_entry_tag = False
+			if type is "tag":
+				self.bool_entry_tag    = False
+				self.bool_entry_xpos   = True
+				self.bool_entry_ypos   = True
+				self.bool_entry_width  = True
+				self.bool_entry_height = True
+
+			elif type is "xpos":
+				self.bool_entry_tag    = True
+				self.bool_entry_xpos   = False
+				self.bool_entry_ypos   = True
+				self.bool_entry_width  = True
+				self.bool_entry_height = True
+
+			elif type is "ypos":
+				self.bool_entry_tag    = True
+				self.bool_entry_xpos   = True
+				self.bool_entry_ypos   = False
+				self.bool_entry_width  = True
+				self.bool_entry_height = True
+
+			elif type is "width":
+				self.bool_entry_tag    = True
+				self.bool_entry_xpos   = True
+				self.bool_entry_ypos   = True
+				self.bool_entry_width  = False
+				self.bool_entry_height = True
+
+			elif type is "height":
+				self.bool_entry_tag    = True
+				self.bool_entry_xpos   = True
+				self.bool_entry_ypos   = True
+				self.bool_entry_width  = True
+				self.bool_entry_height = False
 
 			widget.config(state = state)
 			widget.bind("<Return>", lambda x: self.ds_all("disabled", "Save"))
@@ -523,17 +555,18 @@ class sprite_options(object):
 	def ds_all(self, state, final):
 		try:
 			if self.bool_entry_tag is False:
-				self.handler_entry(state, self.entry_tag)
+				self.thread.thread_tick = 1
+				self.handler_entry(state, self.entry_tag, "tag")
 				
 				if final is "Save":
 					self.function(old = self.tag, replace = self.entry_tag.get())
 					self.bool_entry_tag = True
 
 				else:
-					self.handler_entry("normal", self.entry_tag)
+					self.handler_entry("normal", self.entry_tag, "tag")
 					self.entry_tag.delete(0, tk.END)
 					self.entry_tag.insert(0, self.tag)
-					self.handler_entry("disabled", self.entry_tag)
+					self.handler_entry("disabled", self.entry_tag, "tag")
 					self.bool_entry_tag = True
 
 				self.master.update()
@@ -545,7 +578,7 @@ class sprite_options(object):
 		try:
 			self.master.update()
 
-			self.entry_tag.bind("<Double-Button-1>", lambda x: self.handler_entry("normal", self.entry_tag))
+			self.entry_tag.bind("<Double-Button-1>", lambda x: self.handler_entry("normal", self.entry_tag, "tag"))
 
 			self.text_tag.config(text = self.tag)
 			self.text_tag.place(x = 10,  y = 10)
@@ -555,6 +588,9 @@ class sprite_options(object):
 			if self.bool_entry_tag:
 				self.set(self.entry_tag, self.tag)
 				self.entry_tag.config(state = "disabled")
+
+			else:
+				self.thread.thread_tick = 1000
 		except:
 			raise
 		return None
@@ -576,6 +612,7 @@ class sprite_options(object):
 	def _xywh(self):
 		try:
 			self.text_xpos.place(x = 10, y = self.rect("y", self.entry_path))
+			self.text_xpos.bind("<Double-Button-1>", lambda x: self.handler_entry("normal", self.text_xpos, "xpos"))
 
 			if self.bool_entry_xpos:
 				self.entry_xpos.place(x = 10, y = self.rect("y", self.text_xpos), width = self.canvas.winfo_width()/2 - 10)
@@ -594,23 +631,26 @@ class sprite_options(object):
 			raise
 		return None
 
-	def write(self):
+	def normalize_thread(self, thread = None):
 		try:
-			if not self.bool_entry_tag:
-				pass
+			if thread is None:
+				self.thread.thread_tick = 1
+			else:
+				thread.thread_tick = 1
 
-			if not self.bool_entry_xpos:
-				pass
-
-			if not self.bool_entry_ypos:
-				pass
+			self.bool_entry_tag    = True
+			self.bool_entry_xpos   = True
+			self.bool_entry_ypos   = True
+			self.bool_entry_width  = True
+			self.bool_entry_height = True
 		except:
 			raise
 		return None
 
-	def show(self, sprites, selected, ref = None, up = None):
+	def show(self, sprites, selected, thread, ref = None, up = None):
 		try:
 			if up:
+				self.thread   = thread
 				self.already  = True
 				self.sprites  = sprites
 				self.selected = selected
@@ -622,19 +662,13 @@ class sprite_options(object):
 				self.w = self.sprites[self.selected].w
 				self.h = self.sprites[self.selected].h
 
-				self.var_tag  = tk.StringVar()
-
-				self.var_xpos = tk.IntVar()
-				self.var_ypos = tk.IntVar()
-
 				self.function = ref
 
 				self.master.update()
 	
 				self.canvas.place(x = 10, y = self.about_frame.winfo_height() + 25)
 				self.canvas.place(width = self.master.winfo_width() - 25, height = self.master.winfo_screenheight() - 487)
-
-				self.canvas.bind("<Button-1>", lambda x: self.ds_all("disabled", "Save"))
+				self.canvas.bind("<Button-1>", self.normalize_thread)
 
 				self._tag()
 				self._path()
@@ -645,6 +679,7 @@ class sprite_options(object):
 				if self.already:
 					self.canvas.place_forget()
 
+				self.normalize_thread(thread)
 				self.master.update()
 		except:
 			raise

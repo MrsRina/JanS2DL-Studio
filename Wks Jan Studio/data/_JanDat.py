@@ -10,9 +10,9 @@ class DAT(object):
 				r"{}".format(replace_folder("/_JanJa.py", "/icone.ico")))
 
 			self.bool_click     = 0
-			self.tread_load     = False
 			self.some_selected  = False
 			self.bool_tool_tree = False
+			self.thread_tick    = 1
 
 			self.selected_pos_sprites = None
 			self.selected_tree_view   = None
@@ -42,19 +42,26 @@ class DAT(object):
 
 			self.clock = pygame.time.Clock()
 
-			while self.JanRun:
-				self.JanPygame.fill((self.JanBackgroundColorPygame))
-				self.background_(JanDecode.JAN_IMAGE_DECODE_ALPHA)
-				
-				for event_ in pygame.event.get():
-					self.events_sprite(event_)
-					self.dynamic_popup(event_)
-				
-				self.events_whiles("Write")
-				self.up_events()
+			self.whiling()
 
-				self.refresh()
-				self.window_loop()
+			self.window_loop()
+		except:
+			raise
+		return None
+
+	def whiling(self):
+		try:
+			self.JanPygame.fill((self.JanBackgroundColorPygame))
+			self.background_(JanDecode.JAN_IMAGE_DECODE_ALPHA)
+				
+			for event_ in pygame.event.get():
+				self.events_sprite(event_)
+				self.dynamic_popup(event_)
+				
+			self.up_events()
+			self.refresh()
+
+			pygame.display.flip(); self.JanWin.get_master().after(self.thread_tick, self.whiling) # loop
 		except:
 			raise
 		return None
@@ -75,6 +82,8 @@ class DAT(object):
 								self.sprites[self.selected].selected = True
 
 								self.some_selected = True
+
+								self.thread_tick = 1
 
 							elif self.selected != None:
 								self.sprites[self.selected].selected = False
@@ -185,6 +194,7 @@ class DAT(object):
 							if self.sprites[self.selected].selected:
 								if self.sprites[self.selected].rect.collidepoint(event.pos):
 									self.sprites[self.selected].move = True
+									self.JanSpriteOptions.normalize_thread()
 
 								elif not self.sprites[self.selected].rect.collidepoint(event.pos):
 									if self.selected != None:
@@ -292,6 +302,8 @@ class DAT(object):
 			self.events_select_tree()
 			self.poop_up()
 
+			self.set_title("JanS2DL-Studio {ticks}".format(ticks = self.thread_tick))
+
 			self.JanContainer.container.configure(width = self.JanWin.get("Width"), height = self.JanWin.get("Height"))
 			self.JanTree.up(self.bool_tool_tree)
 			self.JanConsoleDebug.up()
@@ -303,22 +315,23 @@ class DAT(object):
 
 			self.x_main, self.y_main = JanMath.Sync_Resolution_Pos(self.JanWin.get_master())
 
-			self.JanSpriteOptions.show(self.sprites, self.selected, ref = self.ref_sprite, up = self.bool_tool_tree)
+			self.JanSpriteOptions.show(self.sprites, self.selected, self, ref = self.ref_sprite, up = self.bool_tool_tree)
 
 			try:
-				self.JanStatus.set_text("{} {}{} {} {} {} {}".format(
-					"" if self.project is None else self.project.local,
-					"" if self.selected is None else self.selected,
-					pygame.mouse.get_pos() if self.selected is None else " ",
-					"" if self.selected is None else self.sprites[self.selected].x,
-					"" if self.selected is None else self.sprites[self.selected].y,
-					"" if self.selected is None else self.sprites[self.selected].w,
-					"" if self.selected is None else self.sprites[self.selected].h)
+				self.JanStatus.set_text("{project} {selected}{mouse_pos} {selected_x} {selected_y} {selected_w} {selected_h}".format(
+					project    = "" if self.project is None else self.project.local,
+					selected   = "" if self.selected is None else self.selected,
+					mouse_pos  = pygame.mouse.get_pos() if self.selected is None else " ",
+					selected_x = "" if self.selected is None else self.sprites[self.selected].x,
+					selected_y = "" if self.selected is None else self.sprites[self.selected].y,
+					selected_w = "" if self.selected is None else self.sprites[self.selected].w,
+					selected_h = "" if self.selected is None else self.sprites[self.selected].h)
 				)
 
-				self.JanEditorStatus.set_text("{} x {}".format(
-					self.camera_x, self.camera_y
-					))
+				self.JanEditorStatus.set_text("{x} x {y}".format(
+					x = self.camera_x,
+					y = self.camera_y)
+				)
 			except:
 				pass
 
@@ -728,6 +741,12 @@ class DAT(object):
 			raise
 		return None
 
+	def set_title(self, title):
+		try:
+			return self.JanWin.get_master().title(title)
+		except:
+			raise
+		return None
 	def create_widget(self):
 		try:
 			self.JanFrameTools = JanGui.create_frame_tools(self.JanWin.get_master())
@@ -781,13 +800,6 @@ class DAT(object):
 			raise
 		return None
 
-	def events_whiles(self, tag):
-		try:
-			return self.JanSpriteOptions.write()
-		except:
-			raise
-		return None
-
 	def console_print(self, item):
 		try:
 			return self.JanConsoleDebug.ENGINE_PROCESS_PRINT_FROM_CONSOLE(item)
@@ -819,9 +831,7 @@ class DAT(object):
 	def window_loop(self):
 		try:
 			self.JanWin.get_master().protocol("WM_DELETE_WINDOW", self.close)
-
-			pygame.display.flip()
-			self.JanWin.get_master().update()
+			self.JanWin.get_master().mainloop()
 		except:
 			raise
 		return None
