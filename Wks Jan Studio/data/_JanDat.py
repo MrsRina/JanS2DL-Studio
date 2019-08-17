@@ -206,9 +206,9 @@ class DAT(object):
 
 										self.JanSpriteOptions.up = False
 
-										self.bool_tool_tree  = False
-										self.selected        = None
-										self.some_selected   = False
+										self.bool_tool_tree = False
+										self.selected       = None
+										self.some_selected  = False
 
 										self.JanWin.get_master().update()
 
@@ -218,9 +218,9 @@ class DAT(object):
 
 										self.JanSpriteOptions.up = False
 
-										self.bool_tool_tree  = False
-										self.selected        = None
-										self.some_selected   = False
+										self.bool_tool_tree = False
+										self.selected       = None
+										self.some_selected  = False
 
 										self.JanWin.get_master().update()
 						except:
@@ -230,6 +230,7 @@ class DAT(object):
 						try:
 							if self.sprites[self.selected].selected:
 								self.sprites[self.selected].resize = True
+								self.JanSpriteOptions.normalize_thread()
 						except:
 							pass
 

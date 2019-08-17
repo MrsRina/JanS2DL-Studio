@@ -469,7 +469,7 @@ class sprite_options(object):
 
 			self.canvas       = tk.Canvas(self.master, width = self.master.winfo_width() - 5, height = self.master.winfo_height() - 66, bd = 1, bg = "Gray")
 			self.text_tag     = tk.Label(self.canvas, text = self.tag, bg = "Gray")
-			self.entry_tag    = tk.Entry(self.canvas, bg = "Gray49", disabledbackground = "Gray49")
+			self.entry_tag    = tk.Entry(self.canvas, bg = "Gray49", fg = "Black", disabledbackground = "Gray49")
 			self.text_xpos    = tk.Label(self.canvas, text = "X:", bg = "Gray")
 			self.entry_xpos   = tk.Entry(self.canvas, bg = "Gray49", disabledbackground = "Gray49")
 			self.text_ypos    = tk.Label(self.canvas, text = "Y:", bg = "Gray")
@@ -503,6 +503,17 @@ class sprite_options(object):
 			what.delete(0, tk.END)
 			what.insert(0, value)
 			what.config(state = "disabled")
+		except:
+			raise
+		return None
+
+	def any_letter(self, string):
+		try:
+			import re
+			if re.search(r"[a-zA-Z\d]", string):
+				return True
+			else:
+				return False
 		except:
 			raise
 		return None
@@ -555,23 +566,106 @@ class sprite_options(object):
 	def ds_all(self, state, final):
 		try:
 			if self.bool_entry_tag is False:
-				self.thread.thread_tick = 1
+				self.event_entry = "event_entry"
 				self.handler_entry(state, self.entry_tag, "tag")
 				
 				if final is "Save":
 					self.function(old = self.tag, replace = self.entry_tag.get())
 					self.bool_entry_tag = True
-
 				else:
 					self.handler_entry("normal", self.entry_tag, "tag")
 					self.entry_tag.delete(0, tk.END)
 					self.entry_tag.insert(0, self.tag)
 					self.handler_entry("disabled", self.entry_tag, "tag")
 					self.bool_entry_tag = True
+		
+			if self.bool_entry_xpos is False:
+				self.thread.thread_tick = 1
+				self.handler_entry(state, self.entry_xpos, "xpos")
+				
+				if final is "Save":
+					if not self.any_letter(self.entry_xpos.get()):
+						self.handler_entry("normal", self.entry_xpos, "xpos")
+						self.entry_xpos.delete(0, tk.END)
+						self.entry_xpos.insert(0, self.x)
+						self.handler_entry("disabled", self.entry_xpos, "xpos")
+						self.bool_entry_xpos = True
+					else:
+						self.sprites[self.selected].x = float(self.entry_xpos.get())
+						self.bool_entry_xpos = True
+				else:
+					self.handler_entry("normal", self.entry_xpos, "xpos")
+					self.entry_xpos.delete(0, tk.END)
+					self.entry_xpos.insert(0, self.x)
+					self.handler_entry("disabled", self.entry_xpos, "xpos")
+					self.bool_entry_xpos = True
+			
+			if self.bool_entry_ypos is False:
+				self.thread.thread_tick = 1
+				self.handler_entry(state, self.entry_ypos, "ypos")
+				
+				if final is "Save":
+					if not self.any_letter(self.entry_ypos.get()):
+						self.handler_entry("normal", self.entry_ypos, "ypos")
+						self.entry_ypos.delete(0, tk.END)
+						self.entry_ypos.insert(0, self.y)
+						self.handler_entry("disabled", self.entry_ypos, "ypos")
+						self.bool_entry_ypos = True
+					else:
+						self.sprites[self.selected].y = float(self.entry_ypos.get())
+						self.bool_entry_ypos = True
+				else:
+					self.handler_entry("normal", self.entry_ypos, "ypos")
+					self.entry_ypos.delete(0, tk.END)
+					self.entry_ypos.insert(0, self.y)
+					self.handler_entry("disabled", self.entry_ypos, "ypos")
+					self.bool_entry_ypos = True
 
-				self.master.update()
+			if self.bool_entry_width is False:
+				self.thread.thread_tick = 1
+				self.handler_entry(state, self.entry_tag, "width")
+				
+				if final is "Save":
+					if not self.any_letter(self.entry_width.get()):
+						self.handler_entry("normal", self.entry_width, "width")
+						self.entry_width.delete(0, tk.END)
+						self.entry_width.insert(0, self.w)
+						self.handler_entry("disabled", self.entry_width, "width")
+						self.bool_entry_width = True
+					else:
+						self.sprites[self.selected].w = float(self.entry_width.get())
+						self.bool_entry_width = True
+				else:
+					self.handler_entry("normal", self.entry_width, "width")
+					self.entry_width.delete(0, tk.END)
+					self.entry_width.insert(0, self.w)
+					self.handler_entry("disabled", self.entry_width, "width")
+					self.bool_entry_width = True
+
+			if self.bool_entry_height is False:
+				self.thread.thread_tick = 1
+				self.handler_entry(state, self.entry_tag, "height")
+				
+				if final is "Save":
+					if not self.any_letter(self.entry_height.get()):
+						self.handler_entry("normal", self.entry_height, "height")
+						self.entry_height.delete(0, tk.END)
+						self.entry_height.insert(0, self.h)
+						self.handler_entry("disabled", self.entry_height, "height")
+						self.bool_entry_height = True
+					else:
+						self.sprites[self.selected].h = float(self.entry_height.get())
+						self.bool_entry_height = True
+				else:
+					self.handler_entry("normal", self.entry_height, "height")
+					self.entry_height.delete(0, tk.END)
+					self.entry_height.insert(0, self.h)
+					self.handler_entry("disabled", self.entry_height, "height")
+					self.bool_entry_height = True
+
+			self.master.update()
 		except:
-			raise
+			pass
 		return None
 
 	def _tag(self):
@@ -588,9 +682,6 @@ class sprite_options(object):
 			if self.bool_entry_tag:
 				self.set(self.entry_tag, self.tag)
 				self.entry_tag.config(state = "disabled")
-
-			else:
-				self.thread.thread_tick = 1000
 		except:
 			raise
 		return None
@@ -611,16 +702,25 @@ class sprite_options(object):
 
 	def _xywh(self):
 		try:
+			self.master.update()
+
 			self.text_xpos.place(x = 10, y = self.rect("y", self.entry_path))
-			self.text_xpos.bind("<Double-Button-1>", lambda x: self.handler_entry("normal", self.text_xpos, "xpos"))
+			self.entry_xpos.bind("<Double-Button-1>", lambda x: self.handler_entry("normal", self.entry_xpos, "xpos"))
+			
+			self.entry_xpos.place(x = 10, y = self.rect("y", self.text_xpos), width = self.canvas.winfo_width()/2 - 10)
 
 			if self.bool_entry_xpos:
-				self.entry_xpos.place(x = 10, y = self.rect("y", self.text_xpos), width = self.canvas.winfo_width()/2 - 10)
+				self.set(self.entry_xpos, float(self.x))
+				self.entry_xpos.config(state = "disabled")
 
-			self.text_ypos.place(x = self.rect("x", self.entry_xpos), y = self.text_xpos.winfo_y())
+			self.entry_ypos.bind("<Double-Button-1>", lambda x: self.handler_entry("normal", self.entry_ypos, "ypos"))
+			self.entry_ypos.place(x = self.rect("x", self.entry_xpos), y = self.text_xpos.winfo_y())
+			
+			self.entry_ypos.place(x = self.rect("x", self.entry_xpos), y = self.entry_xpos.winfo_y(), width = self.canvas.winfo_width()/2 - 15)
 
 			if self.bool_entry_ypos:
-				self.entry_ypos.place(x = self.rect("x", self.entry_xpos), y = self.entry_xpos.winfo_y(), width = self.canvas.winfo_screenwidth() - 75)
+				self.set(self.entry_ypos, float(self.y))
+				self.entry_ypos.config(state = "disabled")
 
 			if self.bool_entry_width:
 				pass
@@ -657,18 +757,28 @@ class sprite_options(object):
 				self.tag      = self.sprites[self.selected].tag
 				self.path     = self.sprites[self.selected].path
 	
-				self.x = self.sprites[self.selected].x
-				self.y = self.sprites[self.selected].y
-				self.w = self.sprites[self.selected].w
-				self.h = self.sprites[self.selected].h
+				self.x = float(self.sprites[self.selected].x)
+				self.y = float(self.sprites[self.selected].y)
+				self.w = float(self.sprites[self.selected].w)
+				self.h = float(self.sprites[self.selected].h)
 
 				self.function = ref
 
 				self.master.update()
 	
 				self.canvas.place(x = 10, y = self.about_frame.winfo_height() + 25)
-				self.canvas.place(width = self.master.winfo_width() - 25, height = self.master.winfo_screenheight() - 487)
+				self.canvas.place(width = self.master.winfo_width() - 25, height = self.master.winfo_screenheight() - 480)
 				self.canvas.bind("<Button-1>", self.normalize_thread)
+
+				if self.bool_entry_tag is False or self.bool_entry_xpos is False \
+				or self.bool_entry_ypos is False or self.bool_entry_width is False \
+				or self.bool_entry_height is False:
+					if self.process is "event_entry":
+						self.thread.thread_tick = 1
+					else:
+						self.thread.thread_tick = 1000
+				else:
+					self.thread.thread_tick = 1
 
 				self._tag()
 				self._path()

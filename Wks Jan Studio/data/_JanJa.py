@@ -107,10 +107,10 @@ class load_type(object):
 			self.base64    = base64
 			self.cam_x     = cam_x
 			self.cam_y     = cam_y
-			self.x         = 0
-			self.y         = 0
-			self.w         = 0
-			self.h         = 0
+			self.x         = float(0)
+			self.y         = float(0)
+			self.w         = float(0)
+			self.h         = float(0)
 
 			if self.project[1] is "load":
 				self.path      = path
@@ -120,10 +120,10 @@ class load_type(object):
 				self.tag       = tag
 				self.extension = os.path.splitext(os.path.basename(self.path))[1]
 				self.img       = pygame.image.load(self.img_path)
-				self.x         = self.img.get_rect().x
-				self.y         = self.img.get_rect().y
-				self.w         = self.img.get_rect().w
-				self.h         = self.img.get_rect().h
+				self.x         = float(self.img.get_rect().x)
+				self.y         = float(self.img.get_rect().y)
+				self.w         = float(self.img.get_rect().w)
+				self.h         = float(self.img.get_rect().h)
 
 				self.do("load")
 
@@ -277,7 +277,10 @@ class load_type(object):
 				self.cam_x = cam_y
 				self.cam_y = cam_x
 
-				self.rect = pygame.rect.Rect((self.x - self.cam_x, self.y - self.cam_y), (self.w, self.h))
+				try:
+					self.rect = pygame.rect.Rect((float(self.x - self.cam_x), float(self.y - self.cam_y)), (float(self.w), float(self.h)))
+				except:
+					pass
 				self.master.blit(self.img, self.rect)
 
 				if self.selected:
