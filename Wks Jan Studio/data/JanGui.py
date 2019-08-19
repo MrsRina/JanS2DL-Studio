@@ -44,7 +44,7 @@ class start_(object):
 			credit = tk.Label(self.window, text = "Wks Jan Studio", font = "Arial 10", bg = "Gray")
 			credit.place(x = 10, y = 490)
 
-			programer = tk.Label(self.window, text = "Programer - Sr_Rina", font = "Arial 10", bg = "Gray")
+			programer = tk.Label(self.window, text = "Programmer - Sr_Rina", font = "Arial 10", bg = "Gray")
 			programer.place(x = 10, y = 510)
 
 			designer = tk.Label(self.window, text = "Designer - PEDRIN", font = "Arial 10", bg = "Gray")
@@ -69,19 +69,14 @@ class start_(object):
 				self.loading["value"] = self.load_number
 
 				if self.load_number >= 25:
-					self.progress_text.configure(text = "Checking file integrity ...")
+					self.progress_text.configure(text = "Checking file integrity...")
 
 				if self.load_number >= 50:
-					try:
-						pass
-					except:
-						raise
-
-					self.progress_text.configure(text = "Python...")
+					self.progress_text.configure(text = "Python %d..." % sys.version_info[1])
 
 				if self.load_number >= 75:
 					try:
-						import tkinter
+						from JanPort import tk
 					except:
 						raise
 
@@ -89,11 +84,11 @@ class start_(object):
 
 				if self.load_number >= 100:
 					try:
-						import pygame
+						from JanPort import pygame
 					except:
 						raise
 
-					self.progress_text.configure(text = "Pygame ...")
+					self.progress_text.configure(text = "Pygame...")
 
 				if self.load_number >= 125:
 					self.math.Sync_Resolution(self.json, self.hardware)
@@ -455,6 +450,8 @@ class sprite_options(object):
 			self.bool_entry_width  = True
 			self.bool_entry_height = True
 
+			self.event_entry = "not_event_entry"
+
 			self.tag  = None
 			self.path = None
 
@@ -509,11 +506,7 @@ class sprite_options(object):
 
 	def any_letter(self, string):
 		try:
-			import re
-			if re.search(r"[a-zA-Z\d]", string):
-				return True
-			else:
-				return False
+			return string.isdigit()
 		except:
 			raise
 		return None
@@ -566,7 +559,6 @@ class sprite_options(object):
 	def ds_all(self, state, final):
 		try:
 			if self.bool_entry_tag is False:
-				self.event_entry = "event_entry"
 				self.handler_entry(state, self.entry_tag, "tag")
 				
 				if final is "Save":
@@ -580,7 +572,6 @@ class sprite_options(object):
 					self.bool_entry_tag = True
 		
 			if self.bool_entry_xpos is False:
-				self.thread.thread_tick = 1
 				self.handler_entry(state, self.entry_xpos, "xpos")
 				
 				if final is "Save":
@@ -591,8 +582,8 @@ class sprite_options(object):
 						self.handler_entry("disabled", self.entry_xpos, "xpos")
 						self.bool_entry_xpos = True
 					else:
-						self.sprites[self.selected].x = float(self.entry_xpos.get())
-						self.bool_entry_xpos = True
+						self.sprites[self.selected].x = int(self.entry_xpos.get())
+						self.bool_entry_xpos          = True
 				else:
 					self.handler_entry("normal", self.entry_xpos, "xpos")
 					self.entry_xpos.delete(0, tk.END)
@@ -601,7 +592,6 @@ class sprite_options(object):
 					self.bool_entry_xpos = True
 			
 			if self.bool_entry_ypos is False:
-				self.thread.thread_tick = 1
 				self.handler_entry(state, self.entry_ypos, "ypos")
 				
 				if final is "Save":
@@ -612,8 +602,8 @@ class sprite_options(object):
 						self.handler_entry("disabled", self.entry_ypos, "ypos")
 						self.bool_entry_ypos = True
 					else:
-						self.sprites[self.selected].y = float(self.entry_ypos.get())
-						self.bool_entry_ypos = True
+						self.sprites[self.selected].y = int(self.entry_ypos.get())
+						self.bool_entry_ypos          = True
 				else:
 					self.handler_entry("normal", self.entry_ypos, "ypos")
 					self.entry_ypos.delete(0, tk.END)
@@ -622,7 +612,6 @@ class sprite_options(object):
 					self.bool_entry_ypos = True
 
 			if self.bool_entry_width is False:
-				self.thread.thread_tick = 1
 				self.handler_entry(state, self.entry_tag, "width")
 				
 				if final is "Save":
@@ -633,8 +622,8 @@ class sprite_options(object):
 						self.handler_entry("disabled", self.entry_width, "width")
 						self.bool_entry_width = True
 					else:
-						self.sprites[self.selected].w = float(self.entry_width.get())
-						self.bool_entry_width = True
+						self.sprites[self.selected].w = self.entry_width.get()
+						self.bool_entry_width         = True
 				else:
 					self.handler_entry("normal", self.entry_width, "width")
 					self.entry_width.delete(0, tk.END)
@@ -643,7 +632,6 @@ class sprite_options(object):
 					self.bool_entry_width = True
 
 			if self.bool_entry_height is False:
-				self.thread.thread_tick = 1
 				self.handler_entry(state, self.entry_tag, "height")
 				
 				if final is "Save":
@@ -654,8 +642,8 @@ class sprite_options(object):
 						self.handler_entry("disabled", self.entry_height, "height")
 						self.bool_entry_height = True
 					else:
-						self.sprites[self.selected].h = float(self.entry_height.get())
-						self.bool_entry_height = True
+						self.sprites[self.selected].h = self.entry_height.get()
+						self.bool_entry_height        = True
 				else:
 					self.handler_entry("normal", self.entry_height, "height")
 					self.entry_height.delete(0, tk.END)
@@ -710,7 +698,7 @@ class sprite_options(object):
 			self.entry_xpos.place(x = 10, y = self.rect("y", self.text_xpos), width = self.canvas.winfo_width()/2 - 10)
 
 			if self.bool_entry_xpos:
-				self.set(self.entry_xpos, float(self.x))
+				self.set(self.entry_xpos, self.x)
 				self.entry_xpos.config(state = "disabled")
 
 			self.entry_ypos.bind("<Double-Button-1>", lambda x: self.handler_entry("normal", self.entry_ypos, "ypos"))
@@ -719,7 +707,7 @@ class sprite_options(object):
 			self.entry_ypos.place(x = self.rect("x", self.entry_xpos), y = self.entry_xpos.winfo_y(), width = self.canvas.winfo_width()/2 - 15)
 
 			if self.bool_entry_ypos:
-				self.set(self.entry_ypos, float(self.y))
+				self.set(self.entry_ypos, self.y)
 				self.entry_ypos.config(state = "disabled")
 
 			if self.bool_entry_width:
@@ -757,26 +745,23 @@ class sprite_options(object):
 				self.tag      = self.sprites[self.selected].tag
 				self.path     = self.sprites[self.selected].path
 	
-				self.x = float(self.sprites[self.selected].x)
-				self.y = float(self.sprites[self.selected].y)
-				self.w = float(self.sprites[self.selected].w)
-				self.h = float(self.sprites[self.selected].h)
+				self.x = self.sprites[self.selected].x
+				self.y = self.sprites[self.selected].y
+				self.w = self.sprites[self.selected].w
+				self.h = self.sprites[self.selected].h
 
 				self.function = ref
 
 				self.master.update()
 	
 				self.canvas.place(x = 10, y = self.about_frame.winfo_height() + 25)
-				self.canvas.place(width = self.master.winfo_width() - 25, height = self.master.winfo_screenheight() - 480)
+				self.canvas.place(width = self.master.winfo_width() - 25, height = self.master.winfo_screenheight() - 470)
 				self.canvas.bind("<Button-1>", self.normalize_thread)
 
 				if self.bool_entry_tag is False or self.bool_entry_xpos is False \
 				or self.bool_entry_ypos is False or self.bool_entry_width is False \
 				or self.bool_entry_height is False:
-					if self.process is "event_entry":
-						self.thread.thread_tick = 1
-					else:
-						self.thread.thread_tick = 1000
+					self.thread.thread_tick = 1000
 				else:
 					self.thread.thread_tick = 1
 
@@ -890,6 +875,8 @@ class console_debug(object):
 			self.master.update()
 
 			self.console = tk.Text(self.master, bg = "Gray49", state = "disabled")
+			self.scroll  = tk.Scrollbar(self.console, command = self.console.yview, bg = "Gray49", activebackground = "Gray49")
+			self.scroll.pack(side = tk.RIGHT, fill = tk.Y)
 		except:
 			raise
 		return None
@@ -905,6 +892,7 @@ class console_debug(object):
 
 	def up(self):
 		try:
+			self.console.config(yscrollcommand = self.scroll.set)
 			self.console.place(x = 160, y = 10, width = self.master_.winfo_width() - self.master.winfo_x() - 165, height = self.master_.winfo_height() - self.master.winfo_y() - 50)
 		except:
 			raise
