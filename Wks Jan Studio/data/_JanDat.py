@@ -57,6 +57,8 @@ class DAT(object):
 			for event_ in pygame.event.get():
 				self.events_sprite(event_)
 				self.dynamic_popup(event_)
+
+			print(self.sprites)
 				
 			self.up_events()
 			self.refresh()
@@ -354,7 +356,7 @@ class DAT(object):
 					name     = self.cache_project_name.get(1.0, tk.INSERT),
 					camera   = (self.camera_x, self.camera_y),
 					comments = self.cache_project_comment.get(1.0, tk.INSERT),
-					version  = "1.3"
+					version  = "1.4"
 					)
 
 					self.new_folder_path = None
@@ -653,6 +655,8 @@ class DAT(object):
 				self.sprites[replace].tag = replace
 	
 				self.selected = replace
+
+				self.console_print(self.sprites[self.selected].type)
 
 				self.tool_tree.insert(
 				self.tool_tree_sprites if self.sprites[self.selected].type is "Sprites" else self.tool_tree_objects,

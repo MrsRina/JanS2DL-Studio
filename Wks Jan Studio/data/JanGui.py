@@ -701,8 +701,8 @@ class sprite_options(object):
 				self.set(self.entry_xpos, self.x)
 				self.entry_xpos.config(state = "disabled")
 
+			self.text_ypos.place(x = self.rect("x", self.entry_xpos), y = self.text_xpos.winfo_y())
 			self.entry_ypos.bind("<Double-Button-1>", lambda x: self.handler_entry("normal", self.entry_ypos, "ypos"))
-			self.entry_ypos.place(x = self.rect("x", self.entry_xpos), y = self.text_xpos.winfo_y())
 			
 			self.entry_ypos.place(x = self.rect("x", self.entry_xpos), y = self.entry_xpos.winfo_y(), width = self.canvas.winfo_width()/2 - 15)
 
@@ -894,7 +894,7 @@ class console_debug(object):
 		try:
 			self.console.config(yscrollcommand = self.scroll.set)
 			self.console.place(x = 160, y = 10, width = self.master_.winfo_width() - self.master.winfo_x() - 165, height = self.master_.winfo_height() - self.master.winfo_y() - 50)
-		except:
+		except: 
 			raise
 		return None
 
