@@ -762,6 +762,7 @@ class sprite_options(object):
 				or self.bool_entry_ypos is False or self.bool_entry_width is False \
 				or self.bool_entry_height is False:
 					self.thread.thread_tick = 1000
+
 				else:
 					self.thread.thread_tick = 1
 

@@ -57,8 +57,6 @@ class DAT(object):
 			for event_ in pygame.event.get():
 				self.events_sprite(event_)
 				self.dynamic_popup(event_)
-
-			print(self.sprites)
 				
 			self.up_events()
 			self.refresh()
@@ -486,9 +484,11 @@ class DAT(object):
 	
 					if len(self.project.json["Game Sprites"]) > 0:
 						find_sprites = list(self.project.json["Game Sprites"])
-	
+
 						for sprites in find_sprites:
 							self.selected = sprites.replace("Class Sprites ", "")
+							
+							self.console_print(self.selected)
 	
 							self.sprites[self.selected] = load_type([self.project, "project_load"], master = self.JanPygame, state = self,
 							tag = sprites.replace("Class Sprites ", ""), type = "Sprites", cam_x = self.camera_x, cam_y = self.camera_y)
@@ -522,6 +522,7 @@ class DAT(object):
 
 					pygame.display.update()
 					self.JanWin.get_master().update()
+
 				except:
 					self.console_print("This file corrupted or old version ... \n{}".format(find))
 					
@@ -645,7 +646,7 @@ class DAT(object):
 			if old == replace:
 				pass
 
-			else:
+			else:					
 				self.tool_tree.delete("Class {} {}".format(self.sprites[old].type, self.sprites[old].tag))
 
 				self.sprites[replace] = self.sprites[old]
@@ -653,10 +654,7 @@ class DAT(object):
 				del self.sprites[old]
 
 				self.sprites[replace].tag = replace
-	
-				self.selected = replace
-
-				self.console_print(self.sprites[self.selected].type)
+				self.selected             = replace
 
 				self.tool_tree.insert(
 				self.tool_tree_sprites if self.sprites[self.selected].type is "Sprites" else self.tool_tree_objects,
@@ -665,8 +663,11 @@ class DAT(object):
 				text = self.sprites[self.selected].tag,
 				open = True)
 
-				pygame.display.update()
-				self.JanWin.get_master().update()
+				if self.project is not None:
+					self.sprites[replace].do("replace", self.project, old)
+
+			pygame.display.update()
+			self.JanWin.get_master().update()
 		except:
 			raise
 		return None

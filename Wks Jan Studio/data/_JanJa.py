@@ -147,10 +147,11 @@ class load_type(object):
 			raise
 		return None
 
-	def do(self, type, project = None):
+	def do(self, type, project = None, change = None):
 		try:
 			if type is "delete":
-				self.do("delete_sprites_project")
+				self.project = [project]
+				self.do("delete_sprites_project", self.project)
 
 				self.json_name = None
 				self.path      = None
@@ -267,6 +268,15 @@ class load_type(object):
 				self.project[0].json[self.json_class][self.json_name]["Y"]      = self.y
 				self.project[0].json[self.json_class][self.json_name]["Path"]   = self.path
 				self.project[0].json[self.json_class][self.json_name]["Data"]   = self.img_data
+
+			elif type is "replace":
+				self.project    = [project]
+				self.json_name  = "Class {} {}".format(self.type, self.tag)
+				self.json_class = "Game {}".format(self.type)
+
+				self.project[0].json[self.json_class][self.json_name] = self.project[0].json["Game {}".format(self.type)]["Class {} {}".format(self.type, change)]
+
+				del self.project[0].json["Game {}".format(self.type)]["Class {} {}".format(self.type, change)]
 		except:
 			raise
 		return None
