@@ -14,6 +14,9 @@ from tkinter import messagebox
 from tkinter import filedialog
 from tkinter import ttk
 
+from tkinter import Tk as ThemedTk
+from ttkthemes import ThemedTk
+
 try:
 	_JanDat
 except:

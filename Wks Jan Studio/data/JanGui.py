@@ -10,12 +10,14 @@ class start_(object):
 			self.math        = math
 			self.ver         = version
 
-			self.window = tk.Tk()
+			self.window = ThemedTk()
 			self.window.overrideredirect(True)
 
 			self.window.configure(background = "Gray")
 
 			self.window.geometry("640x640+10+10")
+
+			self.window.set_theme("black")
 
 			self.image(image)
 			self.text()
@@ -111,18 +113,16 @@ class start_(object):
 class create_window(object):
 	def __init__(self, width, height, title, color, icon):
 		try:
-			self.window = tk.Tk()
+			self.window = ThemedTk()
 			self.window.geometry("{}x{}".format(width, height))
 			self.window.title(title)
-			
+
 			self.window.iconbitmap(icon)
 			self.window.configure(background = color)
 
-			self.style = ttk.Style()
-			self.style.theme_use("clam")
+			self.window.option_add("*TCombobox*Listbox*Background", "Gray49")
 
-			self.style.configure("Treeview", background = "Gray", fieldbackground = "Gray")
-			self.style.configure("gray.TButton", background = "Gray")
+			self.window.set_theme("black")
 
 			self.window.update()
 		except:
@@ -232,14 +232,14 @@ class create_menu(object):
 
 	def get(self, x):
 		try:
-			if (x) is ("Main"):
-				return (self.menu_file_tools)
+			if x is "Main":
+				return self.menu_file_tools
 
-			elif (x) is ("MainSprite"):
-				return (self.menu_selected_sprites)
+			elif x is "MainSprite":
+				return self.menu_selected_sprites
 
-			elif (x) is ("Events"):
-				return (self.menu_events)
+			elif x is "Events":
+				return self.menu_events
 		except:
 			raise
 		return None
@@ -247,12 +247,9 @@ class create_menu(object):
 class create_container(object):
 	def __init__(self, master, frame, tag):
 		try:
-			self.master = master
-
-			self.resize_height = tk.Frame(self.master, bg = "Gray49")
-
-			self.container = ttk.Notebook(self.master)
-
+			self.master               = master
+			self.resize_height        = tk.Frame(self.master, bg = "Gray49")
+			self.container            = ttk.Notebook(self.master)
 			self.frame_game_developer = tk.Frame(self.master, bg = "Gray")
 			self.frame_event_game     = tk.Frame(self.master, bg = "Gray")
 
@@ -260,7 +257,7 @@ class create_container(object):
 			self.container.add(self.frame_event_game, text = "Events")
 
 			self.resize_height.place(x = 405, y = 0, width = self.master.winfo_screenwidth() - 215)
-			self.container.place(x = 405, y = 0, height = self.master.winfo_screenheight() - 230)
+			self.container.place(x = 405, y = 10, width = self.master.winfo_screenwidth() - 10, height = self.master.winfo_screenheight() - 230)
 		except:
 			raise
 		return None
@@ -464,19 +461,27 @@ class sprite_options(object):
 
 			self.master.update()
 
-			self.canvas       = tk.Canvas(self.master, width = self.master.winfo_width() - 5, height = self.master.winfo_height() - 66, bd = 1, bg = "Gray")
-			self.text_tag     = tk.Label(self.canvas, text = self.tag, bg = "Gray")
-			self.entry_tag    = tk.Entry(self.canvas, bg = "Gray49", fg = "Black", disabledbackground = "Gray49")
-			self.text_xpos    = tk.Label(self.canvas, text = "X:", bg = "Gray")
-			self.entry_xpos   = tk.Entry(self.canvas, bg = "Gray49", disabledbackground = "Gray49")
-			self.text_ypos    = tk.Label(self.canvas, text = "Y:", bg = "Gray")
-			self.entry_ypos   = tk.Entry(self.canvas, bg = "Gray49", disabledbackground = "Gray49")
-			self.text_width   = tk.Label(self.canvas, text = "Width:", bg = "Gray")
-			self.entry_width  = tk.Entry(self.canvas, bg = "Gray", disabledbackground = "Gray49")
-			self.text_height  = tk.Label(self.canvas, text = "Height:", bg = "Gray")
-			self.entry_height = tk.Entry(self.canvas, bg = "Gray49", disabledbackground = "Gray49")
-			self.text_path    = tk.Label(self.canvas, text = "Path:", bg = "Gray")
-			self.entry_path   = tk.Entry(self.canvas, bg = "Gray49", disabledbackground = "Gray49")
+			self.container = ttk.Notebook(self.master)
+			self.frame     = tk.Frame(self.master, width = self.master.winfo_width() - 5, height = self.master.winfo_height() - 66, bd = 1, bg = "Gray")
+			self.frame_1   = tk.Frame(self.master, width = self.master.winfo_width() - 5, height = self.master.winfo_height() - 66, bd = 1, bg = "Gray")
+
+			self.text_tag     = tk.Label(self.frame, text = self.tag, bg = "Gray")
+			self.entry_tag    = tk.Entry(self.frame, bg = "Gray49", fg = "Black", disabledbackground = "Gray49")
+			self.text_xpos    = tk.Label(self.frame, text = "X:", bg = "Gray")
+			self.entry_xpos   = tk.Entry(self.frame, bg = "Gray49", disabledbackground = "Gray49")
+			self.text_ypos    = tk.Label(self.frame, text = "Y:", bg = "Gray")
+			self.entry_ypos   = tk.Entry(self.frame, bg = "Gray49", disabledbackground = "Gray49")
+			self.text_width   = tk.Label(self.frame, text = "Width:", bg = "Gray")
+			self.entry_width  = tk.Entry(self.frame, bg = "Gray", disabledbackground = "Gray49")
+			self.text_height  = tk.Label(self.frame, text = "Height:", bg = "Gray")
+			self.entry_height = tk.Entry(self.frame, bg = "Gray49", disabledbackground = "Gray49")
+			self.text_path    = tk.Label(self.frame, text = "Path:", bg = "Gray")
+			self.entry_path   = tk.Entry(self.frame, bg = "Gray49", disabledbackground = "Gray49")
+
+			self.combox_camera = ttk.Combobox(self.frame)
+
+			self.container.add(self.frame, text = "Config")
+			self.container.add(self.frame_1, text = "Events")
 		except:
 			raise
 		return None
@@ -622,7 +627,7 @@ class sprite_options(object):
 						self.handler_entry("disabled", self.entry_width, "width")
 						self.bool_entry_width = True
 					else:
-						self.sprites[self.selected].w = self.entry_width.get()
+						self.sprites[self.selected].set_size(int(self.entry_width.get()), None)
 						self.bool_entry_width         = True
 				else:
 					self.handler_entry("normal", self.entry_width, "width")
@@ -642,7 +647,7 @@ class sprite_options(object):
 						self.handler_entry("disabled", self.entry_height, "height")
 						self.bool_entry_height = True
 					else:
-						self.sprites[self.selected].h = self.entry_height.get()
+						self.sprites[self.selected].set_size(None, int(self.entry_height.get()))
 						self.bool_entry_height        = True
 				else:
 					self.handler_entry("normal", self.entry_height, "height")
@@ -662,10 +667,10 @@ class sprite_options(object):
 
 			self.entry_tag.bind("<Double-Button-1>", lambda x: self.handler_entry("normal", self.entry_tag, "tag"))
 
-			self.text_tag.config(text = self.tag)
+			self.text_tag.config(text = "{tag} - {type}".format(tag = self.tag, type = self.sprites[self.selected].type))
 			self.text_tag.place(x = 10,  y = 10)
 
-			self.entry_tag.place(x = 10, y = self.rect("y", self.text_tag), width = self.canvas.winfo_width() - 25)
+			self.entry_tag.place(x = 10, y = self.rect("y", self.text_tag), width = self.frame.winfo_width() - 24)
 
 			if self.bool_entry_tag:
 				self.set(self.entry_tag, self.tag)
@@ -680,10 +685,10 @@ class sprite_options(object):
 
 			self.entry_path.insert(0, self.path)
 
-			self.text_path.place(x = 10, y = self.rect("y", self.entry_tag), width = self.canvas.winfo_width() / self.canvas.winfo_width() + 25)
+			self.text_path.place(x = 10, y = self.rect("y", self.entry_tag), width = self.frame.winfo_width() / self.frame.winfo_width() + 25)
 
 			self.entry_path.config(state = "disabled", disabledbackground = "Gray49")
-			self.entry_path.place(x = 10, y = self.rect("y", self.text_path), width = self.canvas.winfo_width() - 25)
+			self.entry_path.place(x = 10, y = self.rect("y", self.text_path), width = self.frame.winfo_width() - 24)
 		except:
 			raise
 		return None
@@ -692,29 +697,48 @@ class sprite_options(object):
 		try:
 			self.master.update()
 
-			self.text_xpos.place(x = 10, y = self.rect("y", self.entry_path))
 			self.entry_xpos.bind("<Double-Button-1>", lambda x: self.handler_entry("normal", self.entry_xpos, "xpos"))
-			
-			self.entry_xpos.place(x = 10, y = self.rect("y", self.text_xpos), width = self.canvas.winfo_width()/2 - 10)
+
+			self.text_xpos.place(x = 10, y = self.rect("y", self.entry_path))
+			self.entry_xpos.place(x = 10, y = self.rect("y", self.text_xpos), width = self.frame.winfo_width() / 2 - 10)
 
 			if self.bool_entry_xpos:
 				self.set(self.entry_xpos, self.x)
 				self.entry_xpos.config(state = "disabled")
 
-			self.text_ypos.place(x = self.rect("x", self.entry_xpos), y = self.text_xpos.winfo_y())
 			self.entry_ypos.bind("<Double-Button-1>", lambda x: self.handler_entry("normal", self.entry_ypos, "ypos"))
-			
-			self.entry_ypos.place(x = self.rect("x", self.entry_xpos), y = self.entry_xpos.winfo_y(), width = self.canvas.winfo_width()/2 - 15)
+
+			self.text_ypos.place(x = self.rect("x", self.entry_xpos), y = self.text_xpos.winfo_y())
+			self.entry_ypos.place(x = self.rect("x", self.entry_xpos), y = self.entry_xpos.winfo_y(), width = self.frame.winfo_width() / 2 - 15)
 
 			if self.bool_entry_ypos:
 				self.set(self.entry_ypos, self.y)
 				self.entry_ypos.config(state = "disabled")
 
+			self.entry_width.bind("<Double-Button-1>", lambda x: self.handler_entry("normal", self.entry_width, "width"))
+
+			self.text_width.place(x = 10, y = self.rect("y", self.entry_ypos))
+			self.entry_width.place(x = 10, y = self.rect("y", self.text_width), width = self.frame.winfo_width() / 2 - 10)
+
 			if self.bool_entry_width:
-				pass
+				self.set(self.entry_width, self.w)
+				self.entry_width.config(state = "disabled")
+
+			self.entry_height.bind("<Double-Button-1>", lambda x: self.handler_entry("normal", self.entry_height, "height"))
+			
+			self.text_height.place(x = self.rect("x", self.entry_width), y = self.text_width.winfo_y())
+			self.entry_height.place(x = self.rect("x", self.entry_width), y = self.entry_width.winfo_y(), width = self.frame.winfo_width() / 2 - 15)
 
 			if self.bool_entry_height:
-				pass
+				self.set(self.entry_height, self.h)
+				self.entry_height.config(state = "disabled")
+		except:
+			raise
+		return None
+
+	def _camera(self):
+		try:
+			self.combox_camera.place(x = 10, y = self.rect("y", self.entry_width) + 5, width = self.frame.winfo_width() - 25)
 		except:
 			raise
 		return None
@@ -754,9 +778,10 @@ class sprite_options(object):
 
 				self.master.update()
 	
-				self.canvas.place(x = 10, y = self.about_frame.winfo_height() + 25)
-				self.canvas.place(width = self.master.winfo_width() - 25, height = self.master.winfo_screenheight() - 470)
-				self.canvas.bind("<Button-1>", self.normalize_thread)
+				self.container.place(x = 10, y = self.about_frame.winfo_height() + 25)
+				self.container.place(width = self.master.winfo_width() - 25, height = self.master.winfo_screenheight() - 487)
+				
+				self.frame.bind("<Button-1>", self.normalize_thread)
 
 				if self.bool_entry_tag is False or self.bool_entry_xpos is False \
 				or self.bool_entry_ypos is False or self.bool_entry_width is False \
@@ -769,11 +794,12 @@ class sprite_options(object):
 				self._tag()
 				self._path()
 				self._xywh()
+				self._camera()
 			else:
 				self.ds_all("disabled", "Leave")
 
 				if self.already:
-					self.canvas.place_forget()
+					self.container.place_forget()
 
 				self.normalize_thread(thread)
 				self.master.update()

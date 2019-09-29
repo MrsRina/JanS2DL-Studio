@@ -22,6 +22,8 @@ class DAT(object):
 
 			self.camera_x = 0
 			self.camera_y = 0
+			self.camera   = "None"
+			self.cameras  = {}
 
 			self.project         = None
 			self.event_file      = 0
@@ -329,7 +331,8 @@ class DAT(object):
 					selected_h = "" if self.selected is None else self.sprites[self.selected].h)
 				)
 
-				self.JanEditorStatus.set_text("{x} x {y}".format(
+				self.JanEditorStatus.set_text("{camera} {x} x {y}".format(
+					camera = self.camera,
 					x = self.camera_x,
 					y = self.camera_y)
 				)
@@ -567,16 +570,25 @@ class DAT(object):
 			)))
 
 			if find:
+				if self.camera is None:
+					self.cameras[self.camera] = {}
+
 				import random
 
 				self.selected               = os.path.splitext(os.path.basename(find))[0] + str(random.randint(100, 1000))
-				self.sprites[self.selected] = load_type([self.project, "load"], "Sprites", self.selected, self.JanPygame, find, self)
+				self.sprites[self.selected] = load_type([self.project, "load"], "Sprites", self.selected, self.JanPygame, find, self, camera = self.camera)
 
 				self.tool_tree.insert(
 				self.tool_tree_sprites, "end",
 				"Class Sprites {}".format(self.sprites[self.selected].tag),
 				text = self.sprites[self.selected].tag,
 				open = True)
+
+				try:
+					self.cameras[self.camera]["Class Objects {}".format(self.sprites[self.selected].tag)] = None
+				except:
+					self.cameras[self.camera] = {}
+					self.cameras[self.camera]["Class Objects {}".format(self.sprites[self.selected].tag)] = None
 
 				if self.project != None:
 					self.selected   = None
@@ -603,16 +615,21 @@ class DAT(object):
 			)))
 
 			if find:
+				if self.camera is None:
+					self.cameras[self.camera] = {}
+
 				import random
 
 				self.selected               = os.path.splitext(os.path.basename(find))[0] + str(random.randint(100, 1000))
-				self.sprites[self.selected] = load_type([self.project, "load"], "Objects", self.selected, self.JanPygame, find, self)
+				self.sprites[self.selected] = load_type([self.project, "load"], "Objects", self.selected, self.JanPygame, find, self, camera = self.camera)
 
 				self.tool_tree.insert(
 				self.tool_tree_objects, "end",
 				"Class Objects {}".format(self.sprites[self.selected].tag),
 				text = self.sprites[self.selected].tag,
 				open = True)
+
+				self.cameras[self.camera]["Class Objects {}".format(self.sprites[self.selected].tag)] = None
 
 				if self.project != None:
 					self.selected   = None
@@ -828,10 +845,9 @@ class DAT(object):
 	def refresh(self):
 		try:
 			for sprites in self.sprites.values():
-				sprites.render(self.camera_x, self.camera_y)
-
+				sprites.render(self.camera_x, self.camera_y, self.cameras[self.camera])
 		except:
-			raise
+			pass
 		return None
 
 	def window_loop(self):
