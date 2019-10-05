@@ -77,12 +77,9 @@ class start_(object):
 					self.progress_text.configure(text = "Python %d..." % sys.version_info[1])
 
 				if self.load_number >= 75:
-					try:
-						from JanPort import tk
-					except:
-						raise
+					# Imported.
 
-					self.progress_text.configure(text = "Tkinter...")
+					self.progress_text.configure(text = "Importing Tkinter...")
 
 				if self.load_number >= 100:
 					try:
@@ -90,7 +87,7 @@ class start_(object):
 					except:
 						raise
 
-					self.progress_text.configure(text = "Pygame...")
+					self.progress_text.configure(text = "Importing Pygame...")
 
 				if self.load_number >= 125:
 					self.math.Sync_Resolution(self.json, self.hardware)
@@ -105,7 +102,7 @@ class start_(object):
 				except:
 					pass
 
-			self.callback()
+			self.callback(pygame)
 		except:
 			raise
 		return None

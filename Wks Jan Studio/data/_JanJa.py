@@ -177,28 +177,6 @@ class load_type(object):
 				self.do("delete_sprites_project", self.project)
 
 				self.json_name = None
-				self.path      = None
-				self.img       = None
-				self.rect      = None
-				self.effect_   = None
-				self.master    = None
-				self.img_data  = None
-				self.extension = None
-				self.img_path  = None
-				self.tag       = None
-				self.move      = None
-				self.resize    = None
-				self.rotate    = None
-				self.rendering = None
-				self.selected  = None
-				self.state     = None
-				self.cam_x     = None
-				self.cam_y     = None
-				self.x         = None
-				self.y         = None
-				self.w         = None
-				self.h         = None
-				self.camera    = None
 
 			elif type is "auto_cache_save":
 				if self.project[0] is None:
@@ -311,7 +289,7 @@ class load_type(object):
 
 	def render(self, cam_y, cam_x, camera):
 		try:
-			if camera == self.camera:
+			if self.camera:
 				if self.rendering:
 					self.cam_x = cam_y
 					self.cam_y = cam_x
