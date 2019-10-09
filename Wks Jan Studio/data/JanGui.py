@@ -13,7 +13,7 @@ class start_(object):
 			self.window = ThemedTk()
 			self.window.overrideredirect(True)
 
-			self.window.configure(background = "Gray")
+			self.window.configure(background = "Gray25")
 
 			self.window.geometry("640x640+10+10")
 
@@ -43,19 +43,19 @@ class start_(object):
 
 	def text(self):
 		try:
-			credit = tk.Label(self.window, text = "Wks Jan Studio", font = "Arial 10", bg = "Gray")
+			credit = tk.Label(self.window, text = "Wks Jan Studio", font = "Arial 10", bg = "Gray25")
 			credit.place(x = 10, y = 490)
 
-			programer = tk.Label(self.window, text = "Programmer - Sr_Rina", font = "Arial 10", bg = "Gray")
+			programer = tk.Label(self.window, text = "Programmer - Sr_Rina", font = "Arial 10", bg = "Gray25")
 			programer.place(x = 10, y = 510)
 
-			designer = tk.Label(self.window, text = "Designer - PEDRIN", font = "Arial 10", bg = "Gray")
+			designer = tk.Label(self.window, text = "Designer - PEDRIN", font = "Arial 10", bg = "Gray25")
 			designer.place(x = 10, y = 530)
 
-			version = tk.Label(self.window, text = self.ver, font = "Arial 10", bg = "Gray")
+			version = tk.Label(self.window, text = self.ver, font = "Arial 10", bg = "Gray25")
 			version.place(x = 10, y = 560)
 
-			self.progress_text = tk.Label(self.window, text = "Loading...", font = "Arial 10", bg = "Gray")
+			self.progress_text = tk.Label(self.window, text = "Loading...", font = "Arial 10", bg = "Gray25")
 			self.progress_text.place(x = 10, y = 585)
 		except:
 			raise
@@ -117,7 +117,8 @@ class create_window(object):
 			self.window.iconbitmap(icon)
 			self.window.configure(background = color)
 
-			self.window.option_add("*TCombobox*Listbox*Background", "Gray49")
+			self.window.option_add("*TCombobox*Listbox*Background", "Gray25")
+			self.window.option_add("*TCombobox*Background", "gray25")
 
 			self.window.set_theme("black")
 
@@ -169,9 +170,9 @@ class create_menu(object):
 	def __init__(self, master, cmds, sub_cmds):
 		try:
 			self.master_menu = tk.Menu(master, tearoff = 0)
-			self.master = master
+			self.master      = master
 
-			master.configure(menu = self.master_menu, bg = "Gray")
+			self.master.configure(menu = self.master_menu, bg = "Gray25")
 
 			self.cmds     = cmds
 			self.sub_cmds = sub_cmds
@@ -205,7 +206,7 @@ class create_menu(object):
 		try:
 			self.menu_events = tk.Menu(self.master_menu, tearoff = 0, bg = "Gray50", fg = "Black")
 
-			self.menu_events.add_command(label = "New Event Mouse"    , command = self.cmds[10]  )
+			self.menu_events.add_command(label = "New Event Mouse"    , command = self.cmds[10] )
 			self.menu_events.add_command(label = "New Event Keyboard" , command = self.cmds[11] )
 			self.menu_events.add_command(label = "New Event Collide"  , command = self.cmds[12] )
 			self.menu_events.add_command(label = "New Event Window"   , command = self.cmds[13] ); self.menu_events.add_separator()
@@ -247,13 +248,13 @@ class create_container(object):
 			self.master               = master
 			self.resize_height        = tk.Frame(self.master, bg = "Gray49")
 			self.container            = ttk.Notebook(self.master)
-			self.frame_game_developer = tk.Frame(self.master, bg = "Gray")
-			self.frame_event_game     = tk.Frame(self.master, bg = "Gray")
+			self.frame_game_developer = tk.Frame(self.master, bg = "Gray25")
+			self.frame_event_game     = tk.Frame(self.master, bg = "Gray25")
 
 			self.container.add(self.frame_game_developer, text = "Game")
 			self.container.add(self.frame_event_game, text = "Events")
 
-			self.resize_height.place(x = 405, y = 0, width = self.master.winfo_screenwidth() - 215)
+			self.resize_height.place(x = 405, y = 10, width = self.master.winfo_screenwidth() - 215)
 			self.container.place(x = 405, y = 10, width = self.master.winfo_screenwidth() - 10, height = self.master.winfo_screenheight() - 230)
 		except:
 			raise
@@ -307,7 +308,7 @@ class create_status(object):
 		try:
 			self.master = master
 
-			self.label = tk.Label(self.master, text = text, bg = "Gray", anchor = "w", relief = tk.SUNKEN)
+			self.label = tk.Label(self.master, text = text, bg = "Gray25", anchor = "w", relief = tk.SUNKEN)
 
 			self.label.pack(fill = tk.X, side = tk.BOTTOM)
 		except:
@@ -326,8 +327,8 @@ class create_frame_tools(object):
 		try:
 			self.master = master
 
-			self.resize = tk.Frame(master, width = 400, height = master.winfo_screenheight(), bg = "Gray49", bd = 5)
-			self.frame  = tk.Frame(master, width = 400, height = master.winfo_screenheight(), bg = "Gray")
+			self.resize = tk.Frame(master, width = 400, height = master.winfo_screenheight(), bg = "Gray25", bd = 5)
+			self.frame  = tk.Frame(master, width = 400, height = master.winfo_screenheight(), bg = "Gray25")
 
 			self.resize.place(x = 3, y = 0)
 			self.frame.place(x = 0, y = 0)
@@ -389,9 +390,24 @@ class create_object_tree_view(object):
 			self.master        = master.frame
 			self.master_master = master.master
 
-			self.tree = ttk.Treeview(self.master)
+			self.project_name = tk.Label(self.master, text = "", bg = "Gray25", fg = "Black")
 
-			self.tree.place(x = 10, y = 10, width = self.master.winfo_width() - 25, height = self.master.winfo_height() - 50)
+			self.container     = ttk.Notebook(self.master)
+			self.frame_sprites = tk.Frame(self.master)
+			self.frame_objects = tk.Frame(self.master)
+
+			self.tree_sprites = ttk.Treeview(self.frame_sprites)
+			self.tree_objects = ttk.Treeview(self.frame_objects)
+			self.tree_cameras = ttk.Treeview(self.master)
+
+			self.container.add(self.frame_sprites, text = "Sprites")
+			self.container.add(self.frame_objects, text = "Objects")
+
+			self.project_name.place(x = 10, y = 10)
+			self.container.place(x = 10, y = 30)
+			self.tree_sprites.place(x = 0, y = 0, width = self.container.winfo_width(), height = self.container.winfo_height())
+			self.tree_objects.place(x = 0, y = 0, width = self.container.winfo_width(), height = self.container.winfo_height())
+			self.tree_cameras.place(x = 10, y = self.container.winfo_y() + 25)
 		except:
 			raise
 		return None
@@ -410,9 +426,85 @@ class create_object_tree_view(object):
 			icone_02       = tk.Label(image = image_icone_02)
 			icone_02.photo = image_icone_02
 
-			self.sprites = self.tree.insert("", "end", "Sprites", image = icone_00.photo, text = " " + "Sprites")
-			self.objects = self.tree.insert("", 'end', "Objects", image = icone_01.photo, text = " " + "Objects")
-			self.cameras = self.tree.insert("", 'end', "Cameras", image = icone_02.photo, text = " " + "Cameras")
+			self.sprites = self.tree_sprites.heading("#0", text = "Sprites", image = icone_00)
+			self.objects = self.tree_objects.heading("#0", text = "Objects", image = icone_01)
+			self.cameras = self.tree_cameras.heading("#0", text = "Cameras", image = icone_02)
+		except:
+			raise
+		return None
+
+	def sprites_menu(self):
+		try:
+			self.sprites_edit = tk.Menu(self.master_menu, tearoff = 0, bg = "Gray50", fg = "Black")
+
+			self.sprites_edit.add_command(label = "New Paste", command = None)
+			self.sprites_edit.add_command(label = "Delete Paste", command = None)
+		except:
+			raise
+		return None
+
+	def objects_menu(self):
+		try:
+			self.objects_edit = tk.Menu(self.master_menu, tearoff = 0, bg = "Gray50", fg = "Black")
+
+			self.objects_edit.add_command(label = "New Paste", command = None)
+			self.objects_edit.add_command(label = "Delete Paste", command = None)
+		except:
+			raise
+		return None
+
+	def cameras_menu(self):
+		try:
+			self.cameras_edit = tk.Menu(self.master_menu, tearoff = 0, bg = "Gray50", fg = "Black")
+
+			self.cameras_edit.add_command(label = "New Paste", command = None)
+			self.cameras_edit.add_command(label = "Delete Paste", command = None)
+		except:
+			raise
+		return None
+
+	def menus(self, callback, what_this_made):
+		try:
+			self.master_menu = tk.Menu(self.master, tearoff = 0)
+
+			self.sprites_menu()
+			self.objects_menu()
+			self.cameras_menu()
+
+			def event_sprites(pos):
+				try:
+					try:
+						self.sprites_edit.post(pos.x_root, pos.y_root)
+					finally:
+						self.sprites_edit.grab_release()
+				except:
+					raise
+				return None
+
+			def event_objects(pos):
+				try:
+					try:
+						self.objects_edit.post(pos.x_root, pos.y_root)
+					finally:
+						self.objects_edit.grab_release()
+				except:
+					raise
+				return None
+
+			def event_cameras(pos):
+				try:
+					try:
+						self.cameras_edit.post(pos.x_root, pos.y_root)
+					finally:
+						self.camera_edit.grab_release()
+				except:
+					raise
+				return None
+
+			if callback.selected is None:
+				self.tree_sprites.bind("<Button-3>", event_sprites)
+				self.tree_objects.bind("<Button-3>", event_objects)
+				self.tree_cameras.bind("<Button-3>", event_cameras)
 		except:
 			raise
 		return None
@@ -420,10 +512,16 @@ class create_object_tree_view(object):
 	def up(self, bool):
 		try:
 			if bool is True:
-				self.tree.place(width = self.master.winfo_width() - 25, height = self.master_master.winfo_height() - self.master_master.winfo_height() / 2)
+				self.container.place(width = self.master_tt.winfo_width() - 25, height = self.master_master.winfo_height() - self.master_master.winfo_height() / 2)
+				self.tree_sprites.place(x = 0, y = 0, width = self.container.winfo_width(), height = self.container.winfo_height())
+				self.tree_objects.place(x = 0, y = 0, width = self.container.winfo_width(), height = self.container.winfo_height())
+				self.tree_cameras.place_forget()
 
 			elif bool is False:
-				self.tree.place(width = self.master.winfo_width() - 25, height = self.master_master.winfo_height() - 45)
+				self.container.place(width = self.master.winfo_width() - 25, height = self.master_master.winfo_height() - self.master_master.winfo_height() / 2)
+				self.tree_sprites.place(x = 0, y = 0, width = self.container.winfo_width(), height = self.container.winfo_height())
+				self.tree_objects.place(x = 0, y = 0, width = self.container.winfo_width(), height = self.container.winfo_height())
+				self.tree_cameras.place(x = 10, y = self.container.winfo_y() + self.container.winfo_height() + 25, width = self.master.winfo_width() - 25, height = self.master.winfo_height() - self.tree_cameras.winfo_y() - 89)
 		except:
 			raise
 		return None
@@ -462,17 +560,17 @@ class sprite_options(object):
 			self.frame     = tk.Frame(self.master, width = self.master.winfo_width() - 5, height = self.master.winfo_height() - 66, bd = 1, bg = "Gray")
 			self.frame_1   = tk.Frame(self.master, width = self.master.winfo_width() - 5, height = self.master.winfo_height() - 66, bd = 1, bg = "Gray")
 
-			self.text_tag     = tk.Label(self.frame, text = self.tag, bg = "Gray")
+			self.text_tag     = tk.Label(self.frame, text = self.tag, bg = "Gray25")
 			self.entry_tag    = tk.Entry(self.frame, bg = "Gray49", fg = "Black", disabledbackground = "Gray49")
-			self.text_xpos    = tk.Label(self.frame, text = "X:", bg = "Gray")
+			self.text_xpos    = tk.Label(self.frame, text = "X:", bg = "Gray25")
 			self.entry_xpos   = tk.Entry(self.frame, bg = "Gray49", disabledbackground = "Gray49")
-			self.text_ypos    = tk.Label(self.frame, text = "Y:", bg = "Gray")
+			self.text_ypos    = tk.Label(self.frame, text = "Y:", bg = "Gray25")
 			self.entry_ypos   = tk.Entry(self.frame, bg = "Gray49", disabledbackground = "Gray49")
-			self.text_width   = tk.Label(self.frame, text = "Width:", bg = "Gray")
-			self.entry_width  = tk.Entry(self.frame, bg = "Gray", disabledbackground = "Gray49")
-			self.text_height  = tk.Label(self.frame, text = "Height:", bg = "Gray")
+			self.text_width   = tk.Label(self.frame, text = "Width:", bg = "Gray25")
+			self.entry_width  = tk.Entry(self.frame, bg = "Gray25", disabledbackground = "Gray49")
+			self.text_height  = tk.Label(self.frame, text = "Height:", bg = "Gray25")
 			self.entry_height = tk.Entry(self.frame, bg = "Gray49", disabledbackground = "Gray49")
-			self.text_path    = tk.Label(self.frame, text = "Path:", bg = "Gray")
+			self.text_path    = tk.Label(self.frame, text = "Path:", bg = "Gray25")
 			self.entry_path   = tk.Entry(self.frame, bg = "Gray49", disabledbackground = "Gray49")
 
 			self.combox_camera = ttk.Combobox(self.frame)
@@ -813,7 +911,7 @@ class frame_debug_tools(object):
 
 			left_widget.update()
 
-			self.frame = tk.Frame(self.master, width = master.winfo_screenwidth(), height = 200, bg = "Gray")
+			self.frame = tk.Frame(self.master, width = master.winfo_screenwidth(), height = 200, bg = "Gray25")
 
 			self.frame.place(x = self.left_widget.winfo_width() + 5, y = self.master.winfo_height() - 200)
 
@@ -834,8 +932,8 @@ class frame_debug_tools(object):
 
 	def pass_color(self, widget):
 		try:
-			def color_pass(event): widget.configure(background = "Gray")
-			def color_norm(event): widget.configure(background = "Gray")
+			def color_pass(event): widget.configure(background = "Gray25")
+			def color_norm(event): widget.configure(background = "Gray25")
 
 			widget.bind("<Enter>", color_pass)
 			widget.bind("<Leave>", color_norm)
@@ -874,9 +972,9 @@ class frame_debug_tools(object):
 			icone_02       = tk.Label(image = image_icone_02)
 			icone_02.photo = image_icone_02
 
-			self.play   = tk.Button(self.frame, image = icone_00.photo, bg = "Gray")
-			self.pause  = tk.Button(self.frame, image = icone_01.photo, bg = "Gray")
-			self.config = tk.Button(self.frame, image = icone_02.photo, bg = "Gray")
+			self.play   = tk.Button(self.frame, image = icone_00.photo, bg = "Gray25")
+			self.pause  = tk.Button(self.frame, image = icone_01.photo, bg = "Gray25")
+			self.config = tk.Button(self.frame, image = icone_02.photo, bg = "Gray25")
 
 			self.pass_color(self.play)
 			self.pass_color(self.pause)
@@ -898,8 +996,8 @@ class console_debug(object):
 			self.master_.update()
 			self.master.update()
 
-			self.console = tk.Text(self.master, bg = "Gray49", state = "disabled")
-			self.scroll  = tk.Scrollbar(self.console, command = self.console.yview, bg = "Gray49", activebackground = "Gray49")
+			self.console = tk.Text(self.master, bg = "gray25", state = "disabled")
+			self.scroll  = tk.Scrollbar(self.console, command = self.console.yview, bg = "Gray49", activebackground = "gray25")
 			self.scroll.pack(side = tk.RIGHT, fill = tk.Y)
 		except:
 			raise
@@ -930,7 +1028,7 @@ class project_window(object):
 			self.project_window.focus_force()
 			self.project_window.grab_set()
 			self.project_window.geometry("400x250")
-			self.project_window.config(background = "Gray")
+			self.project_window.config(background = "Gray25")
 			self.project_window.resizable(0, 0)
 
 			self.text = tk.Label(self.project_window, text = "New Project", bg = "Gray", font = "None 16").place(x = 10, y = 10)

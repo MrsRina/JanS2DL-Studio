@@ -306,7 +306,8 @@ class DAT(object):
 			self.jan_tree.up(self.bool_tool_tree)
 			self.jan_console_debug.up()
 
-			self.tool_tree.heading("#0", text = "..." if self.project is None else self.project.json["Name"])
+			self.jan_tree.project_name.configure(text = "..." if self.project is None else self.project.json["Name"])
+			self.jan_tree.menus(self, "Menus of treeview edits")
 
 			self.jan_menu.menu_file_tools.entryconfig(2, state = JanMath.Sync_File(self.event_file))
 			self.jan_menu.menu_file_tools.entryconfig(3, state = JanMath.Sync_File_As(self.event_file))
@@ -703,7 +704,7 @@ class DAT(object):
 	def create_file_tool_menu(self):
 		try:
 			try:
-				self.jan_menu.get("Main").tk_popup(self.x_main, self.y_main, 0)
+				self.jan_menu.get("Main").post(self.x_main, self.y_main)
 			finally:
 				self.jan_menu.get("Main").grab_release()
 		except:
@@ -713,7 +714,7 @@ class DAT(object):
 	def create_event_menu(self, event):
 		try:
 			try:
-				self.jan_menu.get("Events").tk_popup(event.x_root, event.y_root, 0)
+				self.jan_menu.get("Events").post(event.x_root, event.y_root)
 			finally:
 				self.jan_menu.get("Events").grab_release()
 		except:
@@ -723,7 +724,7 @@ class DAT(object):
 	def create_selected_sprite_menu(self):
 		try:
 			try:
-				self.jan_menu.get("MainSprite").tk_popup(self.x_main, self.y_main, 0)
+				self.jan_menu.get("MainSprite").post(self.x_main, self.y_main)
 			finally:
 				self.jan_menu.get("MainSprite").grab_release()
 		except:
@@ -780,10 +781,10 @@ class DAT(object):
 
 			self.jan_tree.create_class()
 
-			self.tool_tree         = self.jan_tree.tree
-			self.tool_tree_sprites = self.jan_tree.sprites
-			self.tool_tree_objects = self.jan_tree.objects
-			self.tool_tree_cameras = self.jan_tree.cameras
+			self.tool_tree         = self.jan_tree.tree_sprites
+			self.tool_tree_sprites = self.jan_tree
+			self.tool_tree_objects = self.jan_tree
+			self.tool_tree_cameras = self.jan_tree
 
 			self.jan_sprite_options = JanGui.sprite_options(self.jan_win.window, self.jan_frame_tools, self.sprites, self.selected, self.tool_tree)
 
