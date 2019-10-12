@@ -297,7 +297,7 @@ class DAT(object):
 
 	def up_events(self):
 		try:
-			self.events_select_tree()
+			#self.events_select_tree()
 			self.poop_up()
 
 			self.set_title("JanS2DL-Studio {ticks}".format(ticks = self.thread_tick))
@@ -560,11 +560,12 @@ class DAT(object):
 				self.selected               = os.path.splitext(os.path.basename(find))[0] + str(random.randint(100, 1000))
 				self.sprites[self.selected] = load_type([self.project, "load"], "Sprites", self.selected, self.jan_pygame, find, self, camera = self.camera)
 
-				self.tool_tree.insert(
-				self.tool_tree_sprites, "end",
+				self.tool_tree_sprites.insert(
+				"", "end",
 				"Class Sprites {}".format(self.sprites[self.selected].tag),
-				text = self.sprites[self.selected].tag,
-				open = True)
+				image = self.jan_tree.icone_00.photo,
+				text  = self.sprites[self.selected].tag,
+				open  = True)
 
 				try:
 					self.cameras[self.camera]["Class Objects {}".format(self.sprites[self.selected].tag)] = None
@@ -605,7 +606,7 @@ class DAT(object):
 				self.selected               = os.path.splitext(os.path.basename(find))[0] + str(random.randint(100, 1000))
 				self.sprites[self.selected] = load_type([self.project, "load"], "Objects", self.selected, self.jan_pygame, find, self, camera = self.camera)
 
-				self.tool_tree.insert(
+				self.tool_tree_objects.insert(
 				self.tool_tree_objects, "end",
 				"Class Objects {}".format(self.sprites[self.selected].tag),
 				text = self.sprites[self.selected].tag,
@@ -781,10 +782,10 @@ class DAT(object):
 
 			self.jan_tree.create_class()
 
-			self.tool_tree         = self.jan_tree.tree_sprites
-			self.tool_tree_sprites = self.jan_tree
-			self.tool_tree_objects = self.jan_tree
-			self.tool_tree_cameras = self.jan_tree
+			self.tool_tree          = self.jan_tree
+			self.tool_tree_sprites = self.jan_tree.tree_sprites
+			self.tool_tree_objects = self.jan_tree.tree_objects
+			self.tool_tree_cameras = self.jan_tree.tree_cameras
 
 			self.jan_sprite_options = JanGui.sprite_options(self.jan_win.window, self.jan_frame_tools, self.sprites, self.selected, self.tool_tree)
 
