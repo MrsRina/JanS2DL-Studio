@@ -782,10 +782,11 @@ class DAT(object):
 
 			self.jan_tree.create_class()
 
-			self.tool_tree          = self.jan_tree
+			self.tool_tree         = self.jan_tree
 			self.tool_tree_sprites = self.jan_tree.tree_sprites
 			self.tool_tree_objects = self.jan_tree.tree_objects
 			self.tool_tree_cameras = self.jan_tree.tree_cameras
+
 
 			self.jan_sprite_options = JanGui.sprite_options(self.jan_win.window, self.jan_frame_tools, self.sprites, self.selected, self.tool_tree)
 

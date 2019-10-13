@@ -246,7 +246,7 @@ class create_container(object):
 	def __init__(self, master, frame, tag):
 		try:
 			self.master               = master
-			self.resize_height        = tk.Frame(self.master, bg = "red")
+			self.resize_height        = tk.Frame(self.master, bg = "Gray25")
 			self.container            = ttk.Notebook(self.master)
 			self.frame_game_developer = tk.Frame(self.master, bg = "Gray25")
 			self.frame_event_game     = tk.Frame(self.master, bg = "Gray25")
@@ -254,26 +254,30 @@ class create_container(object):
 			self.container.add(self.frame_game_developer, text = "Game")
 			self.container.add(self.frame_event_game, text = "Events")
 
-			self.resize_height.place(x = 405, y = 10, width = self.master.winfo_screenwidth() - 215)
-			self.container.place(x = 405, y = 10, width = self.rect(self.master, self.container, "x"), height = self.master.winfo_screenheight() - 230)
-			print(self.rect(self.master, self.container, "x"))
+			self.resize_height.place(x = 405, y = 10)
+			self.container.place(x = 405, y = 10)
+
+			self.container.place(width = self.rect(self.master, self.container, "x") - 15, height = self.master.winfo_screenheight() - 334)
 		except:
 			raise
 		return None
 
 	def rect(self, this_more, this, x):
 		try:
+			this_more.update()
+			this.update()
+
 			if x is "x":
-				return this.winfo_x() - this_more.winfo_width()
+				return  this_more.winfo_width() - this.winfo_x() 
 			else:
-				return this_more.winfo_width() - this.winfo_x()
+				return this_more.winfo_height() - this.winfo_y()
 		except:
 			raise
 		return None
 
 	def resize_config(self, bottom_widget):
 		try:
-			self.resize_height.place(width = self.master.winfo_width(), height = self.master.winfo_height())
+			self.resize_height.place(width = self.container.winfo_width(), height = self.master.winfo_height())
 
 			def mouse(event):
 				try:
@@ -425,6 +429,8 @@ class create_object_tree_view(object):
 
 	def create_class(self):
 		try:
+			self.master_menu = tk.Menu(self.master, tearoff = 0)
+
 			image_icone_00      = tk.PhotoImage(file = self.icon_path_00)
 			self.icone_00       = tk.Label(image = image_icone_00)
 			self.icone_00.photo = image_icone_00
@@ -440,6 +446,10 @@ class create_object_tree_view(object):
 			self.sprites = self.tree_sprites.heading("#0", text = "Sprites")
 			self.objects = self.tree_objects.heading("#0", text = "Objects")
 			self.cameras = self.tree_cameras.heading("#0", text = "Cameras")
+
+			self.sprites_menu()
+			self.objects_menu()
+			self.cameras_menu()
 		except:
 			raise
 		return None
@@ -476,12 +486,6 @@ class create_object_tree_view(object):
 
 	def menus(self, callback, what_this_made):
 		try:
-			self.master_menu = tk.Menu(self.master, tearoff = 0)
-
-			self.sprites_menu()
-			self.objects_menu()
-			self.cameras_menu()
-
 			def event_sprites(pos):
 				try:
 					try:
@@ -918,13 +922,15 @@ class frame_debug_tools(object):
 		try:
 			self.master      = master
 			self.left_widget = left_widget
-			self.container   = container#
+			self.container   = container
 
-			left_widget.update()
+			self.master.update()
+			self.left_widget.update()
+			self.container.container.update()
 
-			self.frame = tk.Frame(self.master, width = master.winfo_screenwidth(), height = 200, bg = "Gray25")
+			self.frame = tk.Frame(self.master, width = master.winfo_screenwidth(), height = 300, bg = "Gray25")
 
-			self.frame.place(x = self.left_widget.winfo_width() + 5, y = self.master.winfo_height() - 200)
+			self.frame.place(x = self.left_widget.winfo_width() + 5, y = self.master.winfo_height() - 300)
 
 			self.master.update()
 		except:
@@ -1008,8 +1014,12 @@ class console_debug(object):
 			self.master.update()
 
 			self.console = tk.Text(self.master, bg = "gray25", state = "disabled")
-			self.scroll  = tk.Scrollbar(self.console, command = self.console.yview, bg = "Gray49", activebackground = "gray25")
+			self.scroll  = tk.Scrollbar(self.console, command = self.console.yview, bg = "Gray49", activebackground = "Gray25")
+			self.command = tk.Entry(self.master, bg = "Gray25", state = "disabled", disabledbackground = "Gray25")
+
 			self.scroll.pack(side = tk.RIGHT, fill = tk.Y)
+			self.console.place(x = 160, y = 10, width = self.master_.winfo_width() - self.master.winfo_x() - 176, height = self.master_.winfo_height() - self.master.winfo_y() - 74)
+			self.command.place(x = 160, y = self.console.winfo_y() + self.console.winfo_height() + 10, width = self.master_.winfo_width() - self.master.winfo_x() - 176)
 		except:
 			raise
 		return None
@@ -1026,7 +1036,8 @@ class console_debug(object):
 	def up(self):
 		try:
 			self.console.config(yscrollcommand = self.scroll.set)
-			self.console.place(x = 160, y = 10, width = self.master_.winfo_width() - self.master.winfo_x() - 165, height = self.master_.winfo_height() - self.master.winfo_y() - 50)
+			self.console.place(x = 160, y = 10, width = self.master_.winfo_width() - self.master.winfo_x() - 176, height = self.master_.winfo_height() - self.master.winfo_y() - 78)
+			self.command.place(x = 160, y = self.console.winfo_y() + self.console.winfo_height() + 10, width = self.master_.winfo_width() - self.master.winfo_x() - 176)
 		except: 
 			raise
 		return None
