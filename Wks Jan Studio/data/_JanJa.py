@@ -19,9 +19,7 @@ class load(object):
 		try:
 			self.file[item_json] = write_json
 
-			self.path.seek(0)
-			json.dump(self.file, self.path)
-			self.path.truncate()
+			self.save()
 		except:
 			raise
 		return None
@@ -30,9 +28,7 @@ class load(object):
 		try:
 			self.file[item_json] = write_json
 
-			self.path.seek(0)
-			json.dump(self.file, self.path, indent = 4)
-			self.path.truncate()
+			self.save()
 		except:
 			raise
 		return None
@@ -44,9 +40,7 @@ class load(object):
 			except:
 				pass
 
-			self.path.seek(0)
-			json.dump(self.file, self.path)
-			self.path.truncate()
+			self.save()
 		except:
 			raise
 		return None
@@ -61,6 +55,15 @@ class load(object):
 	def __repr__(self):
 		try:
 			return self.file
+		except:
+			raise
+		return None
+
+	def save(self):
+		try:
+			self.path.seek(0)
+			json.dump(self.file, self.path, indent = 4)
+			self.path.truncate()
 		except:
 			raise
 		return None

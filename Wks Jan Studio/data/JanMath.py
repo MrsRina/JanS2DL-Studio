@@ -1,17 +1,5 @@
 from JanPort import math
 
-def Sync_Resolution(resolution, _resolution):
-	try:
-		if not resolution.get("Default Resolution") is False:
-			resolution.set("Width", _resolution(0))
-			resolution.set("Height", _resolution(1))
-
-		elif not resolution.get("Default Resolution") is True:
-			""" """
-	except:
-		raise
-	return None
-
 def Sync_Resolution_Pos(master):
 	try:
 		return (master.winfo_pointerx() - master.winfo_vrootx(),
@@ -50,7 +38,6 @@ def Sync_File_As(x):
 
 		elif x is 3:
 			return "disabled"
-
 	except:
 		raise
 	return None

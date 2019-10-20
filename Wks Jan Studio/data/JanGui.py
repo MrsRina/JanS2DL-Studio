@@ -34,9 +34,9 @@ class start_(object):
 		try:
 			image = tk.PhotoImage(file = image)
 
-			image_show = tk.Label(self.window, image = image)
+			image_show = tk.Label(self.window, image = image, bg = "Gray25")
 			image_show.photo = image
-			image_show.place(x = 0, y = 0)
+			image_show.place(x = -2, y = 0)
 		except:
 			raise
 		return None
@@ -49,7 +49,7 @@ class start_(object):
 			programer = tk.Label(self.window, text = "Programmer - Sr_Rina", font = "Arial 10", bg = "Gray25")
 			programer.place(x = 10, y = 510)
 
-			designer = tk.Label(self.window, text = "Designer - PEDRIN", font = "Arial 10", bg = "Gray25")
+			designer = tk.Label(self.window, text = "Design - PEDRIN", font = "Arial 10", bg = "Gray25")
 			designer.place(x = 10, y = 530)
 
 			version = tk.Label(self.window, text = self.ver, font = "Arial 10", bg = "Gray25")
@@ -63,6 +63,8 @@ class start_(object):
 
 	def loading_tread(self):
 		try:
+			import _JanJa
+
 			self.loading["maximum"] = 200
 			
 			run = True
@@ -71,7 +73,11 @@ class start_(object):
 				self.loading["value"] = self.load_number
 
 				if self.load_number >= 25:
-					self.progress_text.configure(text = "Checking file integrity...")
+					self.progress_text.configure(text = "Checking file configures integrity...")
+
+					if _JanJa.JAN_ENGINE_engine.get("Width") is not _JanJa.hardware_res(0) and _JanJa.JAN_ENGINE_engine.get("Height") is not _JanJa.hardware_res(1):
+						_JanJa.JAN_ENGINE_engine.set("Width", _JanJa.hardware_res(0))
+						_JanJa.JAN_ENGINE_engine.set("Height", _JanJa.hardware_res(1))
 
 				if self.load_number >= 50:
 					self.progress_text.configure(text = "Python %d..." % sys.version_info[1])
@@ -90,7 +96,6 @@ class start_(object):
 					self.progress_text.configure(text = "Importing Pygame...")
 
 				if self.load_number >= 125:
-					self.math.Sync_Resolution(self.json, self.hardware)
 					self.progress_text.configure(text = os.path.abspath("_JanDat.py") + "...")
 
 				if self.load_number >= 200:
@@ -116,6 +121,8 @@ class create_window(object):
 
 			self.window.iconbitmap(icon)
 			self.window.configure(background = color)
+			self.window.resizable(0, 1)
+			self.window.state("zoomed")
 
 			self.window.option_add("*TCombobox*Listbox*Background", "Gray25")
 			self.window.option_add("*TCombobox*Background", "gray25")
@@ -246,7 +253,7 @@ class create_container(object):
 	def __init__(self, master, frame, tag):
 		try:
 			self.master               = master
-			self.resize_height        = tk.Frame(self.master, bg = "Gray49")
+			self.resize_height        = tk.Frame(self.master, bg = "Gray25")
 			self.container            = ttk.Notebook(self.master)
 			self.frame_game_developer = tk.Frame(self.master, bg = "Gray25")
 			self.frame_event_game     = tk.Frame(self.master, bg = "Gray25")
@@ -254,15 +261,31 @@ class create_container(object):
 			self.container.add(self.frame_game_developer, text = "Game")
 			self.container.add(self.frame_event_game, text = "Events")
 
-			self.resize_height.place(x = 405, y = 10, width = self.master.winfo_screenwidth() - 215)
-			self.container.place(x = 405, y = 10, width = self.master.winfo_screenwidth() - 10, height = self.master.winfo_screenheight() - 230)
+			self.resize_height.place(x = 405, y = 10)
+			self.container.place(x = 405, y = 10)
+
+			self.container.place(width = self.rect(self.master, self.container, "x") - 10, height = self.master.winfo_height() - 261)
+			self.resize_height.place(width = self.container.winfo_width(), height = 261)
+		except:
+			raise
+		return None
+
+	def rect(self, this_more, this, x):
+		try:
+			this_more.update()
+
+			if x is "x":
+				return this_more.winfo_width() - this.winfo_x()
+			else:
+				return this_more.winfo_height() - this.winfo_y()
 		except:
 			raise
 		return None
 
 	def resize_config(self, bottom_widget):
 		try:
-			self.resize_height.place(width = self.master.winfo_width(), height = self.master.winfo_height())
+			self.container.place(width = self.rect(self.master, self.container, "x") - 10)
+			self.resize_height.place(width = self.container.winfo_width(), height = self.container.winfo_height() + 11)
 
 			def mouse(event):
 				try:
@@ -275,9 +298,9 @@ class create_container(object):
 				try:
 					if event.y < self.master.winfo_height() - 30:
 						self.container.place(height = event.y)
-						self.resize_height.place(height = event.y + 7.5)
+						self.resize_height.place(height = event.y + 10.5)
 
-						bottom_widget.place(y = event.y + 7.5)
+						bottom_widget.place(y = event.y + 10.5)
 						bottom_widget.place(height = self.master.winfo_screenheight())
 
 					else:
@@ -327,8 +350,8 @@ class create_frame_tools(object):
 		try:
 			self.master = master
 
-			self.resize = tk.Frame(master, width = 400, height = master.winfo_screenheight(), bg = "Gray25", bd = 5)
-			self.frame  = tk.Frame(master, width = 400, height = master.winfo_screenheight(), bg = "Gray25")
+			self.resize = tk.Frame(master, width = 400, height = self.master.winfo_screenheight(), bg = "Gray25", bd = 5)
+			self.frame  = tk.Frame(master, width = 400, height = self.master.winfo_screenheight(), bg = "Gray25")
 
 			self.resize.place(x = 3, y = 0)
 			self.frame.place(x = 0, y = 0)
@@ -354,7 +377,7 @@ class create_frame_tools(object):
 						container[0].place(x = event.x + 5)
 						container[1].place(x = event.x + 5)
 
-						widget_right.frame.place(x = event.x)
+						widget_right.frame.place(x = event.x + 5, width = container[0].winfo_screenwidth())
 
 					else:
 						self.frame.config(width = 2)
@@ -383,6 +406,8 @@ class create_frame_tools(object):
 class create_object_tree_view(object):
 	def __init__(self, master, icon_path_00, icon_path_01, icon_path_02):
 		try:
+			self.commands = [self.create_new_paste, self.delete_paste]
+
 			self.icon_path_00 = icon_path_00
 			self.icon_path_01 = icon_path_01
 			self.icon_path_02 = icon_path_02
@@ -412,23 +437,43 @@ class create_object_tree_view(object):
 			raise
 		return None
 
+	def create_new_paste(self, type):
+		try:
+			pass
+		except:
+			raise
+		return None
+
+	def delete_paste(self):
+		try:
+			pass
+		except:
+			raise
+		return None
+
 	def create_class(self):
 		try:
-			image_icone_00 = tk.PhotoImage(file = self.icon_path_00)
-			icone_00       = tk.Label(image = image_icone_00)
-			icone_00.photo = image_icone_00
+			self.master_menu = tk.Menu(self.master, tearoff = 0)
 
-			image_icone_01 = tk.PhotoImage(file = self.icon_path_01)
-			icone_01       = tk.Label(image = image_icone_01)
-			icone_01.photo = image_icone_01
+			image_icone_00      = tk.PhotoImage(file = self.icon_path_00)
+			self.icone_00       = tk.Label(image = image_icone_00)
+			self.icone_00.photo = image_icone_00
 
-			image_icone_02 = tk.PhotoImage(file = self.icon_path_02)
-			icone_02       = tk.Label(image = image_icone_02)
-			icone_02.photo = image_icone_02
+			image_icone_01      = tk.PhotoImage(file = self.icon_path_01)
+			self.icone_01       = tk.Label(image = image_icone_01)
+			self.icone_01.photo = image_icone_01
 
-			self.sprites = self.tree_sprites.heading("#0", text = "Sprites", image = icone_00)
-			self.objects = self.tree_objects.heading("#0", text = "Objects", image = icone_01)
-			self.cameras = self.tree_cameras.heading("#0", text = "Cameras", image = icone_02)
+			image_icone_02      = tk.PhotoImage(file = self.icon_path_02)
+			self.icone_02       = tk.Label(image = image_icone_02)
+			self.icone_02.photo = image_icone_02
+
+			self.sprites = self.tree_sprites.heading("#0", text = "Sprites")
+			self.objects = self.tree_objects.heading("#0", text = "Objects")
+			self.cameras = self.tree_cameras.heading("#0", text = "Cameras")
+
+			self.sprites_menu()
+			self.objects_menu()
+			self.cameras_menu()
 		except:
 			raise
 		return None
@@ -465,12 +510,6 @@ class create_object_tree_view(object):
 
 	def menus(self, callback, what_this_made):
 		try:
-			self.master_menu = tk.Menu(self.master, tearoff = 0)
-
-			self.sprites_menu()
-			self.objects_menu()
-			self.cameras_menu()
-
 			def event_sprites(pos):
 				try:
 					try:
@@ -496,7 +535,7 @@ class create_object_tree_view(object):
 					try:
 						self.cameras_edit.post(pos.x_root, pos.y_root)
 					finally:
-						self.camera_edit.grab_release()
+						self.cameras_edit.grab_release()
 				except:
 					raise
 				return None
@@ -521,7 +560,7 @@ class create_object_tree_view(object):
 				self.container.place(width = self.master.winfo_width() - 25, height = self.master_master.winfo_height() - self.master_master.winfo_height() / 2)
 				self.tree_sprites.place(x = 0, y = 0, width = self.container.winfo_width(), height = self.container.winfo_height())
 				self.tree_objects.place(x = 0, y = 0, width = self.container.winfo_width(), height = self.container.winfo_height())
-				self.tree_cameras.place(x = 10, y = self.container.winfo_y() + self.container.winfo_height() + 25, width = self.master.winfo_width() - 25, height = self.master.winfo_height() - self.tree_cameras.winfo_y() - 89)
+				self.tree_cameras.place(x = 10, y = self.container.winfo_y() + self.container.winfo_height() + 25, width = self.master.winfo_width() - 25, height = self.master.winfo_height() - self.tree_cameras.winfo_y() - 90)
 		except:
 			raise
 		return None
@@ -907,13 +946,15 @@ class frame_debug_tools(object):
 		try:
 			self.master      = master
 			self.left_widget = left_widget
-			self.container   = container#
+			self.container   = container
 
-			left_widget.update()
+			self.master.update()
+			self.left_widget.update()
+			self.container.container.update()
 
-			self.frame = tk.Frame(self.master, width = master.winfo_screenwidth(), height = 200, bg = "Gray25")
+			self.frame = tk.Frame(self.master, width = self.container.container.winfo_width(), height = 250, bg = "Gray25")
 
-			self.frame.place(x = self.left_widget.winfo_width() + 5, y = self.master.winfo_height() - 200)
+			self.frame.place(x = self.left_widget.winfo_width() + 5, y = self.master.winfo_height() - 250)
 
 			self.master.update()
 		except:
@@ -987,18 +1028,42 @@ class frame_debug_tools(object):
 			raise
 		return None
 
+	def up(self):
+		try:
+			self.frame.place(width = self.container.container.winfo_width(), height = self.master.winfo_height() - self.frame.winfo_y() - 39)
+		except:
+			raise
+		return None
+
 class console_debug(object):
 	def __init__(self, master, master_):
 		try:
-			self.master  = master
-			self.master_ = master_
+			self.master             = master
+			self.master_            = master_
+			self.bool_entry_console = True
 
 			self.master_.update()
 			self.master.update()
 
 			self.console = tk.Text(self.master, bg = "gray25", state = "disabled")
 			self.scroll  = tk.Scrollbar(self.console, command = self.console.yview, bg = "Gray49", activebackground = "gray25")
+			self.ccfeatk = tk.Entry(self.master, bg = "Gray49", disabledbackground = "Gray49", state = "disabled")
+
+			self.console.place(x = 160, y = 10, width = self.master.winfo_width() - 25, height = self.master.winfo_height() - 50)
 			self.scroll.pack(side = tk.RIGHT, fill = tk.Y)
+			self.ccfeatk.place(x = 160, y = self.console.winfo_height() - self.console.winfo_y() + 35, width = self.console.winfo_width())
+		except:
+			raise
+		return None
+
+	def set(self, what, value):
+		try:
+			self.master.update()
+
+			what.config(state = "normal")
+			what.delete(0, tk.END)
+			what.insert(0, value)
+			what.config(state = "disabled")
 		except:
 			raise
 		return None
@@ -1012,11 +1077,23 @@ class console_debug(object):
 			raise
 		return None
 
-	def up(self):
+	def up(self, callback):
 		try:
 			self.console.config(yscrollcommand = self.scroll.set)
-			self.console.place(x = 160, y = 10, width = self.master_.winfo_width() - self.master.winfo_x() - 165, height = self.master_.winfo_height() - self.master.winfo_y() - 50)
-		except: 
+			self.console.place(x = 160, y = 10, width = self.master.winfo_width() - 160, height = self.master.winfo_height() - 50)
+			self.ccfeatk.place(x = 160, y = self.console.winfo_height() - self.console.winfo_y() + 35, width = self.console.winfo_width())
+
+			def false(debug): self.ccfeatk.configure(state = "normal"); self.bool_entry_console = False;
+
+			self.ccfeatk.bind("<Double-Button-1>", false)
+
+			if self.bool_entry_console:
+				callback.thread_tick = 1000
+				self.set(self.ccfeatk, "Console command")
+				self.ccfeatk.configure(state = "disabled")
+			else:
+				callback.thread_tick = 1000
+		except:
 			raise
 		return None
 
