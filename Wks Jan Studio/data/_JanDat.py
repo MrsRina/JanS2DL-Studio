@@ -569,11 +569,7 @@ class DAT(object):
 				"", "end",
 				"Class Sprites {}".format(self.sprites[self.selected].tag),
 				image = self.jan_tree.icone_00.photo,
-<<<<<<< HEAD
 				text  = " {}".format(self.sprites[self.selected].tag),
-=======
-				text  = self.sprites[self.selected].tag,
->>>>>>> 1e8b89ac56baf2fcc0e1e9757d191836d8926a1f
 				open  = True)
 
 				try:
@@ -616,11 +612,8 @@ class DAT(object):
 				self.sprites[self.selected] = load_type([self.project, "load"], "Objects", self.selected, self.jan_pygame, find, self, camera = self.camera)
 
 				self.tool_tree_objects.insert(
-<<<<<<< HEAD
 				"", "end",
-=======
 				self.tool_tree_objects, "end",
->>>>>>> 1e8b89ac56baf2fcc0e1e9757d191836d8926a1f
 				"Class Objects {}".format(self.sprites[self.selected].tag),
 				image = self.jan_tree.icone_01.photo,
 				text  = " {}".format(self.sprites[self.selected].tag),
@@ -797,18 +790,14 @@ class DAT(object):
 
 			self.jan_tree.create_class()
 
-<<<<<<< HEAD
 			self.tool_tree          = self.jan_tree
 			self.tool_tree_sprites = self.jan_tree.tree_sprites
 			self.tool_tree_objects = self.jan_tree.tree_objects
 			self.tool_tree_cameras = self.jan_tree.tree_cameras
-=======
 			self.tool_tree         = self.jan_tree
 			self.tool_tree_sprites = self.jan_tree.tree_sprites
 			self.tool_tree_objects = self.jan_tree.tree_objects
 			self.tool_tree_cameras = self.jan_tree.tree_cameras
-
->>>>>>> 1e8b89ac56baf2fcc0e1e9757d191836d8926a1f
 
 			self.jan_sprite_options = JanGui.sprite_options(self.jan_win.window, self.jan_frame_tools, self.sprites, self.selected, self.tool_tree)
 
