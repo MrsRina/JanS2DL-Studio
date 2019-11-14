@@ -890,11 +890,6 @@ class sprite_options(object):
 
 	def normalize_thread(self, thread = None):
 		try:
-			if thread is None:
-				self.thread.thread_tick = 1
-			else:
-				thread.thread_tick = 1
-
 			self.bool_entry_tag    = True
 			self.bool_entry_xpos   = True
 			self.bool_entry_ypos   = True
@@ -931,10 +926,10 @@ class sprite_options(object):
 				if self.bool_entry_tag is False or self.bool_entry_xpos is False \
 				or self.bool_entry_ypos is False or self.bool_entry_width is False \
 				or self.bool_entry_height is False:
-					self.thread.thread_tick = 1000
+					self.thread.thread_type = "sprite_options"
 
 				else:
-					self.thread.thread_tick = 1
+					self.thread.thread_type = "None"
 
 				self._tag()
 				self._path()
@@ -1100,11 +1095,11 @@ class console_debug(object):
 			self.ccfeatk.bind("<Double-Button-1>", false)
 
 			if self.bool_entry_console:
-				callback.thread_tick = 1000
+				callback.thread_type = "None"
 				self.set(self.ccfeatk, "Console command")
 				self.ccfeatk.configure(state = "disabled")
 			else:
-				callback.thread_tick = 1000
+				callback.thread_type = "console"
 		except:
 			raise
 		return None

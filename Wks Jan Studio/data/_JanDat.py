@@ -17,6 +17,9 @@ class DAT(object):
 			self.some_selected  = False
 			self.bool_tool_tree = False
 			self.thread_tick    = 1
+			self.thread_type    = str
+			self.thread_tree    = {
+			"None" : False, "sprites_options" : "sprites_options", "console" : "console"}
 
 			self.selected_pos_sprites = None
 			self.selected_tree_view   = None
@@ -299,6 +302,7 @@ class DAT(object):
 
 	def up_events(self):
 		try:
+			self.processing_thread_values(self.jan_sprite_options)
 			#self.events_select_tree()
 			self.poop_up()
 
@@ -760,6 +764,16 @@ class DAT(object):
 			return self.jan_win.window.title(title)
 		except:
 			raise
+		return None
+
+	def processing_thread_values(self, sprite_options):
+		try:
+			if self.thread_type is self.thread_tree[self.thread_type]:
+				self.thread_tick = 1000
+			else:
+				self.trhead.thread_tick = 1
+		except:
+			pass # non-except
 		return None
 
 	def create_widget(self):
