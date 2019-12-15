@@ -325,6 +325,8 @@ class DAT(object):
 
 			self.jan_sprite_options.show(self.sprites, self.selected, self, ref = self.ref_sprite, up = self.bool_tool_tree)
 
+			self.event_stash_clicks(self.jan_sprite_options, self.jan_console_debug)
+
 			try:
 				self.jan_status.set_text("{project} {selected}{mouse_pos} {selected_x} {selected_y} {selected_w} {selected_h}".format(
 					project    = "" if self.project is None else self.project.local,
@@ -353,67 +355,6 @@ class DAT(object):
 			raise
 		return None
 
-	def create_new_project(self):
-		try:
-			def color_error():
-				def return_color():
-					try:
-						self.cache_project_name.configure(bg = "Gray")
-						self.cache_project_width.configure(bg = "Gray")
-						self.cache_project_height.configure(bg = "Gray")
-						self.cache_project_comment.configure(bg = "Gray")
-					except:
-						raise
-					return None
-
-				self.cache_project_name.configure(bg = "Red")
-				self.cache_project_width.configure(bg = "Red")
-				self.cache_project_height.configure(bg = "Red")
-				self.cache_project_comment.configure(bg = "Red")
-
-				self.cache_project_name.after(2000, return_color)
-
-				self.jan_win.window.update()
-
-			if self.cache_project_name.get(1.0, tk.INSERT) != "":
-				try:
-					self.project = JanCompiler.create_project(
-					local    = self.new_folder_path,
-					name     = self.cache_project_name.get(1.0, tk.INSERT),
-					camera   = (self.camera_x, self.camera_y),
-					comments = self.cache_project_comment.get(1.0, tk.INSERT),
-					version  = "1.4"
-					)
-
-					self.new_folder_path = None
-
-					self.project = JanCompiler.open_project(path = self.project.local)
-
-					if self.index_type is None:
-						self.clear()
-						self.JanTree.create_class()
-
-					else:
-						for sprites in self.sprites.values():
-							sprites.do("save", project = self.project)
-
-					self.project.save()
-
-					self.event_file    = 2
-					self.some_selected = False
-
-					self.cache_project_window.destroy()
-
-					self.jan_win.window.update()
-
-				except:
-					color_error()
-			else:
-				color_error()
-		except:
-			raise
-		return None
-
 	def cancel_new_project(self):
 		try:
 			self.new_folder_path = None
@@ -425,27 +366,9 @@ class DAT(object):
 			raise
 		return None
 
-	def new_project(self, save = None):
+	def new_project(self):
 		try:
-			find = filedialog.askdirectory()
-
-			if find:
-				self.new_folder_path = find
-				self.some_selected = True
-
-				self.index_type = save
-
-				project_window = JanGui.project_window(self.jan_win.get_master(), self.create_new_project, self.cancel_new_project)
-
-				self.cache_project_window  = project_window
-				self.cache_project_name    = project_window.text_name_project_
-				self.cache_project_width   = project_window.text_widht_project_
-				self.cache_project_height  = project_window.text_height_project_
-				self.cache_project_comment = project_window.text_comment_project_
-
-				project_window.tought_loop()
-
-				self.jan_win.window.update()
+			"Futuramente"
 		except:
 			raise
 		return None
@@ -776,13 +699,20 @@ class DAT(object):
 			pass # non-except
 		return None
 
+	def event_stash_clicks(self, sprites_options, console_debug):
+		try:
+			pass
+		except:
+			raise
+		return None
+
 	def create_widget(self):
 		try:
 			self.jan_frame_tools = JanGui.create_frame_tools(self.jan_win.get_master())
 			self.jan_menu        = JanGui.create_menu(self.jan_win.get_master(),
 			(
 				# Main container and Events container
-				self.new_project, self.open_project, self.save_project, self.save_as_project, self.load_sprite, self.load_object, None,
+				None, self.open_project, self.save_project, self.save_as_project, self.load_sprite, self.load_object, None,
 				None, None, self.close, None, None, None, None, None
 			),
 			(
@@ -804,7 +734,7 @@ class DAT(object):
 
 			self.jan_tree.create_class()
 
-			self.tool_tree          = self.jan_tree
+			self.tool_tree         = self.jan_tree
 			self.tool_tree_sprites = self.jan_tree.tree_sprites
 			self.tool_tree_objects = self.jan_tree.tree_objects
 			self.tool_tree_cameras = self.jan_tree.tree_cameras

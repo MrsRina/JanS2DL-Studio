@@ -773,7 +773,7 @@ class sprite_options(object):
 						self.bool_entry_width = True
 					else:
 						self.sprites[self.selected].set_size(int(self.entry_width.get()), None)
-						self.bool_entry_width         = True
+						self.bool_entry_width = True
 				else:
 					self.handler_entry("normal", self.entry_width, "width")
 					self.entry_width.delete(0, tk.END)
@@ -793,7 +793,7 @@ class sprite_options(object):
 						self.bool_entry_height = True
 					else:
 						self.sprites[self.selected].set_size(None, int(self.entry_height.get()))
-						self.bool_entry_height        = True
+						self.bool_entry_height = True
 				else:
 					self.handler_entry("normal", self.entry_height, "height")
 					self.entry_height.delete(0, tk.END)
@@ -809,8 +809,6 @@ class sprite_options(object):
 	def _tag(self):
 		try:
 			self.master.update()
-
-			self.entry_tag.bind("<Double-Button-1>", lambda x: self.handler_entry("normal", self.entry_tag, "tag"))
 
 			self.text_tag.config(text = "{tag} - {type}".format(tag = self.tag, type = self.sprites[self.selected].type))
 			self.text_tag.place(x = 10,  y = 10)
@@ -842,16 +840,12 @@ class sprite_options(object):
 		try:
 			self.master.update()
 
-			self.entry_xpos.bind("<Double-Button-1>", lambda x: self.handler_entry("normal", self.entry_xpos, "xpos"))
-
 			self.text_xpos.place(x = 10, y = self.rect("y", self.entry_path))
 			self.entry_xpos.place(x = 10, y = self.rect("y", self.text_xpos), width = self.frame.winfo_width() / 2 - 10)
 
 			if self.bool_entry_xpos:
 				self.set(self.entry_xpos, self.x)
 				self.entry_xpos.config(state = "disabled")
-
-			self.entry_ypos.bind("<Double-Button-1>", lambda x: self.handler_entry("normal", self.entry_ypos, "ypos"))
 
 			self.text_ypos.place(x = self.rect("x", self.entry_xpos), y = self.text_xpos.winfo_y())
 			self.entry_ypos.place(x = self.rect("x", self.entry_xpos), y = self.entry_xpos.winfo_y(), width = self.frame.winfo_width() / 2 - 15)
@@ -860,16 +854,12 @@ class sprite_options(object):
 				self.set(self.entry_ypos, self.y)
 				self.entry_ypos.config(state = "disabled")
 
-			self.entry_width.bind("<Double-Button-1>", lambda x: self.handler_entry("normal", self.entry_width, "width"))
-
 			self.text_width.place(x = 10, y = self.rect("y", self.entry_ypos))
 			self.entry_width.place(x = 10, y = self.rect("y", self.text_width), width = self.frame.winfo_width() / 2 - 10)
 
 			if self.bool_entry_width:
 				self.set(self.entry_width, self.w)
 				self.entry_width.config(state = "disabled")
-
-			self.entry_height.bind("<Double-Button-1>", lambda x: self.handler_entry("normal", self.entry_height, "height"))
 			
 			self.text_height.place(x = self.rect("x", self.entry_width), y = self.text_width.winfo_y())
 			self.entry_height.place(x = self.rect("x", self.entry_width), y = self.entry_width.winfo_y(), width = self.frame.winfo_width() / 2 - 15)
@@ -895,6 +885,19 @@ class sprite_options(object):
 			self.bool_entry_ypos   = True
 			self.bool_entry_width  = True
 			self.bool_entry_height = True
+		except:
+			raise
+		return None
+
+	def clicks(self, other_click):
+		try:
+			self.entry_tag.bind("<Double-Button-1>", lambda x: self.handler_entry("normal", self.entry_tag, "tag"))
+
+			self.entry_xpos.bind("<Double-Button-1>", lambda x: self.handler_entry("normal", self.entry_xpos, "xpos"))
+			self.entry_ypos.bind("<Double-Button-1>", lambda x: self.handler_entry("normal", self.entry_ypos, "ypos"))
+
+			self.entry_width.bind("<Double-Button-1>", lambda x: self.handler_entry("normal", self.entry_width, "width"))
+			self.entry_height.bind("<Double-Button-1>", lambda x: self.handler_entry("normal", self.entry_height, "height"))
 		except:
 			raise
 		return None
@@ -1093,6 +1096,7 @@ class console_debug(object):
 			def false(debug): self.ccfeatk.configure(state = "normal"); self.bool_entry_console = False;
 
 			self.ccfeatk.bind("<Double-Button-1>", false)
+			self.master.bind("<Button>")
 
 			if self.bool_entry_console:
 				callback.thread_type = "None"
